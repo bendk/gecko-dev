@@ -49,6 +49,7 @@ WEBIDL_FILES = [
     "Flex.webidl",
     "Fluent.webidl",
     "FrameLoader.webidl",
+    "GeometryScaffolding.webidl",
     "HeapSnapshot.webidl",
     "InspectorUtils.webidl",
     "IteratorResult.webidl",

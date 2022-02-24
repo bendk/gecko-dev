@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-// hard-coded for geometry - no templates yet!
-=======
 // Hand-written JS targeted at the Geometry app.
->>>>>>> eecacd6cae61 (Started to implement uniffi-bindings-gecko-js)
 
 "use strict";
 
@@ -97,24 +93,20 @@ class ArrayBufferDataStream {
   // TODO: write more methods
 }
 
-class FFIConverterDouble {
-  static lift(value) {
-    return value;
-  }
-  static lower(value) {
-    return value;
-  }
+let FFIConverterDouble = {
+  lift: (value) => value,
+  lower: (value) => value,
 }
 
-class FFIConverterLine {
-  static lift(buf) {
+let FFIConverterLine = {
+  lift: function(buf) {
     let dataStream = new ArrayBufferDataStream(buf);
     return new Line(
       FFIConverterPoint.read(dataStream),
       FFIConverterPoint.read(dataStream),
     );
-  }
-  static lower(line) {
+  },
+  lower: function(line) {
       // TODO: calculate the array size
       let buf = new ArrayBuffer(32);
 
@@ -125,8 +117,8 @@ class FFIConverterLine {
   }
 }
 
-class FFIConverterOptionalPoint {
-  static lift(buf) {
+let FFIConverterOptionalPoint = {
+  lift: function(buf) {
     let dataStream = new ArrayBufferDataStream(buf);
     let code = dataStream.readUint8(0);
     switch (code) {
@@ -137,28 +129,28 @@ class FFIConverterOptionalPoint {
         default:
           throw UniFFIError(`Unexpected code: ${code}`);
     }
-  }
+  },
 }
 
-class FFIConverterPoint {
-  static lift(buf) {
+let FFIConverterPoint = {
+  lift: function(buf) {
     return this.read(new ArrayBufferDataStream(buf));
-  }
-  static lower(point) {
+  },
+  lower: function(point) {
     // TODO: calculate the array size
     let buf = new ArrayBuffer(16);
     let dataStream = new ArrayBufferDataStream(buf);
     this.write(dataStream, point);
     return buf;
-  }
-  static read(dataStream) {
+  },
+  read: function(dataStream) {
     return new Point(
         dataStream.readFloat64(),
         dataStream.readFloat64(),
     );
-  }
-  static write(dataStream, point) {
+  },
+  write: function(dataStream, point) {
     dataStream.writeFloat64(point.coord_x);
     dataStream.writeFloat64(point.coord_y);
-  }
+  },
 }
