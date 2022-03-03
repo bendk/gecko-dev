@@ -187,3 +187,4 @@ if CONFIG["COMPILE_ENVIRONMENT"]:
             "!/layout/style/ServoCSSPropList.py",
         ],
     )
+    UniFFIGeneratedFile("GeometryScaffolding.webidl", "/toolkit/components/geometry/src/geometry.udl")

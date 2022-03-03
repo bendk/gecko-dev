@@ -49,7 +49,6 @@ WEBIDL_FILES = [
     "Flex.webidl",
     "Fluent.webidl",
     "FrameLoader.webidl",
-    "GeometryScaffolding.webidl",
     "HeapSnapshot.webidl",
     "InspectorUtils.webidl",
     "IteratorResult.webidl",
@@ -83,6 +82,10 @@ WEBIDL_FILES = [
     "XULMenuElement.webidl",
     "XULTextElement.webidl",
     "XULTreeElement.webidl",
+]
+
+GENERATED_WEBIDL_FILES += [
+    "GeometryScaffolding.webidl",
 ]
 
 if CONFIG["MOZ_PLACES"]:

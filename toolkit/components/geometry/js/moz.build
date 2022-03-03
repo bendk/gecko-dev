@@ -6,14 +6,18 @@
 
 FINAL_LIBRARY = "xul"
 
-UNIFIED_SOURCES += [
-    "GeometryScaffolding.cpp",
+UniFFIGeneratedFile("GeometryScaffolding.cpp", "/toolkit/components/geometry/src/geometry.udl")
+UniFFIGeneratedFile("GeometryScaffolding.h", "/toolkit/components/geometry/src/geometry.udl")
+UniFFIGeneratedFile("Geometry.jsm", "/toolkit/components/geometry/src/geometry.udl")
+
+SOURCES += [
+    "!GeometryScaffolding.cpp",
 ]
 
 EXPORTS.mozilla.dom += [
-    "GeometryScaffolding.h",
+    "!GeometryScaffolding.h",
 ]
 
 EXTRA_JS_MODULES["components-utils"] = [
- "Geometry.jsm",
+ "!Geometry.jsm",
 ]

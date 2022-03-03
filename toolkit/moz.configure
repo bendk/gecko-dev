@@ -3012,6 +3012,13 @@ def disable_smart_cards(build_project):
 set_config("MOZ_NO_SMART_CARDS", True, when=disable_smart_cards)
 set_define("MOZ_NO_SMART_CARDS", True, when=disable_smart_cards)
 
+# Codegen tools
+# ==============================================================
+check_prog(
+        "UNIFFI_BINDGEN_GECKO_JS",
+        ("uniffi-bindgen-gecko-js",),
+)
+
 # Checks for library functions
 # ==============================================================
 with only_when(compile_environment & depends(target.os)(lambda os: os != "WINNT")):

@@ -210,5 +210,25 @@ def CbindgenHeader(name, inputs):
     GeneratedFile(name, script='/build/RunCbindgen.py',
                   entry_point='generate', inputs=inputs)
 
+@template
+def UniFFIGeneratedFile(name, udl_path):
+    """Add a GENERATED_FILES item for running RunUniFFIBindgen.py"""
+    if '.' in name:
+        ext = name.split('.')[-1]
+        if ext == 'webidl':
+            type_flag = 'webidl'
+        elif ext == 'cpp':
+            type_flag = 'cpp'
+        elif ext == 'h':
+            type_flag = 'cpp-header'
+        elif ext == 'jsm':
+            type_flag = 'js'
+        else:
+            error('Unknown extension for UniFFIGeneratedFile: {}'.format(ext))
+    else:
+       error('generated filename must have an extension so we can calculate which file type to generate')
+
+    GeneratedFile(name, script='/build/RunUniFFIBindgen.py',
+                  entry_point='generate', inputs=[udl_path], flags=[type_flag])
 
 include('gecko_templates.mozbuild')
