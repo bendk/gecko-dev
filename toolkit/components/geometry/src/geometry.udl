@@ -2,6 +2,8 @@
 namespace geometry {
   double gradient(Line ln);
   Point? intersection(Line ln1, Line ln2);
+
+  string string_round(string s);
 };
 
 dictionary Point {

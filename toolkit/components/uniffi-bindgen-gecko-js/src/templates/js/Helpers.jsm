@@ -80,8 +80,17 @@ class ArrayBufferDataStream {
         this.pos += 8;
     }
 
+    writeUint8(value) {
+      this.dataView.setUint8(this.pos, value);
+      this.pos += 1;
+    }
 
-
+    writeUint32(value) {
+      this.dataView.setUint32(this.pos, value);
+      this.pos += 4;
+    }
+  
+  
     // TODO: write more methods
 }
 

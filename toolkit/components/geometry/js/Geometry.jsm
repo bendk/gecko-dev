@@ -168,7 +168,7 @@ class FfiConverterTypeLine {
         return this.read(new ArrayBufferDataStream(buf));
     }
     static lower(value) {
-        const buf = new ArrayBuffer(this.computeSize());
+        const buf = new ArrayBuffer(this.computeSize(value));
         const dataStream = new ArrayBufferDataStream(buf);
         this.write(dataStream, value);
         return buf;
@@ -184,7 +184,7 @@ class FfiConverterTypeLine {
         FfiConverterTypePoint.write(dataStream, value.end);
     }
 
-    static computeSize() {
+    static computeSize(value) {
         let totalSize = 0;
         totalSize += FfiConverterTypePoint.computeSize();
         totalSize += FfiConverterTypePoint.computeSize();
@@ -206,7 +206,7 @@ class FfiConverterTypePoint {
         return this.read(new ArrayBufferDataStream(buf));
     }
     static lower(value) {
-        const buf = new ArrayBuffer(this.computeSize());
+        const buf = new ArrayBuffer(this.computeSize(value));
         const dataStream = new ArrayBufferDataStream(buf);
         this.write(dataStream, value);
         return buf;
@@ -275,3 +275,12 @@ function intersection(ln1,ln2) {
 }
 
 EXPORTED_SYMBOLS.push("intersection");
+function stringRound(s) {
+    const liftResult = (result) => FfiConverterString.lift(result)
+    const liftError = null; // TODO
+    const callResult = GeometryScaffolding.geometry5fb2StringRound(FfiConverterString.lower(s),
+    )
+    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
+}
+
+EXPORTED_SYMBOLS.push("stringRound");

@@ -44,4 +44,8 @@ pub fn intersection(ln1: Line, ln2: Line) -> Option<Point> {
     })
 }
 
+pub fn string_round(s: String) -> String {
+    s.clone()
+}
+
 include!(concat!(env!("OUT_DIR"), "/geometry.uniffi.rs"));
