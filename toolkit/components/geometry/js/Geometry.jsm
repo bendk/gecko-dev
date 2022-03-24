@@ -278,9 +278,18 @@ EXPORTED_SYMBOLS.push("intersection");
 function stringRound(s) {
     const liftResult = (result) => FfiConverterString.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry5fb2StringRound(FfiConverterString.lower(s),
+    const callResult = GeometryScaffolding.geometryF18aStringRound(FfiConverterString.lower(s),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("stringRound");
+function stringRecordRound(p) {
+    const liftResult = (result) => FfiConverterPoint.lift(result)
+    const liftError = null; // TODO
+    const callResult = GeometryScaffolding.geometryF18aStringRecordRound(FfiConverterPoint.lower(p),
+    )
+    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
+}
+
+EXPORTED_SYMBOLS.push("stringRecordRound");

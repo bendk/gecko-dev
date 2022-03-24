@@ -4,9 +4,11 @@
 [ChromeOnly, Exposed=Window]
 namespace GeometryScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> geometry5fb2Gradient(ArrayBuffer ln );
+  Promise<UniFFIRustCallResult> geometryF18aGradient(ArrayBuffer ln );
   [Throws]
-  Promise<UniFFIRustCallResult> geometry5fb2Intersection(ArrayBuffer ln1, ArrayBuffer ln2 );
+  Promise<UniFFIRustCallResult> geometryF18aIntersection(ArrayBuffer ln1, ArrayBuffer ln2 );
   [Throws]
-  Promise<UniFFIRustCallResult> geometry5fb2StringRound(ArrayBuffer s );
+  Promise<UniFFIRustCallResult> geometryF18aStringRound(ArrayBuffer s );
+  [Throws]
+  Promise<UniFFIRustCallResult> geometryF18aStringRecordRound(ArrayBuffer p );
 };

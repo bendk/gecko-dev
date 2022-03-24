@@ -2,31 +2,26 @@
 
 class FfiConverterString {
     static lift(buf) {
-        return this.read(new ArrayBufferDataStream(buf));
+        const decoder = new TextDecoder();
+        const utf8Arr = new Uint8Array(buf);
+        return decoder.decode(utf8Arr);
     }
     static lower(value) {
-        const buffer = new ArrayBuffer(this.computeSize(value));
-        const dataStream = new ArrayBufferDataStream(buffer);
-        this.write(dataStream, value)
-        return buffer;
+        const encoder = new TextEncoder();
+        return encoder.encode(value).buffer;
     }
 
     static write(dataStream, value) {
         const encoder = new TextEncoder();
         const utf8Arr = encoder.encode(value);
         dataStream.writeUint32(utf8Arr.length);
-        for (const byte of utf8Arr) {
-            dataStream.writeUint8(byte);
-        }
+        dataStream.writeUint8Array(utf8Arr);
     }
 
     static read(dataStream) {
         const decoder = new TextDecoder();
         const size = dataStream.readUint32();
-        const utf8Arr = new Uint8Array(size);
-        for (let i = 0; i < size; i++) {
-            utf8Arr[i] = dataStream.readUint8();
-        }
+        const utf8Arr = dataStream.readUint8Array(size);
         return decoder.decode(utf8Arr);
     }
 
