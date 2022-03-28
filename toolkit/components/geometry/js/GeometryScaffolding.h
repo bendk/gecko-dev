@@ -12,13 +12,15 @@
 
 // Scaffolding functions from UniFFI
 extern "C" {
-double geometry_f18a_gradient(RustBuffer, RustCallStatus*);
+double geometry_a4ea_gradient(RustBuffer, RustCallStatus*);
 
-RustBuffer geometry_f18a_intersection(RustBuffer, RustBuffer, RustCallStatus*);
+RustBuffer geometry_a4ea_intersection(RustBuffer, RustBuffer, RustCallStatus*);
 
-RustBuffer geometry_f18a_string_round(RustBuffer, RustCallStatus*);
+RustBuffer geometry_a4ea_string_round(RustBuffer, RustCallStatus*);
 
-RustBuffer geometry_f18a_string_record_round(RustBuffer, RustCallStatus*);
+RustBuffer geometry_a4ea_string_record_round(RustBuffer, RustCallStatus*);
+
+RustBuffer geometry_a4ea_arr_round(RustBuffer, uint32_t, RustCallStatus*);
 
 }
 
@@ -28,10 +30,11 @@ class GlobalObject;
 
 class GeometryScaffolding {
   public:
-  static already_AddRefed<Promise> GeometryF18aGradient(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& ln, ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> GeometryF18aIntersection(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& ln1, const ArrayBuffer& ln2, ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> GeometryF18aStringRound(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& s, ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> GeometryF18aStringRecordRound(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& p, ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryA4eaGradient(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& ln, ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryA4eaIntersection(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& ln1, const ArrayBuffer& ln2, ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryA4eaStringRound(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& s, ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryA4eaStringRecordRound(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& p, ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryA4eaArrRound(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& arr, const uint32_t& size, ErrorResult& aUniFFIErrorResult);
 };
 
 }  // namespace mozilla::dom

@@ -151,14 +151,30 @@ class FfiConverterArrayBuffer {
     }
 
     static lower(value) {
-        const buf = new ArrayBuffer(this.computeSize());
+        const buf = new ArrayBuffer(this.computeSize(value));
         const dataStream = new ArrayBufferDataStream(buf);
         this.write(dataStream, value);
         return buf;
     }
 }
 
-class FfiConverterF64 {
+class FfiConverterU32 {
+    static computeSize() {
+        return 4;
+    }
+    static lift(value) {
+        return value;
+    }
+    static lower(value) {
+        return value;
+    }
+    static write(dataStream, value) {
+        dataStream.writeUint32(value)
+    }
+    static read(dataStream) {
+        return dataStream.readUint32()
+    }
+}class FfiConverterF64 {
     static computeSize() {
         return 8;
     }
@@ -309,13 +325,38 @@ EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiCo
     static computeSize() {
         return 1 + FfiConverterTypePoint.computeSize()
     }
+}class FfiConverterSequencestring extends FfiConverterArrayBuffer {
+    static read(dataStream) {
+        const len = dataStream.readUint32();
+        const arr = [];
+        for (let i = 0; i < len; i++) {
+            arr.push(FfiConverterString.read(dataStream));
+        }
+        return arr;
+    }
+
+    static write(dataStream, value) {
+        dataStream.writeUint32(value.length);
+        value.forEach((innerValue) => {
+            FfiConverterString.write(dataStream, innerValue);
+        })
+    }
+
+    static computeSize(value) {
+        // The size of the length
+        let size = 4;
+        for (const innerValue of value) {
+            size += FfiConverterString.computeSize(innerValue);
+        }
+        return size;
+    }
 }
 
 
 function gradient(ln) {
     const liftResult = (result) => FfiConverterF64.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryF18aGradient(FfiConverterTypeLine.lower(ln),
+    const callResult = GeometryScaffolding.geometryA4eaGradient(FfiConverterTypeLine.lower(ln),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -324,7 +365,7 @@ EXPORTED_SYMBOLS.push("gradient");
 function intersection(ln1,ln2) {
     const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryF18aIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
+    const callResult = GeometryScaffolding.geometryA4eaIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -333,7 +374,7 @@ EXPORTED_SYMBOLS.push("intersection");
 function stringRound(s) {
     const liftResult = (result) => FfiConverterString.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryF18aStringRound(FfiConverterString.lower(s),
+    const callResult = GeometryScaffolding.geometryA4eaStringRound(FfiConverterString.lower(s),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -342,9 +383,18 @@ EXPORTED_SYMBOLS.push("stringRound");
 function stringRecordRound(p) {
     const liftResult = (result) => FfiConverterTypePoint.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryF18aStringRecordRound(FfiConverterTypePoint.lower(p),
+    const callResult = GeometryScaffolding.geometryA4eaStringRecordRound(FfiConverterTypePoint.lower(p),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("stringRecordRound");
+function arrRound(arr,size) {
+    const liftResult = (result) => FfiConverterSequencestring.lift(result)
+    const liftError = null; // TODO
+    const callResult = GeometryScaffolding.geometryA4eaArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
+    )
+    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
+}
+
+EXPORTED_SYMBOLS.push("arrRound");

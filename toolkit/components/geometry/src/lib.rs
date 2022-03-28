@@ -56,4 +56,12 @@ pub fn string_record_round(p: Point) -> Point {
     p
 }
 
+pub fn arr_round(arr: Vec<String>, size: u32) -> Vec<String> {
+    assert_eq!(arr.len(), size as usize);
+    for s in arr.clone() {
+        std::str::from_utf8(s.as_bytes()).unwrap();
+    }
+    arr
+}
+
 include!(concat!(env!("OUT_DIR"), "/geometry.uniffi.rs"));

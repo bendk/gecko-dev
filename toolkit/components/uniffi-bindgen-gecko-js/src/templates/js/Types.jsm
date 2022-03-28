@@ -41,6 +41,9 @@
 {%- when Type::String %}
 {%- include "String.jsm" %}
 
+{%- when Type::Sequence with (inner) %}
+{%- include "Sequence.jsm" %}
+
 {%- else %}
 {# TODO implement the other types #}
 
