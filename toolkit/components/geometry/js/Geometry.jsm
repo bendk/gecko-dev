@@ -353,10 +353,44 @@ EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiCo
 }
 
 
+
+class FfiConverterMapstring extends FfiConverterArrayBuffer {
+    static read(dataStream) {
+        const len = dataStream.readUint32();
+        const map = {};
+        for (let i = 0; i < len; i++) {
+            const key = FfiConverterString.read(dataStream);
+            const value = FfiConverterString.read(dataStream);
+            map[key] = value;
+        }
+
+        return map;
+    }
+
+    static write(dataStream, value) {
+        dataStream.writeUint32(Object.keys(value).length);
+        for (const key in value) {
+            FfiConverterString.write(dataStream, key);
+            FfiConverterString.write(dataStream, value[key]);
+        }
+    }
+
+    static computeSize(value) {
+        // The size of the length
+        let size = 4;
+        for (const key in value) {
+            size += FfiConverterString.computeSize(key);
+            size += FfiConverterString.computeSize(value[key]);
+        }
+        return size;
+    }
+}
+
+
 function gradient(ln) {
     const liftResult = (result) => FfiConverterF64.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryA4eaGradient(FfiConverterTypeLine.lower(ln),
+    const callResult = GeometryScaffolding.geometry39efGradient(FfiConverterTypeLine.lower(ln),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -365,7 +399,7 @@ EXPORTED_SYMBOLS.push("gradient");
 function intersection(ln1,ln2) {
     const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryA4eaIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
+    const callResult = GeometryScaffolding.geometry39efIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -374,7 +408,7 @@ EXPORTED_SYMBOLS.push("intersection");
 function stringRound(s) {
     const liftResult = (result) => FfiConverterString.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryA4eaStringRound(FfiConverterString.lower(s),
+    const callResult = GeometryScaffolding.geometry39efStringRound(FfiConverterString.lower(s),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -383,7 +417,7 @@ EXPORTED_SYMBOLS.push("stringRound");
 function stringRecordRound(p) {
     const liftResult = (result) => FfiConverterTypePoint.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryA4eaStringRecordRound(FfiConverterTypePoint.lower(p),
+    const callResult = GeometryScaffolding.geometry39efStringRecordRound(FfiConverterTypePoint.lower(p),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
@@ -392,9 +426,18 @@ EXPORTED_SYMBOLS.push("stringRecordRound");
 function arrRound(arr,size) {
     const liftResult = (result) => FfiConverterSequencestring.lift(result)
     const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometryA4eaArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
+    const callResult = GeometryScaffolding.geometry39efArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("arrRound");
+function mapRound(map,size) {
+    const liftResult = (result) => FfiConverterMapstring.lift(result)
+    const liftError = null; // TODO
+    const callResult = GeometryScaffolding.geometry39efMapRound(FfiConverterMapstring.lower(map),FfiConverterU32.lower(size),
+    )
+    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
+}
+
+EXPORTED_SYMBOLS.push("mapRound");

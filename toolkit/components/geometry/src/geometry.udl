@@ -8,6 +8,8 @@ namespace geometry {
   Point string_record_round(Point p);
 
   sequence<string> arr_round(sequence<string> arr, u32 size);
+
+  record<DOMString, string> map_round(record<DOMString, string> map, u32 size);
 };
 
 dictionary Point {

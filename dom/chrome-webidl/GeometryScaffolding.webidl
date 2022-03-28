@@ -4,13 +4,15 @@
 [ChromeOnly, Exposed=Window]
 namespace GeometryScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> geometryA4eaGradient(ArrayBuffer ln );
+  Promise<UniFFIRustCallResult> geometry39efGradient(ArrayBuffer ln );
   [Throws]
-  Promise<UniFFIRustCallResult> geometryA4eaIntersection(ArrayBuffer ln1, ArrayBuffer ln2 );
+  Promise<UniFFIRustCallResult> geometry39efIntersection(ArrayBuffer ln1, ArrayBuffer ln2 );
   [Throws]
-  Promise<UniFFIRustCallResult> geometryA4eaStringRound(ArrayBuffer s );
+  Promise<UniFFIRustCallResult> geometry39efStringRound(ArrayBuffer s );
   [Throws]
-  Promise<UniFFIRustCallResult> geometryA4eaStringRecordRound(ArrayBuffer p );
+  Promise<UniFFIRustCallResult> geometry39efStringRecordRound(ArrayBuffer p );
   [Throws]
-  Promise<UniFFIRustCallResult> geometryA4eaArrRound(ArrayBuffer arr, unsigned long size );
+  Promise<UniFFIRustCallResult> geometry39efArrRound(ArrayBuffer arr, unsigned long size );
+  [Throws]
+  Promise<UniFFIRustCallResult> geometry39efMapRound(ArrayBuffer map, unsigned long size );
 };

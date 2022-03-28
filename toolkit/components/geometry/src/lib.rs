@@ -2,6 +2,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+use std::collections::HashMap;
+
 // https://rust-lang.github.io/rust-clippy/master/index.html#float_cmp
 // Silence, clippy!
 const EPSILON: f64 = 0.0001f64;
@@ -62,6 +64,15 @@ pub fn arr_round(arr: Vec<String>, size: u32) -> Vec<String> {
         std::str::from_utf8(s.as_bytes()).unwrap();
     }
     arr
+}
+
+pub fn map_round(map: HashMap<String, String>, size: u32) -> HashMap<String, String> {
+    assert_eq!(map.len(), size as usize);
+    for (key, value) in map.clone() {
+        std::str::from_utf8(key.as_bytes()).unwrap();
+        std::str::from_utf8(value.as_bytes()).unwrap();
+    }
+    map
 }
 
 include!(concat!(env!("OUT_DIR"), "/geometry.uniffi.rs"));
