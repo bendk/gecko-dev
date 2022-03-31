@@ -21,18 +21,27 @@ pub struct Line {
     end: Point,
 }
 
-pub fn gradient(ln: Line) -> f64 {
+#[derive(Debug, thiserror::Error)]
+pub enum GeometryError {
+    #[error("The gradient is undefined")]
+    UndefinedGradient,
+}
+
+pub fn gradient(ln: Line) -> Result<f64, GeometryError> {
     let rise = ln.end.coord_y - ln.start.coord_y;
     let run = ln.end.coord_x - ln.start.coord_x;
-    rise / run
+    if run == 0f64 {
+        return Err(GeometryError::UndefinedGradient)
+    }
+    Ok(rise/run)
 }
 
 pub fn intersection(ln1: Line, ln2: Line) -> Option<Point> {
     // TODO: yuck, should be able to take &Line as argument here
     // and have rust figure it out with a bunch of annotations...
-    let g1 = gradient(ln1.clone());
+    let g1 = gradient(ln1.clone()).unwrap();
     let z1 = ln1.start.coord_y - g1 * ln1.start.coord_x;
-    let g2 = gradient(ln2.clone());
+    let g2 = gradient(ln2.clone()).unwrap();
     let z2 = ln2.start.coord_y - g2 * ln2.start.coord_x;
     // Parallel lines do not intersect.
     if (g1 - g2).abs() < EPSILON {

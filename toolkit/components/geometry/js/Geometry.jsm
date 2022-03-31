@@ -301,7 +301,32 @@ class FfiConverterTypePoint {
     }
 }
 
-EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
+EXPORTED_SYMBOLS.push("Point");
+
+
+
+class GeometryError extends Error {}
+EXPORTED_SYMBOLS.push("GeometryError");
+
+
+class UndefinedGradient extends GeometryError {
+    constructor(message, ...params) {
+        super(...params);
+        this.message = message;
+    }
+}
+EXPORTED_SYMBOLS.push("UndefinedGradient");
+
+class FfiConverterTypeGeometryError extends FfiConverterArrayBuffer {
+    static read(dataStream) {
+        switch (dataStream.readInt32()) {
+            case 1:
+                return new UndefinedGradient(FfiConverterString.read(dataStream));
+            default:
+                return new Error("Unknown GeometryError variant");
+        }
+    }
+}class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
     static read(dataStream) {
         const code = dataStream.readUint8(0);
         switch (code) {
@@ -353,7 +378,6 @@ EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiCo
 }
 
 
-
 class FfiConverterMapstring extends FfiConverterArrayBuffer {
     static read(dataStream) {
         const len = dataStream.readUint32();
@@ -388,54 +412,60 @@ class FfiConverterMapstring extends FfiConverterArrayBuffer {
 
 
 function gradient(ln) {
-    const liftResult = (result) => FfiConverterF64.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efGradient(FfiConverterTypeLine.lower(ln),
+    const liftResult = (result) => FfiConverterF64.lift(result);
+    const liftError = (data) => FfiConverterTypeGeometryError.lift(data); // TODO
+
+    const callResult = GeometryScaffolding.geometry77caGradient(FfiConverterTypeLine.lower(ln),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("gradient");
 function intersection(ln1,ln2) {
-    const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
+    const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result);
+    const liftError = null;
+
+    const callResult = GeometryScaffolding.geometry77caIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("intersection");
 function stringRound(s) {
-    const liftResult = (result) => FfiConverterString.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efStringRound(FfiConverterString.lower(s),
+    const liftResult = (result) => FfiConverterString.lift(result);
+    const liftError = null;
+
+    const callResult = GeometryScaffolding.geometry77caStringRound(FfiConverterString.lower(s),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("stringRound");
 function stringRecordRound(p) {
-    const liftResult = (result) => FfiConverterTypePoint.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efStringRecordRound(FfiConverterTypePoint.lower(p),
+    const liftResult = (result) => FfiConverterTypePoint.lift(result);
+    const liftError = null;
+
+    const callResult = GeometryScaffolding.geometry77caStringRecordRound(FfiConverterTypePoint.lower(p),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("stringRecordRound");
 function arrRound(arr,size) {
-    const liftResult = (result) => FfiConverterSequencestring.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
+    const liftResult = (result) => FfiConverterSequencestring.lift(result);
+    const liftError = null;
+
+    const callResult = GeometryScaffolding.geometry77caArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("arrRound");
 function mapRound(map,size) {
-    const liftResult = (result) => FfiConverterMapstring.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry39efMapRound(FfiConverterMapstring.lower(map),FfiConverterU32.lower(size),
+    const liftResult = (result) => FfiConverterMapstring.lift(result);
+    const liftError = null;
+
+    const callResult = GeometryScaffolding.geometry77caMapRound(FfiConverterMapstring.lower(map),FfiConverterU32.lower(size),
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
