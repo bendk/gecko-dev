@@ -3,7 +3,9 @@ namespace geometry {
 
   [Throws=GeometryError]
   double gradient(Line ln);
-  Point? intersection(Line ln1, Line ln2);
+
+  [Throws=ComplexGeometryError]
+  Point intersection(Line ln1, Line ln2);
 
   string string_round(string s);
 
@@ -17,6 +19,11 @@ namespace geometry {
 [Error]
 enum GeometryError {
   "UndefinedGradient"
+};
+
+[Error]
+interface ComplexGeometryError {
+   NoIntersection(string reason, u32 code);
 };
 
 dictionary Point {
