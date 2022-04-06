@@ -50,13 +50,13 @@ Args PrepareArgs(const uint64_t& a, const uint64_t& b, mozilla::ErrorResult& aUn
 // For async calls this should be called in the worker thread
 Result Invoke(Args& aArgs) {
     Result result = {};
+<<<<<<< HEAD:toolkit/components/uniffi-bindgen-gecko-js/fixtures/ArithmeticScaffolding.cpp
     result.mReturnValue = ::arithmetic_475f_add(
          aArgs.a,
          aArgs.b,
-         &result.mCallStatus
-     );
-    return result;
-}
+    result.mReturnValue = ::geometry_4b5d_gradient(
+         aArgs.ln.intoRustBuffer(),
+>>>>>>> 91e1d041ccf0 (Adds support for enums):toolkit/components/geometry/js/GeometryScaffolding.cpp
 
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
@@ -88,33 +88,16 @@ using namespace mozilla::dom;
 // Arguments to pass to the scaffolding function
 //
 // RustBuffer arguments are stored as OwnedRustBuffer instances.  That class takes care of
-// freeing the buffer if the arguments don't get passed to Rust (i.e. intoRustBuffer()
-// isn't called).  This can happen if some of the ArrayBuffer arguments are succuessfully
-// converted, but one fails to convert.
-struct Args {
-    uint64_t a;
-    uint64_t b;
-};
-
-// Return values from the scaffolding function
-struct Result {
-    uint64_t mReturnValue;
-    RustCallStatus mCallStatus = {};
-};
-
-// Convert the arguments we get from JS to arguments to pass to Rust.
 //
-// On error, an error code will be stored in result.  Make sure to check this before
-// passing the args to Invoke().
-//
-// For async calls this should be called in the main thread, since the GC can
-// move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const uint64_t& a, const uint64_t& b, mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    uniFFIArgs.a = a;
-    uniFFIArgs.b = b;
+    map.ComputeState();
+    uniFFIArgs.map = OwnedRustBuffer(map, aUniFFIError);
+    if (aUniFFIError.Failed()) {
+        return uniFFIArgs;
+    }
+    uniFFIArgs.size = size;
 
     return uniFFIArgs;
 }
@@ -124,9 +107,9 @@ Args PrepareArgs(const uint64_t& a, const uint64_t& b, mozilla::ErrorResult& aUn
 // For async calls this should be called in the worker thread
 Result Invoke(Args& aArgs) {
     Result result = {};
-    result.mReturnValue = ::arithmetic_475f_sub(
-         aArgs.a,
-         aArgs.b,
+    result.mReturnValue = ::geometry_4b5d_map_round(
+         aArgs.map.intoRustBuffer(),
+         aArgs.size,
          &result.mCallStatus
      );
     return result;
@@ -138,8 +121,8 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
         case uniffi::CALL_SUCCESS:
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // All other return values (ints, floats, pointers) are handled as a JS number value
-            aReturnValue.mData.setNumber(aCallResult.mReturnValue);
+            // Convert result RustBuffer into an ArrayBuffer and set the data field
+            aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
 
         case uniffi::CALL_ERROR:
@@ -157,7 +140,7 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 }
 }
 // For each Rust scaffolding function, define types and functions for calling it
-namespace arithmetic_475f_div {
+namespace geometry_4b5d_enum_round {
 using namespace mozilla::dom;
 // Arguments to pass to the scaffolding function
 //
@@ -166,13 +149,12 @@ using namespace mozilla::dom;
 // isn't called).  This can happen if some of the ArrayBuffer arguments are succuessfully
 // converted, but one fails to convert.
 struct Args {
-    uint64_t dividend;
-    uint64_t divisor;
+    mozilla::dom::OwnedRustBuffer e;
 };
 
 // Return values from the scaffolding function
 struct Result {
-    uint64_t mReturnValue;
+    RustBuffer mReturnValue;
     RustCallStatus mCallStatus = {};
 };
 
@@ -183,12 +165,15 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const uint64_t& dividend, const uint64_t& divisor, mozilla::ErrorResult& aUniFFIError) {
+Args PrepareArgs(const ArrayBuffer& e, mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    uniFFIArgs.dividend = dividend;
-    uniFFIArgs.divisor = divisor;
+    e.ComputeState();
+    uniFFIArgs.e = OwnedRustBuffer(e, aUniFFIError);
+    if (aUniFFIError.Failed()) {
+        return uniFFIArgs;
+    }
 
     return uniFFIArgs;
 }
@@ -198,9 +183,8 @@ Args PrepareArgs(const uint64_t& dividend, const uint64_t& divisor, mozilla::Err
 // For async calls this should be called in the worker thread
 Result Invoke(Args& aArgs) {
     Result result = {};
-    result.mReturnValue = ::arithmetic_475f_div(
-         aArgs.dividend,
-         aArgs.divisor,
+    result.mReturnValue = ::geometry_4b5d_enum_round(
+         aArgs.e.intoRustBuffer(),
          &result.mCallStatus
      );
     return result;
@@ -212,8 +196,8 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
         case uniffi::CALL_SUCCESS:
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // All other return values (ints, floats, pointers) are handled as a JS number value
-            aReturnValue.mData.setNumber(aCallResult.mReturnValue);
+            // Convert result RustBuffer into an ArrayBuffer and set the data field
+            aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
 
         case uniffi::CALL_ERROR:
@@ -231,7 +215,7 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 }
 }
 // For each Rust scaffolding function, define types and functions for calling it
-namespace arithmetic_475f_equal {
+namespace geometry_4b5d_complex_enum_round {
 using namespace mozilla::dom;
 // Arguments to pass to the scaffolding function
 //
@@ -240,13 +224,12 @@ using namespace mozilla::dom;
 // isn't called).  This can happen if some of the ArrayBuffer arguments are succuessfully
 // converted, but one fails to convert.
 struct Args {
-    uint64_t a;
-    uint64_t b;
+    mozilla::dom::OwnedRustBuffer ce;
 };
 
 // Return values from the scaffolding function
 struct Result {
-    int8_t mReturnValue;
+    RustBuffer mReturnValue;
     RustCallStatus mCallStatus = {};
 };
 
@@ -257,12 +240,15 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const uint64_t& a, const uint64_t& b, mozilla::ErrorResult& aUniFFIError) {
+Args PrepareArgs(const ArrayBuffer& ce, mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    uniFFIArgs.a = a;
-    uniFFIArgs.b = b;
+    ce.ComputeState();
+    uniFFIArgs.ce = OwnedRustBuffer(ce, aUniFFIError);
+    if (aUniFFIError.Failed()) {
+        return uniFFIArgs;
+    }
 
     return uniFFIArgs;
 }
@@ -272,9 +258,8 @@ Args PrepareArgs(const uint64_t& a, const uint64_t& b, mozilla::ErrorResult& aUn
 // For async calls this should be called in the worker thread
 Result Invoke(Args& aArgs) {
     Result result = {};
-    result.mReturnValue = ::arithmetic_475f_equal(
-         aArgs.a,
-         aArgs.b,
+    result.mReturnValue = ::geometry_4b5d_complex_enum_round(
+         aArgs.ce.intoRustBuffer(),
          &result.mCallStatus
      );
     return result;
@@ -286,8 +271,8 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
         case uniffi::CALL_SUCCESS:
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // All other return values (ints, floats, pointers) are handled as a JS number value
-            aReturnValue.mData.setNumber(aCallResult.mReturnValue);
+            // Convert result RustBuffer into an ArrayBuffer and set the data field
+            aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
 
         case uniffi::CALL_ERROR:
@@ -307,38 +292,8 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 }
 
 namespace mozilla::dom {
-using namespace uniffi::arithmetic;
-already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fAdd(const GlobalObject& aUniFFIGlobal, const uint64_t& a, const uint64_t& b, ErrorResult& aUniFFIError) {
-    // Note: Prefix our params and local variables with "uniffi" to avoid name
-    // conflicts with the scaffolding function args
-
-    // Create the promise that we return to JS
-    nsCOMPtr<nsIGlobalObject> uniFFIXPCOMGlobal = do_QueryInterface(aUniFFIGlobal.GetAsSupports());
-    RefPtr<Promise> uniFFIReturnPromise = Promise::Create(uniFFIXPCOMGlobal, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Prepare arguments to pass to Rust
-    auto uniFFIArgs = arithmetic_475f_add::PrepareArgs(a, b, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Create a second promise that gets resolved by a background task that calls the scaffolding function
-    using UniFFITaskPromise = MozPromise<arithmetic_475f_add::Result, nsresult, true>;
-    RefPtr uniFFITaskPromise = new UniFFITaskPromise::Private(__func__);
-    nsresult uniFFIDispatchResult = NS_DispatchBackgroundTask(
-            NS_NewRunnableFunction(
-                "ArithmeticScaffolding::Arithmetic475fAdd",
-                [args = std::move(uniFFIArgs), uniFFITaskPromise]() mutable {
-                auto result = arithmetic_475f_add::Invoke(args);
-                uniFFITaskPromise->Resolve(std::move(result), __func__);
-            }),
+                auto result = geometry_4b5d_gradient::Invoke(args);
             NS_DISPATCH_EVENT_MAY_BLOCK);
-    if (NS_FAILED(uniFFIDispatchResult)) {
-        uniFFITaskPromise->Reject(uniFFIDispatchResult, __func__);
-    }
 
     // When the background task promise completes, resolve the JS promise
     uniFFITaskPromise->Then(GetCurrentSerialEventTarget(), __func__,
@@ -355,12 +310,6 @@ already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fAdd(const GlobalO
             uniFFIReturnPromise->MaybeResolve(returnValue);
             }
     );
-
-    // Return the JS promise, using forget() to convert it to already_AddRefed
-    return uniFFIReturnPromise.forget();
-}
-using namespace uniffi::arithmetic;
-already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fSub(const GlobalObject& aUniFFIGlobal, const uint64_t& a, const uint64_t& b, ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
 
@@ -372,148 +321,4 @@ already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fSub(const GlobalO
     }
 
     // Prepare arguments to pass to Rust
-    auto uniFFIArgs = arithmetic_475f_sub::PrepareArgs(a, b, aUniFFIError);
     if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Create a second promise that gets resolved by a background task that calls the scaffolding function
-    using UniFFITaskPromise = MozPromise<arithmetic_475f_sub::Result, nsresult, true>;
-    RefPtr uniFFITaskPromise = new UniFFITaskPromise::Private(__func__);
-    nsresult uniFFIDispatchResult = NS_DispatchBackgroundTask(
-            NS_NewRunnableFunction(
-                "ArithmeticScaffolding::Arithmetic475fSub",
-                [args = std::move(uniFFIArgs), uniFFITaskPromise]() mutable {
-                auto result = arithmetic_475f_sub::Invoke(args);
-                uniFFITaskPromise->Resolve(std::move(result), __func__);
-            }),
-            NS_DISPATCH_EVENT_MAY_BLOCK);
-    if (NS_FAILED(uniFFIDispatchResult)) {
-        uniFFITaskPromise->Reject(uniFFIDispatchResult, __func__);
-    }
-
-    // When the background task promise completes, resolve the JS promise
-    uniFFITaskPromise->Then(GetCurrentSerialEventTarget(), __func__,
-            [uniFFIXPCOMGlobal, uniFFIReturnPromise](UniFFITaskPromise::ResolveOrRejectValue&& aResult) {
-            if (!aResult.IsResolve()) {
-                uniFFIReturnPromise->MaybeRejectWithUnknownError("ArithmeticScaffolding::Arithmetic475fSub task dispatch failed");
-                return;
-            }
-
-            AutoEntryScript aes(uniFFIXPCOMGlobal, "ArithmeticScaffolding::Arithmetic475fSub call resolve");
-            RootedDictionary<UniFFIRustCallResult> returnValue(aes.cx());
-
-            arithmetic_475f_sub::ReturnResult(aes.cx(), aResult.ResolveValue(), returnValue);
-            uniFFIReturnPromise->MaybeResolve(returnValue);
-            }
-    );
-
-    // Return the JS promise, using forget() to convert it to already_AddRefed
-    return uniFFIReturnPromise.forget();
-}
-using namespace uniffi::arithmetic;
-already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fDiv(const GlobalObject& aUniFFIGlobal, const uint64_t& dividend, const uint64_t& divisor, ErrorResult& aUniFFIError) {
-    // Note: Prefix our params and local variables with "uniffi" to avoid name
-    // conflicts with the scaffolding function args
-
-    // Create the promise that we return to JS
-    nsCOMPtr<nsIGlobalObject> uniFFIXPCOMGlobal = do_QueryInterface(aUniFFIGlobal.GetAsSupports());
-    RefPtr<Promise> uniFFIReturnPromise = Promise::Create(uniFFIXPCOMGlobal, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Prepare arguments to pass to Rust
-    auto uniFFIArgs = arithmetic_475f_div::PrepareArgs(dividend, divisor, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Create a second promise that gets resolved by a background task that calls the scaffolding function
-    using UniFFITaskPromise = MozPromise<arithmetic_475f_div::Result, nsresult, true>;
-    RefPtr uniFFITaskPromise = new UniFFITaskPromise::Private(__func__);
-    nsresult uniFFIDispatchResult = NS_DispatchBackgroundTask(
-            NS_NewRunnableFunction(
-                "ArithmeticScaffolding::Arithmetic475fDiv",
-                [args = std::move(uniFFIArgs), uniFFITaskPromise]() mutable {
-                auto result = arithmetic_475f_div::Invoke(args);
-                uniFFITaskPromise->Resolve(std::move(result), __func__);
-            }),
-            NS_DISPATCH_EVENT_MAY_BLOCK);
-    if (NS_FAILED(uniFFIDispatchResult)) {
-        uniFFITaskPromise->Reject(uniFFIDispatchResult, __func__);
-    }
-
-    // When the background task promise completes, resolve the JS promise
-    uniFFITaskPromise->Then(GetCurrentSerialEventTarget(), __func__,
-            [uniFFIXPCOMGlobal, uniFFIReturnPromise](UniFFITaskPromise::ResolveOrRejectValue&& aResult) {
-            if (!aResult.IsResolve()) {
-                uniFFIReturnPromise->MaybeRejectWithUnknownError("ArithmeticScaffolding::Arithmetic475fDiv task dispatch failed");
-                return;
-            }
-
-            AutoEntryScript aes(uniFFIXPCOMGlobal, "ArithmeticScaffolding::Arithmetic475fDiv call resolve");
-            RootedDictionary<UniFFIRustCallResult> returnValue(aes.cx());
-
-            arithmetic_475f_div::ReturnResult(aes.cx(), aResult.ResolveValue(), returnValue);
-            uniFFIReturnPromise->MaybeResolve(returnValue);
-            }
-    );
-
-    // Return the JS promise, using forget() to convert it to already_AddRefed
-    return uniFFIReturnPromise.forget();
-}
-using namespace uniffi::arithmetic;
-already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic475fEqual(const GlobalObject& aUniFFIGlobal, const uint64_t& a, const uint64_t& b, ErrorResult& aUniFFIError) {
-    // Note: Prefix our params and local variables with "uniffi" to avoid name
-    // conflicts with the scaffolding function args
-
-    // Create the promise that we return to JS
-    nsCOMPtr<nsIGlobalObject> uniFFIXPCOMGlobal = do_QueryInterface(aUniFFIGlobal.GetAsSupports());
-    RefPtr<Promise> uniFFIReturnPromise = Promise::Create(uniFFIXPCOMGlobal, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Prepare arguments to pass to Rust
-    auto uniFFIArgs = arithmetic_475f_equal::PrepareArgs(a, b, aUniFFIError);
-    if (aUniFFIError.Failed()) {
-        return nullptr;
-    }
-
-    // Create a second promise that gets resolved by a background task that calls the scaffolding function
-    using UniFFITaskPromise = MozPromise<arithmetic_475f_equal::Result, nsresult, true>;
-    RefPtr uniFFITaskPromise = new UniFFITaskPromise::Private(__func__);
-    nsresult uniFFIDispatchResult = NS_DispatchBackgroundTask(
-            NS_NewRunnableFunction(
-                "ArithmeticScaffolding::Arithmetic475fEqual",
-                [args = std::move(uniFFIArgs), uniFFITaskPromise]() mutable {
-                auto result = arithmetic_475f_equal::Invoke(args);
-                uniFFITaskPromise->Resolve(std::move(result), __func__);
-            }),
-            NS_DISPATCH_EVENT_MAY_BLOCK);
-    if (NS_FAILED(uniFFIDispatchResult)) {
-        uniFFITaskPromise->Reject(uniFFIDispatchResult, __func__);
-    }
-
-    // When the background task promise completes, resolve the JS promise
-    uniFFITaskPromise->Then(GetCurrentSerialEventTarget(), __func__,
-            [uniFFIXPCOMGlobal, uniFFIReturnPromise](UniFFITaskPromise::ResolveOrRejectValue&& aResult) {
-            if (!aResult.IsResolve()) {
-                uniFFIReturnPromise->MaybeRejectWithUnknownError("ArithmeticScaffolding::Arithmetic475fEqual task dispatch failed");
-                return;
-            }
-
-            AutoEntryScript aes(uniFFIXPCOMGlobal, "ArithmeticScaffolding::Arithmetic475fEqual call resolve");
-            RootedDictionary<UniFFIRustCallResult> returnValue(aes.cx());
-
-            arithmetic_475f_equal::ReturnResult(aes.cx(), aResult.ResolveValue(), returnValue);
-            uniFFIReturnPromise->MaybeResolve(returnValue);
-            }
-    );
-
-    // Return the JS promise, using forget() to convert it to already_AddRefed
-    return uniFFIReturnPromise.forget();
-}
-
-}  // namespace mozilla::dom

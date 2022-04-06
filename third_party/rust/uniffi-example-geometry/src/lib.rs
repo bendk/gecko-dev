@@ -18,6 +18,21 @@ pub struct Line {
     end: Point,
 }
 
+pub enum ExampleEnum {
+    V1, V2
+}
+
+pub enum ComplexEnum {
+    V1 {
+        s: String,
+        num: u32,
+    },
+    V2 {
+        s: String,
+        num: f64
+    }
+}
+
 pub fn gradient(ln: Line) -> f64 {
     let rise = ln.end.coord_y - ln.start.coord_y;
     let run = ln.end.coord_x - ln.start.coord_x;
