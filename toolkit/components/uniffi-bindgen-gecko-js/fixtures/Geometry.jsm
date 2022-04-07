@@ -115,6 +115,11 @@ class ArrayBufferDataStream {
       this.pos += size + 4;
     }
 
+    writeInt32(value) {
+        this.dataView.setInt32(this.pos, value);
+        this.pos += 4;
+    }
+
     readString() {
       const decoder = new TextDecoder();
       const size = this.readUint32();
@@ -297,125 +302,7 @@ class FfiConverterTypePoint {
     }
 }
 
-EXPORTED_SYMBOLS.push("Point");
-
-
-
-
-class ComplexEnum {}
-ComplexEnum.V1 = class extends ComplexEnum{
-    constructor(
-        s,
-        num
-        ) {
-            super();
-            this.s = s;
-            this.num = num;
-        }
-}
-ComplexEnum.V2 = class extends ComplexEnum{
-    constructor(
-        s,
-        num
-        ) {
-            super();
-            this.s = s;
-            this.num = num;
-        }
-}
-
-class FfiConverterTypeComplexEnum extends FfiConverterArrayBuffer {
-    static read(dataStream) {
-        switch (dataStream.readInt32()) {
-            case 1:
-                return new ComplexEnum.V1(
-                    FfiConverterString.read(dataStream),
-                    FfiConverterU32.read(dataStream)
-                    );
-            case 2:
-                return new ComplexEnum.V2(
-                    FfiConverterString.read(dataStream),
-                    FfiConverterF64.read(dataStream)
-                    );
-            default:
-                return new Error("Unknown ComplexEnum variant");
-        }
-    }
-
-    static write(dataStream, value) {
-        if (value instanceof ComplexEnum.V1) {
-            dataStream.writeInt32(1);
-            FfiConverterString.write(dataStream, value.s);
-            FfiConverterU32.write(dataStream, value.num);
-            return;
-        }
-        if (value instanceof ComplexEnum.V2) {
-            dataStream.writeInt32(2);
-            FfiConverterString.write(dataStream, value.s);
-            FfiConverterF64.write(dataStream, value.num);
-            return;
-        }
-        return new Error("Unknown ComplexEnum variant");
-    }
-
-    static computeSize(value) {
-        // Size of the Int indicating the variant
-        let totalSize = 4;
-        if (value instanceof ComplexEnum.V1) {
-            totalSize += FfiConverterString.computeSize(value.s);
-            totalSize += FfiConverterU32.computeSize(value.num);
-            return totalSize;
-        }
-        if (value instanceof ComplexEnum.V2) {
-            totalSize += FfiConverterString.computeSize(value.s);
-            totalSize += FfiConverterF64.computeSize(value.num);
-            return totalSize;
-        }
-        return new Error("Unknown ComplexEnum variant");
-    }
-}
-
-EXPORTED_SYMBOLS.push("ComplexEnum");
-
-
-
-
-const ExampleEnum = {
-    V1: 1,
-    V2: 2,
-};
-
-Object.freeze(ExampleEnum);
-class FfiConverterTypeExampleEnum extends FfiConverterArrayBuffer {
-    static read(dataStream) {
-        switch (dataStream.readInt32()) {
-            case 1:
-                return ExampleEnum.V1
-            case 2:
-                return ExampleEnum.V2
-            default:
-                return new Error("Unknown ExampleEnum variant");
-        }
-    }
-
-    static write(dataStream, value) {
-        if (value === ExampleEnum.V1) {
-            dataStream.writeInt32(1);
-            return;
-        }
-        if (value === ExampleEnum.V2) {
-            dataStream.writeInt32(2);
-            return;
-        }
-        return new Error("Unknown ExampleEnum variant");
-    }
-
-    static computeSize(value) {
-        return 4;
-    }
-}
-
-EXPORTED_SYMBOLS.push("ExampleEnum");class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
+EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
     static read(dataStream) {
         const code = dataStream.readUint8(0);
         switch (code) {
