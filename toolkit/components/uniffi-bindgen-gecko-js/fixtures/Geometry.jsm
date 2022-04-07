@@ -303,24 +303,22 @@ EXPORTED_SYMBOLS.push("Point");
 
 
 class ComplexEnum {}
-
-EXPORTED_SYMBOLS.push("ComplexEnum");
-
-
-ComplexEnum.V1 = class {
+ComplexEnum.V1 = class extends ComplexEnum{
     constructor(
         s,
         num
         ) {
+            super();
             this.s = s;
             this.num = num;
         }
 }
-ComplexEnum.V2 = class {
+ComplexEnum.V2 = class extends ComplexEnum{
     constructor(
         s,
         num
         ) {
+            super();
             this.s = s;
             this.num = num;
         }
@@ -377,45 +375,35 @@ class FfiConverterTypeComplexEnum extends FfiConverterArrayBuffer {
     }
 }
 
+EXPORTED_SYMBOLS.push("ComplexEnum");
 
 
 
-class ExampleEnum {}
 
-EXPORTED_SYMBOLS.push("ExampleEnum");
+const ExampleEnum = {
+    V1: 1,
+    V2: 2,
+};
 
-
-ExampleEnum.V1 = class {
-    constructor(
-        ) {
-        }
-}
-ExampleEnum.V2 = class {
-    constructor(
-        ) {
-        }
-}
-
+Object.freeze(ExampleEnum);
 class FfiConverterTypeExampleEnum extends FfiConverterArrayBuffer {
     static read(dataStream) {
         switch (dataStream.readInt32()) {
             case 1:
-                return new ExampleEnum.V1(
-                    );
+                return ExampleEnum.V1
             case 2:
-                return new ExampleEnum.V2(
-                    );
+                return ExampleEnum.V2
             default:
                 return new Error("Unknown ExampleEnum variant");
         }
     }
 
     static write(dataStream, value) {
-        if (value instanceof ExampleEnum.V1) {
+        if (value === ExampleEnum.V1) {
             dataStream.writeInt32(1);
             return;
         }
-        if (value instanceof ExampleEnum.V2) {
+        if (value === ExampleEnum.V2) {
             dataStream.writeInt32(2);
             return;
         }
@@ -423,17 +411,11 @@ class FfiConverterTypeExampleEnum extends FfiConverterArrayBuffer {
     }
 
     static computeSize(value) {
-        // Size of the Int indicating the variant
-        let totalSize = 4;
-        if (value instanceof ExampleEnum.V1) {
-            return totalSize;
-        }
-        if (value instanceof ExampleEnum.V2) {
-            return totalSize;
-        }
-        return new Error("Unknown ExampleEnum variant");
+        return 4;
     }
-}class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
+}
+
+EXPORTED_SYMBOLS.push("ExampleEnum");class FfiConverterOptionalTypePoint extends FfiConverterArrayBuffer {
     static read(dataStream) {
         const code = dataStream.readUint8(0);
         switch (code) {
@@ -461,92 +443,22 @@ class FfiConverterTypeExampleEnum extends FfiConverterArrayBuffer {
 
 
 function gradient(ln) {
-<<<<<<< HEAD:toolkit/components/uniffi-bindgen-gecko-js/fixtures/Geometry.jsm
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
 
     const callResult = GeometryScaffolding.geometryEb69Gradient(FfiConverterTypeLine.lower(ln),
-=======
-    const liftResult = (result) => FfiConverterF64.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dGradient(FfiConverterTypeLine.lower(ln),
->>>>>>> 91e1d041ccf0 (Adds support for enums):toolkit/components/geometry/js/Geometry.jsm
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
 EXPORTED_SYMBOLS.push("gradient");
 function intersection(ln1,ln2) {
-<<<<<<< HEAD:toolkit/components/uniffi-bindgen-gecko-js/fixtures/Geometry.jsm
     const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result);
     const liftError = null;
 
     const callResult = GeometryScaffolding.geometryEb69Intersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
-=======
-    const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dIntersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
->>>>>>> 91e1d041ccf0 (Adds support for enums):toolkit/components/geometry/js/Geometry.jsm
     )
     return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
 }
 
-<<<<<<< HEAD:toolkit/components/uniffi-bindgen-gecko-js/fixtures/Geometry.jsm
 EXPORTED_SYMBOLS.push("intersection");
-=======
-EXPORTED_SYMBOLS.push("intersection");
-function stringRound(s) {
-    const liftResult = (result) => FfiConverterString.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dStringRound(FfiConverterString.lower(s),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("stringRound");
-function stringRecordRound(p) {
-    const liftResult = (result) => FfiConverterTypePoint.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dStringRecordRound(FfiConverterTypePoint.lower(p),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("stringRecordRound");
-function arrRound(arr,size) {
-    const liftResult = (result) => FfiConverterSequencestring.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dArrRound(FfiConverterSequencestring.lower(arr),FfiConverterU32.lower(size),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("arrRound");
-function mapRound(map,size) {
-    const liftResult = (result) => FfiConverterMapstring.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dMapRound(FfiConverterMapstring.lower(map),FfiConverterU32.lower(size),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("mapRound");
-function enumRound(e) {
-    const liftResult = (result) => FfiConverterTypeExampleEnum.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dEnumRound(FfiConverterTypeExampleEnum.lower(e),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("enumRound");
-function complexEnumRound(ce) {
-    const liftResult = (result) => FfiConverterTypeComplexEnum.lift(result)
-    const liftError = null; // TODO
-    const callResult = GeometryScaffolding.geometry4b5dComplexEnumRound(FfiConverterTypeComplexEnum.lower(ce),
-    )
-    return callResult.then((result) => handleRustResult(result,  liftResult, liftError));
-}
-
-EXPORTED_SYMBOLS.push("complexEnumRound");
->>>>>>> 91e1d041ccf0 (Adds support for enums):toolkit/components/geometry/js/Geometry.jsm

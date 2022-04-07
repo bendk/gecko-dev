@@ -1,22 +1,58 @@
 {%- let enum_ = ci.get_enum_definition(name).unwrap() %}
 
+{%- if enum_.is_flat() %}
+
+const {{ enum_.nm() }} = {
+    {%- for variant in enum_.variants() %}
+    {{ variant.name().to_shouty_snake_case() }}: {{loop.index}},
+    {%- endfor %}
+};
+
+Object.freeze({{ enum_.nm() }});
+class {{ ffi_converter }} extends FfiConverterArrayBuffer {
+    static read(dataStream) {
+        switch (dataStream.readInt32()) {
+            {%- for variant in enum_.variants() %}
+            case {{ loop.index }}:
+                return {{ enum_.nm() }}.{{ variant.name().to_shouty_snake_case() }}
+            {%- endfor %}
+            default:
+                return new Error("Unknown {{ enum_.nm() }} variant");
+        }
+    }
+
+    static write(dataStream, value) {
+        {%- for variant in enum_.variants() %}
+        if (value === {{ enum_.nm() }}.{{ variant.name().to_shouty_snake_case() }}) {
+            dataStream.writeInt32({{ loop.index }});
+            return;
+        }
+        {%- endfor %}
+        return new Error("Unknown {{ enum_.nm() }} variant");
+    }
+
+    static computeSize(value) {
+        return 4;
+    }
+}
+
+{%- else %}
+
 class {{ enum_.nm() }} {}
-
-EXPORTED_SYMBOLS.push("{{ enum_.nm() }}");
-
-{% for variant in enum_.variants() %}
-{{enum_.nm()}}.{{variant.name().to_camel_case() }} = class {
+{%- for variant in enum_.variants() %}
+{{enum_.nm()}}.{{variant.name().to_camel_case() }} = class extends {{ enum_.nm() }}{
     constructor(
         {% for field in variant.fields() -%}
-        {{field.nm()}}{%- if loop.last %}{%- else %}, {%- endif %}
+        {{ field.nm() }}{%- if loop.last %}{%- else %}, {%- endif %}
         {% endfor -%}
         ) {
+            super();
             {%- for field in variant.fields() %}
             this.{{field.nm()}} = {{ field.nm() }};
             {%- endfor %}
         }
 }
-{%-endfor %}
+{%- endfor %}
 
 class {{ ffi_converter }} extends FfiConverterArrayBuffer {
     static read(dataStream) {
@@ -61,3 +97,7 @@ class {{ ffi_converter }} extends FfiConverterArrayBuffer {
         return new Error("Unknown {{ enum_.nm() }} variant");
     }
 }
+
+{%- endif %}
+
+EXPORTED_SYMBOLS.push("{{ enum_.nm() }}");
