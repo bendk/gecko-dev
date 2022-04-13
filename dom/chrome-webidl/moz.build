@@ -89,7 +89,9 @@ if CONFIG["MOZ_UNIFFI_FIXTURES"]:
     WEBIDL_FILES.extend([
         "ArithmeticScaffolding.webidl",
         "GeometryScaffolding.webidl",
-        "RondpointScaffolding.webidl"
+        "RondpointScaffolding.webidl",
+        "SpritesScaffolding.webidl",
+        "TodolistScaffolding.webidl",
     ])
 
 if CONFIG["MOZ_PLACES"]:

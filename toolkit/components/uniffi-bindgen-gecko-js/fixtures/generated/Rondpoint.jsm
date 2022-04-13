@@ -954,12 +954,15 @@ class FfiConverterTypeOptionneur extends FfiConverter {
         return value.ptr;
     }
 
+    // Note: We store the object pointer using the `setPrivate` JS API.  From
+    // the JS side, this appears as a 64-bit float value.
+
     static read(dataStream) {
-        return lift(dataStream.readInt64());
+        return this.lift(dataStream.readFloat64());
     }
 
     static write(dataStream, value) {
-        dataStream.writeInt64(value.ptr);
+        dataStream.writeFloat64(this.lower(value));
     }
 
     static computeSize(value) {
@@ -1299,12 +1302,15 @@ class FfiConverterTypeRetourneur extends FfiConverter {
         return value.ptr;
     }
 
+    // Note: We store the object pointer using the `setPrivate` JS API.  From
+    // the JS side, this appears as a 64-bit float value.
+
     static read(dataStream) {
-        return lift(dataStream.readInt64());
+        return this.lift(dataStream.readFloat64());
     }
 
     static write(dataStream, value) {
-        dataStream.writeInt64(value.ptr);
+        dataStream.writeFloat64(this.lower(value));
     }
 
     static computeSize(value) {
@@ -1587,12 +1593,15 @@ class FfiConverterTypeStringifier extends FfiConverter {
         return value.ptr;
     }
 
+    // Note: We store the object pointer using the `setPrivate` JS API.  From
+    // the JS side, this appears as a 64-bit float value.
+
     static read(dataStream) {
-        return lift(dataStream.readInt64());
+        return this.lift(dataStream.readFloat64());
     }
 
     static write(dataStream, value) {
-        dataStream.writeInt64(value.ptr);
+        dataStream.writeFloat64(this.lower(value));
     }
 
     static computeSize(value) {

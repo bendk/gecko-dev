@@ -6,7 +6,9 @@
 
 FINAL_LIBRARY = "xul"
 
-components = ["Arithmetic", "Geometry", "Rondpoint"]
+components = [
+    "Arithmetic", "Geometry", "Rondpoint", "Sprites", "Todolist",
+]
 
 UNIFIED_SOURCES += [
     "generated/{}Scaffolding.cpp".format(component) for component in components

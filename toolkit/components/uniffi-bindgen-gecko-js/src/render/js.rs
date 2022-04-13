@@ -200,6 +200,14 @@ pub impl Object {
 
 #[ext(name=ConstructorJSExt)]
 pub impl Constructor {
+    fn nm(&self) -> String {
+        if self.is_primary_constructor() {
+            "init".to_string()
+        } else {
+            self.name().to_mixed_case()
+        }
+    }
+
     fn arg_names(&self) -> String {
         arg_names(&self.arguments().as_slice())
     }

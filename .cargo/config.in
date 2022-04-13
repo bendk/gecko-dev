@@ -12,6 +12,11 @@ git = "https://github.com/msirringhaus/minidump_writer_linux.git"
 replace-with = "vendored-sources"
 rev = "029ac0d54b237f27dc7d8d4e51bc0fb076e5e852"
 
+[source."https://github.com/mozilla/uniffi-rs.git"]
+branch = "main"
+git = "https://github.com/mozilla/uniffi-rs.git"
+replace-with = "vendored-sources"
+
 [source."https://github.com/mozilla/neqo"]
 git = "https://github.com/mozilla/neqo"
 replace-with = "vendored-sources"
@@ -106,11 +111,6 @@ rev = "140c8f4"
 git = "https://github.com/chris-zen/coremidi.git"
 replace-with = "vendored-sources"
 rev = "fc68464b5445caf111e41f643a2e69ccce0b4f83"
-
-[source."https://github.com/bendk/uniffi-rs.git"]
-branch = "external-bindings-tests"
-git = "https://github.com/bendk/uniffi-rs.git"
-replace-with = "vendored-sources"
 
 [source.crates-io]
 replace-with = "vendored-sources"
