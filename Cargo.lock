@@ -2172,6 +2172,8 @@ dependencies = [
  "uniffi-example-arithmetic",
  "uniffi-example-geometry",
  "uniffi-example-rondpoint",
+ "uniffi-example-sprites",
+ "uniffi-example-todolist",
  "viaduct",
  "webext_storage_bridge",
  "webrender_bindings",
@@ -5685,7 +5687,7 @@ checksum = "8ccb82d61f80a663efe1f787a51b16b5a51e3314d6ac365b08639f52387b33f3"
 [[package]]
 name = "uniffi"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "anyhow",
  "bytes 1.1.0",
@@ -5714,7 +5716,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-arithmetic"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "thiserror",
  "uniffi",
@@ -5725,7 +5727,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-geometry"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "uniffi",
  "uniffi_build",
@@ -5735,8 +5737,30 @@ dependencies = [
 [[package]]
 name = "uniffi-example-rondpoint"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-sprites"
+version = "0.17.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
+dependencies = [
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-todolist"
+version = "0.17.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
+dependencies = [
+ "lazy_static",
+ "thiserror",
  "uniffi",
  "uniffi_build",
  "uniffi_macros",
@@ -5745,7 +5769,7 @@ dependencies = [
 [[package]]
 name = "uniffi_bindgen"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "anyhow",
  "askama",
@@ -5761,7 +5785,7 @@ dependencies = [
 [[package]]
 name = "uniffi_build"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "anyhow",
  "uniffi_bindgen",
@@ -5770,7 +5794,7 @@ dependencies = [
 [[package]]
 name = "uniffi_macros"
 version = "0.17.0"
-source = "git+https://github.com/bendk/uniffi-rs.git?branch=external-bindings-tests#a998673cfb511be0a972749bbe322044d5835ac4"
+source = "git+https://github.com/mozilla/uniffi-rs.git?branch=main#103404ba686e7e22233a132f017dcf2722a5962a"
 dependencies = [
  "glob",
  "proc-macro2",

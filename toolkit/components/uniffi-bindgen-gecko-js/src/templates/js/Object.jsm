@@ -1,8 +1,6 @@
 {%- let object = ci.get_object_definition(name).unwrap() %}
 
 class {{ object.nm() }} {
-    {%- match object.primary_constructor() %}
-    {%- when Some with (cons) %}
     // Use `init` to instantiate this class.
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
     constructor(ptr) {
@@ -13,6 +11,7 @@ class {{ object.nm() }} {
         this.ptr = ptr;
     }
 
+    {%- for cons in object.constructors() %}
     {%- if cons.is_async() %}
     /**
      * An async constructor for {{ object.nm() }}.
@@ -27,11 +26,10 @@ class {{ object.nm() }} {
      * @returns { {{ object.nm() }} }
      */
     {%- endif %}
-    static init({{cons.arg_names()}}) {
+    static {{ cons.nm() }}({{cons.arg_names()}}) {
         {% call js::call_constructor(cons, type_) %}
     }
-    {%- else %}
-    {%- endmatch %}
+    {%- endfor %}
 
     {%- for meth in object.methods() %}
     {{ meth.nm() }}({{ meth.arg_names() }}) {
@@ -49,12 +47,15 @@ class {{ ffi_converter }} extends FfiConverter {
         return value.ptr;
     }
 
+    // Note: We store the object pointer using the `setPrivate` JS API.  From
+    // the JS side, this appears as a 64-bit float value.
+
     static read(dataStream) {
-        return lift(dataStream.readInt64());
+        return this.lift(dataStream.readFloat64());
     }
 
     static write(dataStream, value) {
-        dataStream.writeInt64(value.ptr);
+        dataStream.writeFloat64(this.lower(value));
     }
 
     static computeSize(value) {

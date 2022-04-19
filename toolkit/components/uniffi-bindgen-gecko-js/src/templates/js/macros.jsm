@@ -34,7 +34,7 @@
             {%- if receiver_ffi_converter != "" %}{{ receiver_ffi_converter }}.lower(this),
             {% endif %}
             {%- for arg in func.arguments() -%}
-            {{ arg.lower_fn_name() }}({{ arg.name() }}),
+            {{ arg.lower_fn_name() }}({{ arg.nm() }}),
             {%- endfor %}
         )
     }

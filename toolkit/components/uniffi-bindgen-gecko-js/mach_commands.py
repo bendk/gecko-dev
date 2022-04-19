@@ -33,6 +33,18 @@ generated_bindings_paths = {
         "cpp": f"{generated_dir}/RondpointScaffolding.cpp",
         "js": f"{generated_dir}/Rondpoint.jsm",
     },
+    'third_party/rust/uniffi-example-sprites/src/sprites.udl': {
+        'webidl': 'dom/chrome-webidl/SpritesScaffolding.webidl',
+        'cpp-header': f'{generated_dir}/SpritesScaffolding.h',
+        'cpp': f'{generated_dir}/SpritesScaffolding.cpp',
+        'js': f'{generated_dir}/Sprites.jsm',
+    },
+    'third_party/rust/uniffi-example-todolist/src/todolist.udl': {
+        'webidl': 'dom/chrome-webidl/TodolistScaffolding.webidl',
+        'cpp-header': f'{generated_dir}/TodolistScaffolding.h',
+        'cpp': f'{generated_dir}/TodolistScaffolding.cpp',
+        'js': f'{generated_dir}/Todolist.jsm',
+    },
 }
 
 
