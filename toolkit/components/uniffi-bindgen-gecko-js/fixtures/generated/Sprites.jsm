@@ -264,10 +264,12 @@ class Sprite {
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
     constructor(ptr) {
         if (!ptr) {
-            throw new UniFFIError("Attempting to construct an object that needs to be constructed asynchronously" +
-            "Please use the init async function")
+            throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
+            "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
+        this.destroyed = false;
+        this.callCounter = 0;
     }
     /**
      * An async constructor for Sprite.
@@ -319,7 +321,8 @@ class Sprite {
     }
     }
     getPosition() {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterTypePoint.lift(result);
     const liftError = null;
@@ -335,9 +338,11 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     moveTo(position) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -354,9 +359,11 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     moveBy(direction) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -373,6 +380,32 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
+    }
+
+    destroy() {
+        this.destroyed = true;
+        // If the call counter is not zero, there are ongoing calls that haven't concluded
+        // yet. The function calls themselves will make sure to deallocate the object once the last
+        // one concludes and we will prevent any new calls by throwing a UniFFIError
+        if (this.callCounter === 0) {
+            SpritesScaffolding.ffiSprites850SpriteObjectFree(this.ptr);
+        }
+    }
+
+    runMethod(callback) {
+        if (this.destroyed) {
+            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
+        }
+        try {
+            this.callCounter += 1;
+            return callback();
+        } finally {
+            this.callCounter -=1;
+            if (this.destroyed && this.callCounter === 0) {
+                SpritesScaffolding.ffiSprites850SpriteObjectFree(this.ptr);
+            }
+        }
     }
 }
 

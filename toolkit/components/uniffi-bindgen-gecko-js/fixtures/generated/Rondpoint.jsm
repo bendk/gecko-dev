@@ -440,10 +440,12 @@ class Optionneur {
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
     constructor(ptr) {
         if (!ptr) {
-            throw new UniFFIError("Attempting to construct an object that needs to be constructed asynchronously" +
-            "Please use the init async function")
+            throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
+            "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
+        this.destroyed = false;
+        this.callCounter = 0;
     }
     /**
      * An async constructor for Optionneur.
@@ -469,7 +471,8 @@ class Optionneur {
     }
     }
     sinonBoolean(value = false) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
@@ -486,9 +489,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonString(value = "default") {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -505,9 +510,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonSequence(value = []) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterSequencestring.lift(result);
     const liftError = null;
@@ -524,9 +531,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonNull(value = null) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterOptionalstring.lift(result);
     const liftError = null;
@@ -543,9 +552,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonZero(value = 0) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterOptionali32.lift(result);
     const liftError = null;
@@ -562,9 +573,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU8Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
@@ -581,9 +594,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI8Dec(value = -42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
@@ -600,9 +615,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU16Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
@@ -619,9 +636,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI16Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
@@ -638,9 +657,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU32Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
@@ -657,9 +678,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI32Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
@@ -676,9 +699,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU64Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
@@ -695,9 +720,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI64Dec(value = 42) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
@@ -714,9 +741,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU8Hex(value = 0xff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
@@ -733,9 +762,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI8Hex(value = -127) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
@@ -752,9 +783,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU16Hex(value = 0xffff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
@@ -771,9 +804,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI16Hex(value = 0x7f) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
@@ -790,9 +825,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU32Hex(value = 0xffffffff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
@@ -809,9 +846,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI32Hex(value = 0x7fffffff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
@@ -828,9 +867,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU64Hex(value = 0xffffffffffffffff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
@@ -847,9 +888,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonI64Hex(value = 0x7fffffffffffffff) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
@@ -866,9 +909,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonU32Oct(value = 0o755) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
@@ -885,9 +930,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonF32(value = 42.0) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterF32.lift(result);
     const liftError = null;
@@ -904,9 +951,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonF64(value = 42.1) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
@@ -923,9 +972,11 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     sinonEnum(value = Enumeration.TROIS) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterTypeEnumeration.lift(result);
     const liftError = null;
@@ -942,6 +993,32 @@ class Optionneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
+    }
+
+    destroy() {
+        this.destroyed = true;
+        // If the call counter is not zero, there are ongoing calls that haven't concluded
+        // yet. The function calls themselves will make sure to deallocate the object once the last
+        // one concludes and we will prevent any new calls by throwing a UniFFIError
+        if (this.callCounter === 0) {
+            RondpointScaffolding.ffiRondpointC728OptionneurObjectFree(this.ptr);
+        }
+    }
+
+    runMethod(callback) {
+        if (this.destroyed) {
+            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
+        }
+        try {
+            this.callCounter += 1;
+            return callback();
+        } finally {
+            this.callCounter -=1;
+            if (this.destroyed && this.callCounter === 0) {
+                RondpointScaffolding.ffiRondpointC728OptionneurObjectFree(this.ptr);
+            }
+        }
     }
 }
 
@@ -978,10 +1055,12 @@ class Retourneur {
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
     constructor(ptr) {
         if (!ptr) {
-            throw new UniFFIError("Attempting to construct an object that needs to be constructed asynchronously" +
-            "Please use the init async function")
+            throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
+            "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
+        this.destroyed = false;
+        this.callCounter = 0;
     }
     /**
      * An async constructor for Retourneur.
@@ -1007,7 +1086,8 @@ class Retourneur {
     }
     }
     identiqueI8(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
@@ -1024,9 +1104,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueU8(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
@@ -1043,9 +1125,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueI16(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
@@ -1062,9 +1146,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueU16(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
@@ -1081,9 +1167,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueI32(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
@@ -1100,9 +1188,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueU32(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
@@ -1119,9 +1209,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueI64(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
@@ -1138,9 +1230,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueU64(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
@@ -1157,9 +1251,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueFloat(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterF32.lift(result);
     const liftError = null;
@@ -1176,9 +1272,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueDouble(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
@@ -1195,9 +1293,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueBoolean(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
@@ -1214,9 +1314,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueString(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1233,9 +1335,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueNombresSignes(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterTypeDictionnaireNombresSignes.lift(result);
     const liftError = null;
@@ -1252,9 +1356,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueNombres(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterTypeDictionnaireNombres.lift(result);
     const liftError = null;
@@ -1271,9 +1377,11 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     identiqueOptionneurDictionnaire(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterTypeOptionneurDictionnaire.lift(result);
     const liftError = null;
@@ -1290,6 +1398,32 @@ class Retourneur {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
+    }
+
+    destroy() {
+        this.destroyed = true;
+        // If the call counter is not zero, there are ongoing calls that haven't concluded
+        // yet. The function calls themselves will make sure to deallocate the object once the last
+        // one concludes and we will prevent any new calls by throwing a UniFFIError
+        if (this.callCounter === 0) {
+            RondpointScaffolding.ffiRondpointC728RetourneurObjectFree(this.ptr);
+        }
+    }
+
+    runMethod(callback) {
+        if (this.destroyed) {
+            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
+        }
+        try {
+            this.callCounter += 1;
+            return callback();
+        } finally {
+            this.callCounter -=1;
+            if (this.destroyed && this.callCounter === 0) {
+                RondpointScaffolding.ffiRondpointC728RetourneurObjectFree(this.ptr);
+            }
+        }
     }
 }
 
@@ -1326,10 +1460,12 @@ class Stringifier {
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
     constructor(ptr) {
         if (!ptr) {
-            throw new UniFFIError("Attempting to construct an object that needs to be constructed asynchronously" +
-            "Please use the init async function")
+            throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
+            "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
+        this.destroyed = false;
+        this.callCounter = 0;
     }
     /**
      * An async constructor for Stringifier.
@@ -1355,7 +1491,8 @@ class Stringifier {
     }
     }
     wellKnownString(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1372,9 +1509,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringI8(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1391,9 +1530,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringU8(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1410,9 +1551,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringI16(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1429,9 +1572,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringU16(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1448,9 +1593,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringI32(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1467,9 +1614,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringU32(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1486,9 +1635,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringI64(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1505,9 +1656,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringU64(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1524,9 +1677,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringFloat(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1543,9 +1698,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringDouble(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1562,9 +1719,11 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
     }
     toStringBoolean(value) {
-        
+        return this.runMethod(() => {
+            
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
@@ -1581,6 +1740,32 @@ class Stringifier {
     }  catch (error) {
         return Promise.reject(error)
     }
+        });
+    }
+
+    destroy() {
+        this.destroyed = true;
+        // If the call counter is not zero, there are ongoing calls that haven't concluded
+        // yet. The function calls themselves will make sure to deallocate the object once the last
+        // one concludes and we will prevent any new calls by throwing a UniFFIError
+        if (this.callCounter === 0) {
+            RondpointScaffolding.ffiRondpointC728StringifierObjectFree(this.ptr);
+        }
+    }
+
+    runMethod(callback) {
+        if (this.destroyed) {
+            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
+        }
+        try {
+            this.callCounter += 1;
+            return callback();
+        } finally {
+            this.callCounter -=1;
+            if (this.destroyed && this.callCounter === 0) {
+                RondpointScaffolding.ffiRondpointC728StringifierObjectFree(this.ptr);
+            }
+        }
     }
 }
 
