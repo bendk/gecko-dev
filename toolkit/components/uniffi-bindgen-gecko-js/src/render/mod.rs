@@ -13,6 +13,7 @@ use std::io::Write;
 use uniffi_bindgen::interface::ComponentInterface;
 
 mod cpp;
+mod js;
 mod shared;
 mod webidl;
 
@@ -26,8 +27,7 @@ pub(crate) fn render_file(
         Mode::Webidl => webidl::WebIDLScaffoldingTemplate { ci }.render()?,
         Mode::CPP => cpp::CPPScaffoldingTemplate { ci }.render()?,
         Mode::CPPHeader => cpp::CPPHeaderScaffoldingTemplate { ci }.render()?,
-        Mode::JS => unimplemented!(),
-        // Mode::JS => js::JSBindingsTemplate { ci }.render()?, TODO
+        Mode::JS => js::JSBindingsTemplate { ci }.render()?,
     };
 
     write!(writer, "{}", output_text)?;
