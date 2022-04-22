@@ -72,6 +72,9 @@ PACKAGES_WE_ALWAYS_WANT_AN_OVERRIDE_OF = [
 # Historically duplicated crates. Eventually we want this list to be empty.
 # If you do need to make changes increasing the number of duplicates, please
 # add a comment as to why.
+#
+# paste, semver, semver-parser, toml, nom are duplicated because of the UniFFI
+# project and UniFFI depends on newer versions than other Gecko dependencies.
 TOLERATED_DUPES = {
     "arrayvec": 2,
     "base64": 3,
@@ -86,9 +89,14 @@ TOLERATED_DUPES = {
     "memmap2": 2,
     "memoffset": 2,
     "mio": 2,
+    "nom": 2,
+    "paste": 2,
     "pin-project-lite": 2,
+    "semver": 2,
+    "semver-parser": 2,
     "target-lexicon": 2,
     "tokio": 3,
+    "toml": 2,
 }
 
 
