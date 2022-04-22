@@ -171,3 +171,17 @@ webext-storage = { git = "https://github.com/mozilla/application-services", rev 
 # There is not going to be new version of mio 0.6, mio now being >= 0.7.11.
 [patch.crates-io.mio]
 path = "third_party/rust/mio-0.6.23"
+
+# Patch the UniFFI fixture crates to use the published version of UniFFI.
+#
+# These are used to test UniFFI functionality.  We haven't figured out how we
+# want to publish these yet, so they are only accessible via git.  This works
+# okay, but it means that their dependencies on UniFFI crates will normally
+# also be the git versions.  Patch them to use the published versions to avoid
+# duplicate crates.
+[patch."https://github.com/mozilla/uniffi-rs.git"]
+uniffi = "0.18"
+uniffi_bindgen = "0.18"
+uniffi_build = "0.18"
+uniffi_macros = "0.18"
+weedle2 = "2.0.1"
