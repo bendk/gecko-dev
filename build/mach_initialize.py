@@ -359,6 +359,9 @@ def initialize(topsrcdir):
             "testing/webcompat/mach_commands.py"
         ),
         "esmify": MachCommandReference("tools/esmify/mach_commands.py"),
+        "uniffi": MachCommandReference(
+            "toolkit/components/uniffi-bindgen-gecko-js/mach_commands.py"
+        ),
     }
 
     # Set a reasonable limit to the number of open files.
