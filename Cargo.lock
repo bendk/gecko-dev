@@ -637,13 +637,6 @@ dependencies = [
 
 [[package]]
 name = "cargo_metadata"
-version = "0.13.999"
-dependencies = [
- "cargo_metadata 0.14.2",
-]
-
-[[package]]
-name = "cargo_metadata"
 version = "0.14.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "4acbb09d9ee8e23699b9634375c72795d095bf268439da88562cf9b501f181fa"
@@ -1614,6 +1607,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "extend"
+version = "1.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "5c5216e387a76eebaaf11f6d871ec8a4aae0b25f05456ee21f228e024b1b3610"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
 name = "fallible-iterator"
 version = "0.2.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2217,6 +2222,11 @@ dependencies = [
  "tokio-threadpool",
  "unic-langid",
  "unic-langid-ffi",
+ "uniffi-example-arithmetic",
+ "uniffi-example-geometry",
+ "uniffi-example-rondpoint",
+ "uniffi-example-sprites",
+ "uniffi-example-todolist",
  "url",
  "viaduct",
  "webext_storage_bridge",
@@ -3722,13 +3732,6 @@ dependencies = [
  "cfg-if 0.1.999",
  "libc",
  "void",
-]
-
-[[package]]
-name = "nom"
-version = "5.999.999"
-dependencies = [
- "nom 6.1.2",
 ]
 
 [[package]]
@@ -5671,28 +5674,98 @@ checksum = "957e51f3646910546462e67d5f7599b9e4fb8acdd304b087a6494730f9eebf04"
 [[package]]
 name = "uniffi"
 version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "d0fe14882ae6ea89f31ac922ad8e6f76b3f346f07965791a60ade60cc3bcdd60"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
 dependencies = [
  "anyhow",
  "bytes 1.1.0",
- "cargo_metadata 0.13.999",
+ "camino",
+ "cargo_metadata",
  "lazy_static",
  "log",
  "paste",
  "static_assertions",
+ "uniffi_bindgen",
+]
+
+[[package]]
+name = "uniffi-bindgen-gecko-js"
+version = "0.1.0"
+dependencies = [
+ "anyhow",
+ "askama",
+ "camino",
+ "clap",
+ "extend",
+ "heck",
+ "serde",
+ "toml 0.5.9",
+ "uniffi_bindgen",
+]
+
+[[package]]
+name = "uniffi-example-arithmetic"
+version = "0.18.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
+dependencies = [
+ "thiserror",
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-geometry"
+version = "0.18.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
+dependencies = [
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-rondpoint"
+version = "0.18.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
+dependencies = [
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-sprites"
+version = "0.18.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
+dependencies = [
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
+]
+
+[[package]]
+name = "uniffi-example-todolist"
+version = "0.18.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
+dependencies = [
+ "lazy_static",
+ "thiserror",
+ "uniffi",
+ "uniffi_build",
+ "uniffi_macros",
 ]
 
 [[package]]
 name = "uniffi_bindgen"
 version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "49a9810482e988792ed22fc6747d872bd32600f7e3bfc11fe93019d155d7e89c"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
 dependencies = [
  "anyhow",
  "askama",
- "cargo_metadata 0.13.999",
+ "camino",
+ "cargo_metadata",
  "clap",
+ "fs-err",
  "heck",
  "paste",
  "serde",
@@ -5703,19 +5776,19 @@ dependencies = [
 [[package]]
 name = "uniffi_build"
 version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "bcb7401cfd8da93541c23a0683c1dab3c782d2a118254536106b0aa4d9b30607"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
 dependencies = [
  "anyhow",
+ "camino",
  "uniffi_bindgen",
 ]
 
 [[package]]
 name = "uniffi_macros"
 version = "0.18.0"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4e7b60ccb030ef51b0c85eb9ca55f28ff68b82c1a29d2bc0c7053777010af0d3"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
 dependencies = [
+ "camino",
  "glob",
  "proc-macro2",
  "quote",
@@ -6066,12 +6139,11 @@ dependencies = [
 
 [[package]]
 name = "weedle2"
-version = "2.0.1"
-source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "8a69b360c3d0df7dc1a18124677ee8476576c806418f30a360a6cf6cf4e072a6"
+version = "3.0.0"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=bb2039f077a29dba0879372a67e764e6ace8e33f#bb2039f077a29dba0879372a67e764e6ace8e33f"
 dependencies = [
  "fs-err",
- "nom 5.999.999",
+ "nom 6.1.2",
 ]
 
 [[package]]
@@ -6340,3 +6412,11 @@ dependencies = [
  "crossbeam-utils 0.8.8",
  "flate2",
 ]
+
+[[patch.unused]]
+name = "cargo_metadata"
+version = "0.13.999"
+
+[[patch.unused]]
+name = "nom"
+version = "5.999.999"

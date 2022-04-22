@@ -12,6 +12,11 @@ git = "https://github.com/rust-minidump/minidump-writer.git"
 replace-with = "vendored-sources"
 rev = "75ada456c92a429704691a85e1cb42fef8cafc0d"
 
+[source."https://github.com/mozilla/uniffi-rs.git"]
+git = "https://github.com/mozilla/uniffi-rs.git"
+replace-with = "vendored-sources"
+rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+
 [source."https://github.com/mozilla/neqo"]
 git = "https://github.com/mozilla/neqo"
 replace-with = "vendored-sources"
