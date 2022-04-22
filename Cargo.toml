@@ -167,7 +167,31 @@ sync15-traits = { git = "https://github.com/mozilla/application-services", rev =
 viaduct = { git = "https://github.com/mozilla/application-services", rev = "2689788cecf24c385e6b7440e3aa1a89c511f14a" }
 webext-storage = { git = "https://github.com/mozilla/application-services", rev = "2689788cecf24c385e6b7440e3aa1a89c511f14a" }
 
+# FIXME: Remove this hack once we release uniffi v0.19.0
+uniffi = { git = "https://github.com/mozilla/uniffi-rs.git", rev="bb2039f077a29dba0879372a67e764e6ace8e33f" }
+uniffi_bindgen = { git = "https://github.com/mozilla/uniffi-rs.git", rev="bb2039f077a29dba0879372a67e764e6ace8e33f" }
+uniffi_build = { git = "https://github.com/mozilla/uniffi-rs.git", rev="bb2039f077a29dba0879372a67e764e6ace8e33f" }
+uniffi_macros = { git = "https://github.com/mozilla/uniffi-rs.git", rev="bb2039f077a29dba0879372a67e764e6ace8e33f" }
+weedle2 = { git = "https://github.com/mozilla/uniffi-rs.git", rev="bb2039f077a29dba0879372a67e764e6ace8e33f" }
+
 # Patch mio 0.6 to use winapi 0.3 and miow 0.3, getting rid of winapi 0.2.
 # There is not going to be new version of mio 0.6, mio now being >= 0.7.11.
 [patch.crates-io.mio]
 path = "third_party/rust/mio-0.6.23"
+
+# FIXME: Add this back once we release UniFFI v0.19.0
+# Patch the UniFFI fixture crates to use the published version of UniFFI.
+#
+# These are used to test UniFFI functionality.  We haven't figured out how we
+# want to publish these yet, so they are only accessible via git.  This works
+# okay, but it means that their dependencies on UniFFI crates will normally
+# also be the git versions.  Patch them to use the published versions to avoid
+# duplicate crates.
+
+# [patch."https://github.com/mozilla/uniffi-rs.git"]
+# uniffi = "0.19"
+# uniffi_bindgen = "0.19"
+# uniffi_build = "0.19"
+# uniffi_macros = "0.19"
+# weedle2 = "3.0.0"
+
