@@ -1,10 +1,12 @@
 //! This module contains `Dependency` and the types/functions it uses for deserialization.
 
+use std::fmt;
+
 use camino::Utf8PathBuf;
-use semver::VersionReq;
-use serde::{Deserialize, Deserializer, Serialize};
 #[cfg(feature = "builder")]
 use derive_builder::Builder;
+use semver::VersionReq;
+use serde::{Deserialize, Deserializer, Serialize};
 
 #[derive(Eq, PartialEq, Clone, Debug, Copy, Hash, Serialize, Deserialize)]
 /// Dependencies can come in three kinds
@@ -29,6 +31,14 @@ impl Default for DependencyKind {
     }
 }
 
+impl fmt::Display for DependencyKind {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        let s = serde_json::to_string(self).unwrap();
+        // skip opening and closing quotes
+        f.write_str(&s[1..s.len() - 1])
+    }
+}
+
 /// The `kind` can be `null`, which is interpreted as the default - `Normal`.
 pub(super) fn parse_dependency_kind<'de, D>(d: D) -> Result<DependencyKind, D::Error>
 where
@@ -37,7 +47,7 @@ where
     Deserialize::deserialize(d).map(|x: Option<_>| x.unwrap_or_default())
 }
 
-#[derive(Clone, Serialize, Deserialize, Debug)]
+#[derive(Clone, Serialize, Deserialize, Debug, PartialEq, Eq)]
 #[cfg_attr(feature = "builder", derive(Builder))]
 #[non_exhaustive]
 #[cfg_attr(feature = "builder", builder(pattern = "owned", setter(into)))]

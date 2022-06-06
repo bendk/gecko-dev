@@ -3,12 +3,12 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 use anyhow::{Context, Result};
+use camino::{Utf8Path, Utf8PathBuf};
 use clap::{ArgEnum, Parser};
 use heck::ToUpperCamelCase;
 use serde::Deserialize;
 use std::fs::File;
 use std::io::Write;
-use std::path::{Path, PathBuf};
 use uniffi_bindgen::{
     generate_external_bindings, BindingGenerator, ComponentInterface, EmptyBindingGeneratorConfig,
 };
@@ -34,23 +34,23 @@ struct CliArgs {
     stdout: bool,
 
     /// Write output to path
-    #[clap(long, parse(from_os_str), value_name = "FILE")]
-    out: Option<PathBuf>,
+    #[clap(long, value_name = "FILE")]
+    out: Option<Utf8PathBuf>,
 
     /// Directory in which to write generated files. Default is same folder as .udl file.
-    #[clap(long, parse(from_os_str), value_name = "DIR")]
-    out_dir: Option<PathBuf>,
+    #[clap(long, value_name = "DIR")]
+    out_dir: Option<Utf8PathBuf>,
 
     /// Path to the optional uniffi config file. If not provided, uniffi-bindgen will try to guess it from the UDL's file location.
-    #[clap(long, parse(from_os_str), value_name = "DIR")]
-    config_path: Option<PathBuf>,
+    #[clap(long, value_name = "DIR")]
+    config_path: Option<Utf8PathBuf>,
 
     /// Generation mode
     #[clap(arg_enum)]
     mode: Mode,
 
     /// Path to the UDL file
-    udl_file: PathBuf,
+    udl_file: Utf8PathBuf,
 }
 
 struct GeckoJsBindingGenerator {
@@ -68,7 +68,7 @@ impl GeckoJsBindingGenerator {
     fn create_writer(
         &self,
         ci: &ComponentInterface,
-        out_dir: &Path,
+        out_dir: &Utf8Path,
     ) -> anyhow::Result<Box<dyn Write>> {
         if self.args.stdout {
             return Ok(Box::new(std::io::stdout()));
@@ -101,7 +101,7 @@ impl BindingGenerator for GeckoJsBindingGenerator {
         &self,
         ci: ComponentInterface,
         config: Self::Config,
-        out_dir: &Path,
+        out_dir: &camino::Utf8Path,
     ) -> anyhow::Result<()> {
         let writer = self.create_writer(&ci, out_dir)?;
         render::render_file(self.args.mode, ci, config, writer)
@@ -113,7 +113,7 @@ pub fn run_main() -> Result<()> {
     let binding_generator = GeckoJsBindingGenerator::new(args.clone());
     generate_external_bindings(
         binding_generator,
-        args.udl_file,
+        &args.udl_file,
         args.config_path,
         args.out_dir,
     )

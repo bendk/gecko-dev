@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -31,23 +33,39 @@ RustBuffer sprites_ff2d_translate(RustBuffer, RustBuffer, RustCallStatus*);
 namespace mozilla::dom {
 
 class GlobalObject;
-
+class SpritePointerType : public UniFFIPointerType {
+    public:
+        static SpritePointerType& getInstance() {
+            static SpritePointerType instance;
+            return instance;
+        }
+    private:
+        SpritePointerType() {
+            typeName = u"uniffi::spritesSprite"_ns;
+            destructor = ffi_sprites_ff2d_Sprite_object_free;
+        }
+};
 class SpritesScaffolding {
   public:
-  static already_AddRefed<Promise> FfiSpritesFf2dSpriteObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> FfiSpritesFf2dSpriteObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> SpritesFf2dSpriteNew(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& initialPosition,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> SpritesFf2dSpriteNewRelativeTo(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& reference, const ArrayBuffer& direction,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteGetPosition(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> SpritesFf2dSpriteGetPosition(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteMoveTo(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& position,
+  static already_AddRefed<Promise> SpritesFf2dSpriteMoveTo(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& position,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteMoveBy(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& direction,
+  static already_AddRefed<Promise> SpritesFf2dSpriteMoveBy(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& direction,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> SpritesFf2dTranslate(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& position, const ArrayBuffer& direction,
   ErrorResult& aUniFFIErrorResult);
+
+  static already_AddRefed<UniFFIPointer> ReadPointerSprite(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointerSprite(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  
 };
 
 }  // namespace mozilla::dom

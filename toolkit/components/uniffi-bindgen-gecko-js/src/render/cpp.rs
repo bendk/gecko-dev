@@ -6,7 +6,9 @@ use super::shared::*;
 use askama::Template;
 use extend::ext;
 use heck::{ToLowerCamelCase, ToSnakeCase, ToUpperCamelCase};
-use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType};
+use uniffi_bindgen::interface::{
+    ComponentInterface, FFIArgument, FFIFunction, FFIType , Object,
+};
 
 #[derive(Template)]
 #[template(path = "Scaffolding.cpp", escape = "none")]
@@ -32,6 +34,12 @@ pub impl ComponentInterface {
     // C++ namespace we create for this scaffolding code
     fn cpp_namespace(&self) -> String {
         format!("uniffi::{}", self.namespace().to_snake_case())
+    }
+
+    // Returns the name of the object in Upper camel case
+    // which is the name used in the CPP code
+    fn obj_name(&self, obj_name: &str) -> String {
+        obj_name.to_upper_camel_case()
     }
 }
 
@@ -100,8 +108,7 @@ pub impl FFIType {
             FFIType::Int64 => "int64_t",
             FFIType::Float32 => "float",
             FFIType::Float64 => "double",
-            // Pointers are handled with the "private value" API, see Scaffolding.cpp for details
-            FFIType::RustArcPtr => "JS::Handle<JS::Value>",
+            FFIType::RustArcPtr(_) => "UniFFIPointer",
             // The JS wrapper code uses `ArrayBuffer` since it has a nice JS API.  We input
             // `ArrayBuffer` in the C++ code, then convert it to `RustBuffer` before passing to
             // Rust.
@@ -124,7 +131,7 @@ pub impl FFIType {
     fn args_type(&self) -> String {
         match self {
             FFIType::RustBuffer => "OwnedRustBuffer".to_owned(),
-            FFIType::RustArcPtr => "void *".to_owned(),
+            FFIType::RustArcPtr(_) => "void *".to_owned(),
             _ => self.js_webidl_type(),
         }
     }
@@ -135,7 +142,7 @@ pub impl FFIType {
     fn rust_type(&self) -> String {
         match self {
             FFIType::RustBuffer => "RustBuffer".to_owned(),
-            FFIType::RustArcPtr => "void *".to_owned(),
+            FFIType::RustArcPtr(_) => "void *".to_owned(),
             _ => self.js_webidl_type(),
         }
     }
@@ -157,5 +164,12 @@ pub impl FFIArgument {
 
     fn rust_type(&self) -> String {
         self.type_().rust_type()
+    }
+}
+
+#[ext(name=ObjectCppExt)]
+pub impl Object {
+    fn nm(&self) -> String {
+        self.name().to_upper_camel_case()
     }
 }

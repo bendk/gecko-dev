@@ -1,4 +1,4 @@
-{%- for func in ci.iter_function_definitions() %}
+{%- for func in ci.function_definitions() %}
 function {{ func.nm() }}({{ func.arg_names() }}) {
     {% call js::call_scaffolding_function(func) %}
 }

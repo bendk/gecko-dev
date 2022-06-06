@@ -6,6 +6,11 @@
 #include "mozilla/dom/TodolistScaffolding.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/Promise.h"
+#include "mozilla/Logging.h"
+#include "mozilla/EndianUtils.h"
+
+static mozilla::LazyLogModule sUniFFITodolistScaffoldingLogger("uniffi_logger");
+
 
 namespace uniffi::todolist {
 // For each Rust scaffolding function, define types and functions for calling it
@@ -28,13 +33,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -53,11 +63,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -115,12 +126,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &TodoListPointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -161,13 +173,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& todo,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     todo.ComputeState();
     uniFFIArgs.todo = OwnedRustBuffer(todo, aUniFFIError);
@@ -195,11 +212,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -240,13 +258,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entry,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& entry,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     entry.ComputeState();
     uniFFIArgs.entry = OwnedRustBuffer(entry, aUniFFIError);
@@ -274,11 +297,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -315,13 +339,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -340,12 +369,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -382,13 +412,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -407,12 +442,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -453,13 +489,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entries,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& entries,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     entries.ComputeState();
     uniFFIArgs.entries = OwnedRustBuffer(entries, aUniFFIError);
@@ -487,11 +528,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -532,13 +574,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& items,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& items,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     items.ComputeState();
     uniFFIArgs.items = OwnedRustBuffer(items, aUniFFIError);
@@ -566,11 +613,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -607,13 +655,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -632,12 +685,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -674,13 +728,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -699,12 +758,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -741,13 +801,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -766,12 +831,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -812,13 +878,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& todo,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     todo.ComputeState();
     uniFFIArgs.todo = OwnedRustBuffer(todo, aUniFFIError);
@@ -846,11 +917,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -886,13 +958,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -911,11 +988,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -973,12 +1051,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1014,13 +1093,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& list,
+Args PrepareArgs(const UniFFIPointer& list,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.list = list.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!list.IsSamePtrType(&TodoListPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer list is not of type TodoList");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.list = list.GetPtr();
 
     return uniFFIArgs;
 }
@@ -1039,11 +1123,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1115,12 +1200,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1140,7 +1226,7 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 
 namespace mozilla::dom {
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::FfiTodolist126TodoListObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::FfiTodolist126TodoListObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1246,7 +1332,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListNew(const Glob
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItem(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1299,7 +1385,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItem(const 
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntry(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entry,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entry,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1352,7 +1438,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntry(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetEntries(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1405,7 +1491,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetEntries(con
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetItems(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1458,7 +1544,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetItems(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntries(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entries,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entries,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1511,7 +1597,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddEntries(con
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItems(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& items,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& items,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1564,7 +1650,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListAddItems(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLastEntry(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLastEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1617,7 +1703,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLastEntry(c
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLast(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLast(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1670,7 +1756,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetLast(const 
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetFirst(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetFirst(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1723,7 +1809,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListGetFirst(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListClearItem(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListClearItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1776,7 +1862,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListClearItem(cons
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListMakeDefault(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126TodoListMakeDefault(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1882,7 +1968,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126GetDefaultList(const G
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::todolist;
-already_AddRefed<Promise> TodolistScaffolding::Todolist126SetDefaultList(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& list,
+already_AddRefed<Promise> TodolistScaffolding::Todolist126SetDefaultList(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& list,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -1987,5 +2073,25 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126CreateEntryWith(const 
     // Return the JS promise, using forget() to convert it to already_AddRefed
     return uniFFIReturnPromise.forget();
 }
+  already_AddRefed<UniFFIPointer> TodolistScaffolding::ReadPointerTodoList(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFITodolistScaffoldingLogger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
 
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &TodoListPointerType::getInstance());
+  }
+  void TodolistScaffolding::WritePointerTodoList(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFITodolistScaffoldingLogger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
+  }
+
+  
 }  // namespace mozilla::dom

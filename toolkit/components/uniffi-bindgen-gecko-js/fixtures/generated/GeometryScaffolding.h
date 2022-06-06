@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -20,9 +22,7 @@ RustBuffer geometry_c382_intersection(RustBuffer, RustBuffer, RustCallStatus*);
 
 namespace mozilla::dom {
 
-class GlobalObject;
-
-class GeometryScaffolding {
+class GlobalObject;class GeometryScaffolding {
   public:
   static already_AddRefed<Promise> GeometryC382Gradient(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& ln,
   ErrorResult& aUniFFIErrorResult);
