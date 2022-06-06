@@ -108,7 +108,6 @@ pub impl FFIType {
             FFIType::Int64 => "int64_t",
             FFIType::Float32 => "float",
             FFIType::Float64 => "double",
-            // Pointers are handled with the "private value" API, see Scaffolding.cpp for details
             FFIType::RustArcPtr(_) => "UniFFIPointer",
             // The JS wrapper code uses `ArrayBuffer` since it has a nice JS API.  We input
             // `ArrayBuffer` in the C++ code, then convert it to `RustBuffer` before passing to

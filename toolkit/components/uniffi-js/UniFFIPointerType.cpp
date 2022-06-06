@@ -10,11 +10,11 @@
 static mozilla::LazyLogModule sUniFFIPointerTypeLogger("uniffi_logger");
 namespace mozilla::dom {
 
-void UniFFIPointerType::getTypeName(nsString& retval) {
+void UniFFIPointerType::GetTypeName(nsString& retval) {
   retval = this->typeName;
 }
 
-void UniFFIPointerType::destroyPtr(void *ptr) {
+void UniFFIPointerType::DestroyPtr(void *ptr) {
   MOZ_LOG(sUniFFIPointerTypeLogger, LogLevel::Info, ("[UniFFI] Calling the object's Rust destructor"));
   RustCallStatus status;
   this->destructor(ptr, &status);

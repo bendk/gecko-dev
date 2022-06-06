@@ -40,11 +40,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -177,11 +177,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -253,11 +253,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -329,11 +329,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -405,11 +405,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -481,11 +481,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -557,11 +557,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -633,11 +633,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -709,11 +709,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -785,11 +785,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -861,11 +861,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -937,11 +937,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1017,11 +1017,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1104,11 +1104,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1191,11 +1191,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1278,11 +1278,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&RetourneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1359,11 +1359,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -1500,11 +1500,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1583,11 +1583,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1659,11 +1659,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1735,11 +1735,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1811,11 +1811,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1887,11 +1887,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1963,11 +1963,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2039,11 +2039,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2115,11 +2115,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2191,11 +2191,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2267,11 +2267,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2343,11 +2343,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&StringifierPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2417,11 +2417,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -2554,11 +2554,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2634,11 +2634,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2721,11 +2721,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2808,11 +2808,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2895,11 +2895,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2978,11 +2978,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3054,11 +3054,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3130,11 +3130,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3206,11 +3206,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3282,11 +3282,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3358,11 +3358,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3434,11 +3434,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3510,11 +3510,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3586,11 +3586,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3662,11 +3662,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3738,11 +3738,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3814,11 +3814,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3890,11 +3890,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3966,11 +3966,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4042,11 +4042,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4118,11 +4118,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4194,11 +4194,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4270,11 +4270,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4346,11 +4346,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4426,11 +4426,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&OptionneurPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -8218,7 +8218,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336Switcheroo(const Gl
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   
@@ -8239,7 +8239,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336Switcheroo(const Gl
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   
@@ -8260,7 +8260,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336Switcheroo(const Gl
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   

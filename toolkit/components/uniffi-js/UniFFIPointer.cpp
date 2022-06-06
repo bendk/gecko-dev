@@ -36,18 +36,18 @@ JSObject* UniFFIPointer::WrapObject(JSContext* aCx,
   return dom::UniFFIPointer_Binding::Wrap(aCx, this, aGivenProto);
 }
 
-void* UniFFIPointer::getPtr() const {
+void* UniFFIPointer::GetPtr() const {
     MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info, ("[UniFFI] Getting raw pointer"));
     return this->ptr;
 }
 
-bool UniFFIPointer::isSamePtrType(const UniFFIPointerType* type) const {
+bool UniFFIPointer::IsSamePtrType(const UniFFIPointerType* type) const {
     return this->type == type;
 }
 
 UniFFIPointer::~UniFFIPointer() {
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info, ("[UniFFI] Destroying pointer"));
-  this->type->destroyPtr(this->ptr);
+  this->type->DestroyPtr(this->ptr);
 }
 
 } // namespace mozilla::dom

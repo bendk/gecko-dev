@@ -40,11 +40,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&SpritePointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -282,11 +282,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&SpritePointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -359,11 +359,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& position,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&SpritePointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     position.ComputeState();
     uniFFIArgs.position = OwnedRustBuffer(position, aUniFFIError);
@@ -444,11 +444,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& direction,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&SpritePointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     direction.ComputeState();
     uniFFIArgs.direction = OwnedRustBuffer(direction, aUniFFIError);
@@ -980,7 +980,7 @@ already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dTranslate(const GlobalO
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   

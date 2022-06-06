@@ -67,11 +67,11 @@ Args PrepareArgs(
     {%- when FFIType::RustArcPtr(name) %}
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!{{ arg.nm() }}.isSamePtrType(&{{ ci.obj_name(name) }}PointerType::getInstance())) {
+    if (!{{ arg.nm() }}.IsSamePtrType(&{{ ci.obj_name(name) }}PointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer {{ arg.nm() }} is not of type {{ name }}");
         return uniFFIArgs;
     }
-    uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }}.getPtr();
+    uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }}.GetPtr();
     {%- else %}
     uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }};
     {%- endmatch %}
@@ -237,7 +237,7 @@ RootedDictionary<UniFFIRustCallResult>& aUniFFIReturnValue, ErrorResult& aUniFFI
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   {% endfor %}

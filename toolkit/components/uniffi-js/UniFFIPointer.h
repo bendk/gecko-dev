@@ -28,9 +28,23 @@ class UniFFIPointer final: public nsISupports, public nsWrapperCache {
     JSObject* WrapObject(JSContext* aCx,
                         JS::Handle<JSObject*> aGivenProto) override;
     nsISupports* GetParentObject() { return nullptr; }
-    void *getPtr() const;
 
-    bool isSamePtrType(const UniFFIPointerType* type) const;
+    /**
+     * returns the raw pointer `UniFFIPointer` holds
+     * This is safe because:
+     * - The pointer was allocated in Rust as a reference counted `Arc<T>`
+     * - Rust cloned the pointer without destructing it when passed into C++
+     * - Eventually, when the destructor of `UniFFIPointer` runs, we return ownership
+     *    to Rust, which then decrements the count and deallocates the memory the pointer points to.
+     */
+    void *GetPtr() const;
+
+    /**
+     * Returns true if the pointer type `this` holds is the same as the argument
+     * it does so using pointer comparison, as there is **exactly** one static `UniFFIPointerType`
+     * per type exposed in the UniFFI interface
+     */
+    bool IsSamePtrType(const UniFFIPointerType* type) const;
 
 
   private:
@@ -38,6 +52,10 @@ class UniFFIPointer final: public nsISupports, public nsWrapperCache {
     void *ptr;
 
   protected:
+  /**
+   * Destructs the `UniFFIPointer`, making sure to give back ownership of the
+   * raw pointer back to Rust, which deallocates the pointer
+   */
   ~UniFFIPointer();
 
 };

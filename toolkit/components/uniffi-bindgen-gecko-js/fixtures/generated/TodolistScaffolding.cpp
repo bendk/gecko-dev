@@ -40,11 +40,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -180,11 +180,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& todo,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     todo.ComputeState();
     uniFFIArgs.todo = OwnedRustBuffer(todo, aUniFFIError);
@@ -265,11 +265,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& entry,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     entry.ComputeState();
     uniFFIArgs.entry = OwnedRustBuffer(entry, aUniFFIError);
@@ -346,11 +346,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -419,11 +419,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -496,11 +496,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& entries,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     entries.ComputeState();
     uniFFIArgs.entries = OwnedRustBuffer(entries, aUniFFIError);
@@ -581,11 +581,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& items,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     items.ComputeState();
     uniFFIArgs.items = OwnedRustBuffer(items, aUniFFIError);
@@ -662,11 +662,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -735,11 +735,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -808,11 +808,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -885,11 +885,11 @@ Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& todo,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     todo.ComputeState();
     uniFFIArgs.todo = OwnedRustBuffer(todo, aUniFFIError);
@@ -965,11 +965,11 @@ Args PrepareArgs(const UniFFIPointer& ptr,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!ptr.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!ptr.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer ptr is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.ptr = ptr.getPtr();
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -1100,11 +1100,11 @@ Args PrepareArgs(const UniFFIPointer& list,
     Args uniFFIArgs;
     // We check if the pointer in the argument passed has the same type expected by this
     // function
-    if (!list.isSamePtrType(&TodoListPointerType::getInstance())) {
+    if (!list.IsSamePtrType(&TodoListPointerType::getInstance())) {
         aUniFFIError.ThrowTypeError("pointer list is not of type TodoList");
         return uniFFIArgs;
     }
-    uniFFIArgs.list = list.getPtr();
+    uniFFIArgs.list = list.GetPtr();
 
     return uniFFIArgs;
 }
@@ -2090,7 +2090,7 @@ already_AddRefed<Promise> TodolistScaffolding::Todolist126CreateEntryWith(const 
       // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
       // we do the reverse here
       uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
-      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
   }
 
   
