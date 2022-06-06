@@ -6,7 +6,7 @@ use super::shared::*;
 use askama::Template;
 use extend::ext;
 use heck::{ToLowerCamelCase, ToUpperCamelCase};
-use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType};
+use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType, Object};
 
 #[derive(Template)]
 #[template(path = "Scaffolding.webidl", escape = "none")]
@@ -52,8 +52,7 @@ pub impl FFIType {
             FFIType::Int64 => "long long",
             FFIType::Float32 => "float",
             FFIType::Float64 => "double",
-            // Pointers are handled with the "private value" API, see Scaffolding.cpp for details
-            FFIType::RustArcPtr => "any",
+            FFIType::RustArcPtr(_) => "UniFFIPointer",
             FFIType::RustBuffer => "ArrayBuffer",
             FFIType::ForeignBytes => unimplemented!("ForeignBytes not supported"),
             FFIType::ForeignCallback => unimplemented!("ForeignCallback not supported"),
@@ -69,5 +68,12 @@ pub impl FFIArgument {
     }
     fn type_name(&self) -> String {
         self.type_().type_name()
+    }
+}
+
+#[ext(name=ObjectWebIDLExt)]
+pub impl Object {
+    fn nm(&self) -> String {
+        self.name().to_upper_camel_case()
     }
 }
