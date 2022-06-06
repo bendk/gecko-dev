@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -20,6 +22,21 @@ extern "C" {
 namespace mozilla::dom {
 
 class GlobalObject;
+
+{%- for object in ci.object_definitions() %}
+class {{ object.nm() }}PointerType : public UniFFIPointerType {
+    public:
+        static {{ object.nm() }}PointerType& getInstance() {
+            static {{ object.nm() }}PointerType instance;
+            return instance;
+        }
+    private:
+        {{ object.nm() }}PointerType() {
+            typeName = u"{{ ci.cpp_namespace() }}{{ object.nm() }}"_ns;
+            destructor = {{ object.ffi_object_free().rust_name() }};
+        }
+};
+{% endfor -%}
 
 class {{ ci.scaffolding_class() }} {
   public:
@@ -35,6 +52,14 @@ class {{ ci.scaffolding_class() }} {
   RootedDictionary<UniFFIRustCallResult>& aUniFFIReturnValue, ErrorResult& aUniFFIErrorResult);
   {%- endif %}
   {%- endfor %}
+
+
+  {%- for object in ci.object_definitions() %}
+
+  static already_AddRefed<UniFFIPointer> ReadPointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  {% endfor %}
 };
 
 }  // namespace mozilla::dom

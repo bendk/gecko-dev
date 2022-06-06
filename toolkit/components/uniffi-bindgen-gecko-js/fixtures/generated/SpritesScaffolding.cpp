@@ -6,6 +6,11 @@
 #include "mozilla/dom/SpritesScaffolding.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/Promise.h"
+#include "mozilla/Logging.h"
+#include "mozilla/EndianUtils.h"
+
+static mozilla::LazyLogModule sUniFFISpritesScaffoldingLogger("uniffi_logger");
+
 
 namespace uniffi::sprites {
 // For each Rust scaffolding function, define types and functions for calling it
@@ -28,13 +33,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -53,11 +63,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -129,12 +140,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &SpritePointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -220,12 +232,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &SpritePointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -262,13 +275,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
 
     return uniFFIArgs;
 }
@@ -287,12 +305,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -333,13 +352,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& position,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& position,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     position.ComputeState();
     uniFFIArgs.position = OwnedRustBuffer(position, aUniFFIError);
@@ -367,11 +391,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -412,13 +437,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& direction,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& direction,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.IsSamePtrType(&SpritePointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Sprite");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.GetPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     direction.ComputeState();
     uniFFIArgs.direction = OwnedRustBuffer(direction, aUniFFIError);
@@ -446,11 +476,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -536,12 +567,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -561,7 +593,7 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 
 namespace mozilla::dom {
 using namespace uniffi::sprites;
-already_AddRefed<Promise> SpritesScaffolding::FfiSpritesFf2dSpriteObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> SpritesScaffolding::FfiSpritesFf2dSpriteObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -720,7 +752,7 @@ already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteNewRelativeTo(con
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::sprites;
-already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteGetPosition(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteGetPosition(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -773,7 +805,7 @@ already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteGetPosition(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::sprites;
-already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteMoveTo(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& position,
+already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteMoveTo(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& position,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -826,7 +858,7 @@ already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteMoveTo(const Glob
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::sprites;
-already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteMoveBy(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& direction,
+already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dSpriteMoveBy(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& direction,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -931,5 +963,25 @@ already_AddRefed<Promise> SpritesScaffolding::SpritesFf2dTranslate(const GlobalO
     // Return the JS promise, using forget() to convert it to already_AddRefed
     return uniFFIReturnPromise.forget();
 }
+  already_AddRefed<UniFFIPointer> SpritesScaffolding::ReadPointerSprite(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFISpritesScaffoldingLogger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
 
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &SpritePointerType::getInstance());
+  }
+  void SpritesScaffolding::WritePointerSprite(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFISpritesScaffoldingLogger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
+  }
+
+  
 }  // namespace mozilla::dom

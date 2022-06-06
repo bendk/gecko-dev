@@ -9,4 +9,11 @@ namespace {{ ci.scaffolding_namespace() }} {
       {%- for arg in func.arguments() %}{{ arg.type_name() }} {{ arg.nm() }}{% if !loop.last %}, {% endif %}{% endfor -%}
     );
 {%- endfor %}
+
+{%- for object in ci.object_definitions() %}
+
+UniFFIPointer readPointer{{ object.nm() }}(ArrayBuffer buff, long position);
+void writePointer{{ object.nm() }}(UniFFIPointer ptr, ArrayBuffer buff, long position);
+
+{% endfor %}
 };

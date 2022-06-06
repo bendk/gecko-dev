@@ -6,6 +6,11 @@
 #include "mozilla/dom/{{ ci.scaffolding_class() }}.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/Promise.h"
+#include "mozilla/Logging.h"
+#include "mozilla/EndianUtils.h"
+
+static mozilla::LazyLogModule sUniFFI{{ ci.scaffolding_class() }}Logger("uniffi_logger");
+
 
 namespace {{ ci.cpp_namespace() }} {
 {%- for func in ci.iter_user_ffi_function_definitions() %}
@@ -59,9 +64,14 @@ Args PrepareArgs(
     if (aUniFFIError.Failed()) {
         return uniFFIArgs;
     }
-    {%- when FFIType::RustArcPtr %}
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }}.toPrivate();
+    {%- when FFIType::RustArcPtr(name) %}
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!{{ arg.nm() }}.IsSamePtrType(&{{ ci.obj_name(name) }}PointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer {{ arg.nm() }} is not of type {{ name }}");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }}.GetPtr();
     {%- else %}
     uniFFIArgs.{{ arg.nm() }} = {{ arg.nm() }};
     {%- endmatch %}
@@ -94,23 +104,24 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             {%- match func.return_type() %}
-            {%- when Some with (FFIType::RustBuffer) %}
+                {%- when Some with (FFIType::RustBuffer) %}
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
-            {%- when Some with (FFIType::RustArcPtr) %}
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
-            {%- when Some with (_) %}
+                {%- when Some with (FFIType::RustArcPtr(name)) %}
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &{{ ci.obj_name(name) }}PointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
+                {%- when Some with (_) %}
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
-            {%- when None %}
+                {%- else %}
             // Void return
             {%- endmatch %}
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -208,4 +219,26 @@ RootedDictionary<UniFFIRustCallResult>& aUniFFIReturnValue, ErrorResult& aUniFFI
 
 {%- endfor %}
 
+  {%- for object in ci.object_definitions() %}
+  already_AddRefed<UniFFIPointer> {{ ci.scaffolding_class() }}::ReadPointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFI{{ ci.scaffolding_class() }}Logger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &{{ object.nm() }}PointerType::getInstance());
+  }
+  void {{ ci.scaffolding_class() }}::WritePointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFI{{ ci.scaffolding_class() }}Logger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.GetPtr());
+  }
+
+  {% endfor %}
 }  // namespace mozilla::dom

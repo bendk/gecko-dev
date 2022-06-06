@@ -5707,6 +5707,7 @@ version = "0.1.0"
 dependencies = [
  "anyhow",
  "askama",
+ "camino",
  "clap",
  "extend",
  "heck",
@@ -5718,7 +5719,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-arithmetic"
 version = "0.18.0"
-source = "git+https://github.com/mozilla/uniffi-rs.git?rev=4487bbda8f75b712f2058eaebd592c65e8d5e9dc#4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=a8f49198773e61fb3f31dbd56473844968708714#a8f49198773e61fb3f31dbd56473844968708714"
 dependencies = [
  "thiserror",
  "uniffi",
@@ -5729,7 +5730,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-geometry"
 version = "0.18.0"
-source = "git+https://github.com/mozilla/uniffi-rs.git?rev=4487bbda8f75b712f2058eaebd592c65e8d5e9dc#4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=a8f49198773e61fb3f31dbd56473844968708714#a8f49198773e61fb3f31dbd56473844968708714"
 dependencies = [
  "uniffi",
  "uniffi_build",
@@ -5739,7 +5740,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-rondpoint"
 version = "0.18.0"
-source = "git+https://github.com/mozilla/uniffi-rs.git?rev=4487bbda8f75b712f2058eaebd592c65e8d5e9dc#4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=a8f49198773e61fb3f31dbd56473844968708714#a8f49198773e61fb3f31dbd56473844968708714"
 dependencies = [
  "uniffi",
  "uniffi_build",
@@ -5749,7 +5750,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-sprites"
 version = "0.18.0"
-source = "git+https://github.com/mozilla/uniffi-rs.git?rev=4487bbda8f75b712f2058eaebd592c65e8d5e9dc#4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=a8f49198773e61fb3f31dbd56473844968708714#a8f49198773e61fb3f31dbd56473844968708714"
 dependencies = [
  "uniffi",
  "uniffi_build",
@@ -5759,7 +5760,7 @@ dependencies = [
 [[package]]
 name = "uniffi-example-todolist"
 version = "0.18.0"
-source = "git+https://github.com/mozilla/uniffi-rs.git?rev=4487bbda8f75b712f2058eaebd592c65e8d5e9dc#4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+source = "git+https://github.com/mozilla/uniffi-rs.git?rev=a8f49198773e61fb3f31dbd56473844968708714#a8f49198773e61fb3f31dbd56473844968708714"
 dependencies = [
  "lazy_static",
  "thiserror",

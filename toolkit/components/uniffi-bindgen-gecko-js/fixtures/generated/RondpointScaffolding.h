@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -143,124 +145,161 @@ int8_t rondpoint_9336_switcheroo(int8_t, RustCallStatus*);
 namespace mozilla::dom {
 
 class GlobalObject;
+class RetourneurPointerType : public UniFFIPointerType {
+    public:
+        static RetourneurPointerType& getInstance() {
+            static RetourneurPointerType instance;
+            return instance;
+        }
+    private:
+        RetourneurPointerType() {
+            typeName = u"uniffi::rondpointRetourneur"_ns;
+            destructor = ffi_rondpoint_9336_Retourneur_object_free;
+        }
+};
 
+class StringifierPointerType : public UniFFIPointerType {
+    public:
+        static StringifierPointerType& getInstance() {
+            static StringifierPointerType instance;
+            return instance;
+        }
+    private:
+        StringifierPointerType() {
+            typeName = u"uniffi::rondpointStringifier"_ns;
+            destructor = ffi_rondpoint_9336_Stringifier_object_free;
+        }
+};
+
+class OptionneurPointerType : public UniFFIPointerType {
+    public:
+        static OptionneurPointerType& getInstance() {
+            static OptionneurPointerType instance;
+            return instance;
+        }
+    private:
+        OptionneurPointerType() {
+            typeName = u"uniffi::rondpointOptionneur"_ns;
+            destructor = ffi_rondpoint_9336_Optionneur_object_free;
+        }
+};
 class RondpointScaffolding {
   public:
-  static already_AddRefed<Promise> FfiRondpoint9336RetourneurObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> FfiRondpoint9336RetourneurObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Rondpoint9336RetourneurNew(const GlobalObject& aUniFFIGlobal,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueI64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueU64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueFloat(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueFloat(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueDouble(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueDouble(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueNombresSignes(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueNombresSignes(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueNombres(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueNombres(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> FfiRondpoint9336StringifierObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> FfiRondpoint9336StringifierObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Rondpoint9336StringifierNew(const GlobalObject& aUniFFIGlobal,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierWellKnownString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierWellKnownString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringI64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringU64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringFloat(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringFloat(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringDouble(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringDouble(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336StringifierToStringBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336StringifierToStringBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> FfiRondpoint9336OptionneurObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> FfiRondpoint9336OptionneurObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Rondpoint9336OptionneurNew(const GlobalObject& aUniFFIGlobal,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonSequence(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonSequence(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonNull(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonNull(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonZero(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonZero(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU8Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU8Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI8Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI8Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU16Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU16Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI16Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI16Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI32Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI32Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU64Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU64Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI64Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI64Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU8Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU8Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI8Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI8Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU16Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU16Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI16Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI16Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI32Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI32Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU64Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU64Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI64Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonI64Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Oct(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonU32Oct(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonF32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonF32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonF64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonF64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonEnum(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+  static already_AddRefed<Promise> Rondpoint9336OptionneurSinonEnum(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Rondpoint9336CopieDictionnaire(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& d,
   ErrorResult& aUniFFIErrorResult);
@@ -272,6 +311,21 @@ class RondpointScaffolding {
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Rondpoint9336Switcheroo(const GlobalObject& aUniFFIGlobal,const int8_t& b,
   ErrorResult& aUniFFIErrorResult);
+
+  static already_AddRefed<UniFFIPointer> ReadPointerRetourneur(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointerRetourneur(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  
+
+  static already_AddRefed<UniFFIPointer> ReadPointerStringifier(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointerStringifier(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  
+
+  static already_AddRefed<UniFFIPointer> ReadPointerOptionneur(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointerOptionneur(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  
 };
 
 }  // namespace mozilla::dom

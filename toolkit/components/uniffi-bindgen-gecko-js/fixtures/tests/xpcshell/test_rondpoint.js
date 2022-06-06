@@ -163,33 +163,33 @@ add_task(async function() {
   await affirmEnchaine([true, false], st.toStringBoolean.bind(st));
 
   // Bytes
-  await affirmEnchaine([-128, 127], st.toStringI8.bind(rt));
-  await affirmEnchaine([0, 0xff], st.toStringU8.bind(rt));
+  await affirmEnchaine([-128, 127], st.toStringI8.bind(st));
+  await affirmEnchaine([0, 0xff], st.toStringU8.bind(st));
 
   // Shorts
-  await affirmEnchaine([-32768, 32767], st.toStringI16.bind(rt));
-  await affirmEnchaine([0, 0xffff], st.toStringU16.bind(rt));
+  await affirmEnchaine([-32768, 32767], st.toStringI16.bind(st));
+  await affirmEnchaine([0, 0xffff], st.toStringU16.bind(st));
 
   // Ints
   await affirmEnchaine(
     [0, 1, -1, -2147483648, 2147483647],
-    st.toStringI32.bind(rt)
+    st.toStringI32.bind(st)
   );
-  await affirmEnchaine([0, 0xffffffff], st.toStringU32.bind(rt));
+  await affirmEnchaine([0, 0xffffffff], st.toStringU32.bind(st));
 
   // Longs
   // NOTE: we cannot represent greater than `Number.MAX_SAFE_INTEGER`
   await affirmEnchaine(
     [0, 1, -1, Number.MAX_SAFE_INTEGER, Number.MIN_SAFE_INTEGER],
-    st.toStringI64.bind(rt)
+    st.toStringI64.bind(st)
   );
-  await affirmEnchaine([0, Number.MAX_SAFE_INTEGER], st.toStringU64.bind(rt));
+  await affirmEnchaine([0, Number.MAX_SAFE_INTEGER], st.toStringU64.bind(st));
 
   // Floats
-  await affirmEnchaine([0.0, 0.5, 0.25, 1.5], st.toStringFloat.bind(rt));
+  await affirmEnchaine([0.0, 0.5, 0.25, 1.5], st.toStringFloat.bind(st));
 
   // Doubles
-  await affirmEnchaine([0.0, 0.5, 0.25, 1.5], st.toStringDouble.bind(rt));
+  await affirmEnchaine([0.0, 0.5, 0.25, 1.5], st.toStringDouble.bind(st));
 
   // Prove to ourselves that default arguments are being used.
   // Step 1: call the methods without arguments, and check against the UDL.
