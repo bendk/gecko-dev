@@ -9,8 +9,6 @@ class {{ object.nm() }} {
             "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
-        this.destroyed = false;
-        this.callCounter = 0;
     }
 
     {%- for cons in object.constructors() %}
@@ -35,36 +33,10 @@ class {{ object.nm() }} {
 
     {%- for meth in object.methods() %}
     {{ meth.nm() }}({{ meth.arg_names() }}) {
-        return this.runMethod(() => {
-            {% call js::call_method(meth, type_, object) %}
-        });
+        {% call js::call_method(meth, type_, object) %}
     }
     {%- endfor %}
 
-    destroy() {
-        this.destroyed = true;
-        // If the call counter is not zero, there are ongoing calls that haven't concluded
-        // yet. The function calls themselves will make sure to deallocate the object once the last
-        // one concludes and we will prevent any new calls by throwing a UniFFIError
-        if (this.callCounter === 0) {
-            {{ ci.scaffolding_name() }}.{{ object.ffi_object_free().nm() }}(this.ptr);
-        }
-    }
-
-    runMethod(callback) {
-        if (this.destroyed) {
-            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
-        }
-        try {
-            this.callCounter += 1;
-            return callback();
-        } finally {
-            this.callCounter -=1;
-            if (this.destroyed && this.callCounter === 0) {
-                {{ ci.scaffolding_name() }}.{{ object.ffi_object_free().nm() }}(this.ptr);
-            }
-        }
-    }
 }
 
 class {{ ffi_converter }} extends FfiConverter {
@@ -76,15 +48,12 @@ class {{ ffi_converter }} extends FfiConverter {
         return value.ptr;
     }
 
-    // Note: We store the object pointer using the `setPrivate` JS API.  From
-    // the JS side, this appears as a 64-bit float value.
-
     static read(dataStream) {
-        return this.lift(dataStream.readFloat64());
+        return this.lift(dataStream.readPointer{{ object.nm() }}());
     }
 
     static write(dataStream, value) {
-        dataStream.writeFloat64(this.lower(value));
+        dataStream.writePointer{{ object.nm() }}(value.ptr);
     }
 
     static computeSize(value) {

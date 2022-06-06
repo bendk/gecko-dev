@@ -4,35 +4,40 @@
 [ChromeOnly, Exposed=Window]
 namespace TodolistScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> ffiTodolist126TodoListObjectFree(any ptr);
+  Promise<UniFFIRustCallResult> ffiTodolist126TodoListObjectFree(UniFFIPointer ptr);
   [Throws]
   Promise<UniFFIRustCallResult> todolist126TodoListNew();
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListAddItem(any ptr, ArrayBuffer todo);
+  Promise<UniFFIRustCallResult> todolist126TodoListAddItem(UniFFIPointer ptr, ArrayBuffer todo);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListAddEntry(any ptr, ArrayBuffer entry);
+  Promise<UniFFIRustCallResult> todolist126TodoListAddEntry(UniFFIPointer ptr, ArrayBuffer entry);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListGetEntries(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListGetEntries(UniFFIPointer ptr);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListGetItems(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListGetItems(UniFFIPointer ptr);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListAddEntries(any ptr, ArrayBuffer entries);
+  Promise<UniFFIRustCallResult> todolist126TodoListAddEntries(UniFFIPointer ptr, ArrayBuffer entries);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListAddItems(any ptr, ArrayBuffer items);
+  Promise<UniFFIRustCallResult> todolist126TodoListAddItems(UniFFIPointer ptr, ArrayBuffer items);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListGetLastEntry(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListGetLastEntry(UniFFIPointer ptr);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListGetLast(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListGetLast(UniFFIPointer ptr);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListGetFirst(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListGetFirst(UniFFIPointer ptr);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListClearItem(any ptr, ArrayBuffer todo);
+  Promise<UniFFIRustCallResult> todolist126TodoListClearItem(UniFFIPointer ptr, ArrayBuffer todo);
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126TodoListMakeDefault(any ptr);
+  Promise<UniFFIRustCallResult> todolist126TodoListMakeDefault(UniFFIPointer ptr);
   [Throws]
   Promise<UniFFIRustCallResult> todolist126GetDefaultList();
   [Throws]
-  Promise<UniFFIRustCallResult> todolist126SetDefaultList(any list);
+  Promise<UniFFIRustCallResult> todolist126SetDefaultList(UniFFIPointer list);
   [Throws]
   Promise<UniFFIRustCallResult> todolist126CreateEntryWith(ArrayBuffer todo);
+
+UniFFIPointer readPointerTodoList(ArrayBuffer buff, long position);
+void writePointerTodoList(UniFFIPointer ptr, ArrayBuffer buff, long position);
+
+
 };

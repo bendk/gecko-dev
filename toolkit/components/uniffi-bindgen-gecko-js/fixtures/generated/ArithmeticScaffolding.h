@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -24,9 +26,7 @@ int8_t arithmetic_8817_equal(uint64_t, uint64_t, RustCallStatus*);
 
 namespace mozilla::dom {
 
-class GlobalObject;
-
-class ArithmeticScaffolding {
+class GlobalObject;class ArithmeticScaffolding {
   public:
   static already_AddRefed<Promise> Arithmetic8817Add(const GlobalObject& aUniFFIGlobal,const uint64_t& a, const uint64_t& b,
   ErrorResult& aUniFFIErrorResult);

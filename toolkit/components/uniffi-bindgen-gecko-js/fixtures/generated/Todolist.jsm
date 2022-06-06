@@ -158,6 +158,18 @@ class ArrayBufferDataStream {
       this.pos += size;
       return value;
     }
+
+    readPointerTodoList() {
+        const res = TodolistScaffolding.readPointerTodoList(this.dataView.buffer, this.pos);
+        this.pos += 8;
+        return res;
+    }
+
+    writePointerTodoList(value) {
+        TodolistScaffolding.writePointerTodoList(value, this.dataView.buffer, this.pos);
+        this.pos += 8;
+    }
+    
 }
 
 function handleRustResult(result, liftCallback, liftErrCallback) {
@@ -252,8 +264,6 @@ class TodoList {
             "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
-        this.destroyed = false;
-        this.callCounter = 0;
     }
     /**
      * An async constructor for TodoList.
@@ -279,8 +289,7 @@ class TodoList {
     }
     }
     addItem(todo) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -297,11 +306,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     addEntry(entry) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -318,11 +325,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     getEntries() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterSequenceTypeTodoEntry.lift(result);
     const liftError = null;
@@ -338,11 +343,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     getItems() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterSequencestring.lift(result);
     const liftError = null;
@@ -358,11 +361,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     addEntries(entries) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -379,11 +380,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     addItems(items) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -400,11 +399,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     getLastEntry() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterTypeTodoEntry.lift(result);
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -420,11 +417,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     getLast() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -440,11 +435,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     getFirst() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -460,11 +453,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     clearItem(todo) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = (data) => FfiConverterTypeTodoError.lift(data);
@@ -481,11 +472,9 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     makeDefault() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -501,33 +490,8 @@ class TodoList {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
 
-    destroy() {
-        this.destroyed = true;
-        // If the call counter is not zero, there are ongoing calls that haven't concluded
-        // yet. The function calls themselves will make sure to deallocate the object once the last
-        // one concludes and we will prevent any new calls by throwing a UniFFIError
-        if (this.callCounter === 0) {
-            TodolistScaffolding.ffiTodolist126TodoListObjectFree(this.ptr);
-        }
-    }
-
-    runMethod(callback) {
-        if (this.destroyed) {
-            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
-        }
-        try {
-            this.callCounter += 1;
-            return callback();
-        } finally {
-            this.callCounter -=1;
-            if (this.destroyed && this.callCounter === 0) {
-                TodolistScaffolding.ffiTodolist126TodoListObjectFree(this.ptr);
-            }
-        }
-    }
 }
 
 class FfiConverterTypeTodoList extends FfiConverter {
@@ -539,15 +503,12 @@ class FfiConverterTypeTodoList extends FfiConverter {
         return value.ptr;
     }
 
-    // Note: We store the object pointer using the `setPrivate` JS API.  From
-    // the JS side, this appears as a 64-bit float value.
-
     static read(dataStream) {
-        return this.lift(dataStream.readFloat64());
+        return this.lift(dataStream.readPointerTodoList());
     }
 
     static write(dataStream, value) {
-        dataStream.writeFloat64(this.lower(value));
+        dataStream.writePointerTodoList(value.ptr);
     }
 
     static computeSize(value) {

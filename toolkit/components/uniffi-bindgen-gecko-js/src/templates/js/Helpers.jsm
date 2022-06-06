@@ -149,6 +149,20 @@ class ArrayBufferDataStream {
       this.pos += size;
       return value;
     }
+
+    {%- for object in ci.object_definitions() %}
+
+    readPointer{{ object.nm() }}() {
+        const res = {{ci.scaffolding_name()}}.readPointer{{ object.nm() }}(this.dataView.buffer, this.pos);
+        this.pos += 8;
+        return res;
+    }
+
+    writePointer{{ object.nm() }}(value) {
+        {{ci.scaffolding_name()}}.writePointer{{ object.nm() }}(value, this.dataView.buffer, this.pos);
+        this.pos += 8;
+    }
+    {% endfor %}
 }
 
 function handleRustResult(result, liftCallback, liftErrCallback) {

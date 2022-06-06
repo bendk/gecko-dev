@@ -8,6 +8,8 @@
 #include "mozilla/dom/RootedDictionary.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIPointer.h"
+#include "mozilla/dom/UniFFIPointerType.h"
 #include "UniFFI.h"
 
 // Scaffolding functions from UniFFI
@@ -49,41 +51,57 @@ RustBuffer todolist_126_create_entry_with(RustBuffer, RustCallStatus*);
 namespace mozilla::dom {
 
 class GlobalObject;
-
+class TodoListPointerType : public UniFFIPointerType {
+    public:
+        static TodoListPointerType& getInstance() {
+            static TodoListPointerType instance;
+            return instance;
+        }
+    private:
+        TodoListPointerType() {
+            typeName = u"uniffi::todolistTodoList"_ns;
+            destructor = ffi_todolist_126_TodoList_object_free;
+        }
+};
 class TodolistScaffolding {
   public:
-  static already_AddRefed<Promise> FfiTodolist126TodoListObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> FfiTodolist126TodoListObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Todolist126TodoListNew(const GlobalObject& aUniFFIGlobal,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddItem(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+  static already_AddRefed<Promise> Todolist126TodoListAddItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddEntry(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entry,
+  static already_AddRefed<Promise> Todolist126TodoListAddEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entry,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetEntries(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListGetEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetItems(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListGetItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddEntries(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& entries,
+  static already_AddRefed<Promise> Todolist126TodoListAddEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entries,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddItems(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& items,
+  static already_AddRefed<Promise> Todolist126TodoListAddItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& items,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetLastEntry(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListGetLastEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetLast(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListGetLast(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetFirst(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListGetFirst(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListClearItem(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& todo,
+  static already_AddRefed<Promise> Todolist126TodoListClearItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListMakeDefault(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+  static already_AddRefed<Promise> Todolist126TodoListMakeDefault(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Todolist126GetDefaultList(const GlobalObject& aUniFFIGlobal,
   ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126SetDefaultList(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& list,
+  static already_AddRefed<Promise> Todolist126SetDefaultList(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& list,
   ErrorResult& aUniFFIErrorResult);
   static already_AddRefed<Promise> Todolist126CreateEntryWith(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& todo,
   ErrorResult& aUniFFIErrorResult);
+
+  static already_AddRefed<UniFFIPointer> ReadPointerTodoList(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
+  static void WritePointerTodoList(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+
+  
 };
 
 }  // namespace mozilla::dom

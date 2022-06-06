@@ -6,6 +6,11 @@
 #include "mozilla/dom/ArithmeticScaffolding.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/Promise.h"
+#include "mozilla/Logging.h"
+#include "mozilla/EndianUtils.h"
+
+static mozilla::LazyLogModule sUniFFIArithmeticScaffoldingLogger("uniffi_logger");
+
 
 namespace uniffi::arithmetic {
 // For each Rust scaffolding function, define types and functions for calling it
@@ -56,12 +61,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -125,12 +131,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -194,12 +201,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -263,12 +271,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -499,5 +508,4 @@ already_AddRefed<Promise> ArithmeticScaffolding::Arithmetic8817Equal(const Globa
     // Return the JS promise, using forget() to convert it to already_AddRefed
     return uniFFIReturnPromise.forget();
 }
-
 }  // namespace mozilla::dom

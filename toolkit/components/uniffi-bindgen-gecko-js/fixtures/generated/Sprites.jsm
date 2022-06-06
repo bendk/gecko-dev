@@ -158,6 +158,18 @@ class ArrayBufferDataStream {
       this.pos += size;
       return value;
     }
+
+    readPointerSprite() {
+        const res = SpritesScaffolding.readPointerSprite(this.dataView.buffer, this.pos);
+        this.pos += 8;
+        return res;
+    }
+
+    writePointerSprite(value) {
+        SpritesScaffolding.writePointerSprite(value, this.dataView.buffer, this.pos);
+        this.pos += 8;
+    }
+    
 }
 
 function handleRustResult(result, liftCallback, liftErrCallback) {
@@ -268,8 +280,6 @@ class Sprite {
             "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
         this.ptr = ptr;
-        this.destroyed = false;
-        this.callCounter = 0;
     }
     /**
      * An async constructor for Sprite.
@@ -321,8 +331,7 @@ class Sprite {
     }
     }
     getPosition() {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => FfiConverterTypePoint.lift(result);
     const liftError = null;
@@ -338,11 +347,9 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     moveTo(position) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -359,11 +366,9 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
     moveBy(direction) {
-        return this.runMethod(() => {
-            
+        
 
     const liftResult = (result) => undefined;
     const liftError = null;
@@ -380,33 +385,8 @@ class Sprite {
     }  catch (error) {
         return Promise.reject(error)
     }
-        });
     }
 
-    destroy() {
-        this.destroyed = true;
-        // If the call counter is not zero, there are ongoing calls that haven't concluded
-        // yet. The function calls themselves will make sure to deallocate the object once the last
-        // one concludes and we will prevent any new calls by throwing a UniFFIError
-        if (this.callCounter === 0) {
-            SpritesScaffolding.ffiSpritesFf2dSpriteObjectFree(this.ptr);
-        }
-    }
-
-    runMethod(callback) {
-        if (this.destroyed) {
-            throw new UniFFIError("Attempting to call method on Object that is already destroyed")
-        }
-        try {
-            this.callCounter += 1;
-            return callback();
-        } finally {
-            this.callCounter -=1;
-            if (this.destroyed && this.callCounter === 0) {
-                SpritesScaffolding.ffiSpritesFf2dSpriteObjectFree(this.ptr);
-            }
-        }
-    }
 }
 
 class FfiConverterTypeSprite extends FfiConverter {
@@ -418,15 +398,12 @@ class FfiConverterTypeSprite extends FfiConverter {
         return value.ptr;
     }
 
-    // Note: We store the object pointer using the `setPrivate` JS API.  From
-    // the JS side, this appears as a 64-bit float value.
-
     static read(dataStream) {
-        return this.lift(dataStream.readFloat64());
+        return this.lift(dataStream.readPointerSprite());
     }
 
     static write(dataStream, value) {
-        dataStream.writeFloat64(this.lower(value));
+        dataStream.writePointerSprite(value.ptr);
     }
 
     static computeSize(value) {

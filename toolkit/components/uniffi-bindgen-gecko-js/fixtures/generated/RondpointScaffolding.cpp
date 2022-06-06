@@ -6,6 +6,11 @@
 #include "mozilla/dom/RondpointScaffolding.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/Promise.h"
+#include "mozilla/Logging.h"
+#include "mozilla/EndianUtils.h"
+
+static mozilla::LazyLogModule sUniFFIRondpointScaffoldingLogger("uniffi_logger");
+
 
 namespace uniffi::rondpoint {
 // For each Rust scaffolding function, define types and functions for calling it
@@ -28,13 +33,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
 
     return uniFFIArgs;
 }
@@ -53,11 +63,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -115,12 +126,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &RetourneurPointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -158,13 +170,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -185,12 +202,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -228,13 +246,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -255,12 +278,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -298,13 +322,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -325,12 +354,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -368,13 +398,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -395,12 +430,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -438,13 +474,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -465,12 +506,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -508,13 +550,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -535,12 +582,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -578,13 +626,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -605,12 +658,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -648,13 +702,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -675,12 +734,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -718,13 +778,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const float& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -745,12 +810,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -788,13 +854,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const double& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -815,12 +886,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -858,13 +930,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -885,12 +962,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -932,13 +1010,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -966,12 +1049,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1013,13 +1097,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1047,12 +1136,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1094,13 +1184,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1128,12 +1223,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1175,13 +1271,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&RetourneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Retourneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1209,12 +1310,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1250,13 +1352,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
 
     return uniFFIArgs;
 }
@@ -1275,11 +1382,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1337,12 +1445,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &StringifierPointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1384,13 +1493,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -1418,12 +1532,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1461,13 +1576,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1488,12 +1608,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1531,13 +1652,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1558,12 +1684,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1601,13 +1728,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1628,12 +1760,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1671,13 +1804,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1698,12 +1836,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1741,13 +1880,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1768,12 +1912,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1811,13 +1956,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1838,12 +1988,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1881,13 +2032,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1908,12 +2064,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -1951,13 +2108,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -1978,12 +2140,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2021,13 +2184,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const float& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2048,12 +2216,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2091,13 +2260,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const double& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2118,12 +2292,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2161,13 +2336,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&StringifierPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Stringifier");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2188,12 +2368,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2229,13 +2410,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr,
+Args PrepareArgs(const UniFFIPointer& ptr,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
 
     return uniFFIArgs;
 }
@@ -2254,11 +2440,12 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Void return
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2316,12 +2503,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
-            // Pointer return, use `JS::Value::setPrivate()` to store it
-            aReturnValue.mData.setPrivate(aCallResult.mReturnValue);
+            RefPtr<UniFFIPointer> uniFFIPtr = UniFFIPointer::Create(aCallResult.mReturnValue, &OptionneurPointerType::getInstance() );
+            aReturnValue.mData.setObjectOrNull(uniFFIPtr->WrapObject(aContext, nullptr));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2359,13 +2547,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2386,12 +2579,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2433,13 +2627,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2467,12 +2666,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2514,13 +2714,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2548,12 +2753,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2595,13 +2801,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2629,12 +2840,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2676,13 +2888,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -2710,12 +2927,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2753,13 +2971,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2780,12 +3003,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2823,13 +3047,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2850,12 +3079,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2893,13 +3123,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2920,12 +3155,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -2963,13 +3199,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -2990,12 +3231,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3033,13 +3275,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3060,12 +3307,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3103,13 +3351,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3130,12 +3383,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3173,13 +3427,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3200,12 +3459,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3243,13 +3503,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3270,12 +3535,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3313,13 +3579,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3340,12 +3611,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3383,13 +3655,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int8_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int8_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3410,12 +3687,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3453,13 +3731,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3480,12 +3763,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3523,13 +3807,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int16_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int16_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3550,12 +3839,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3593,13 +3883,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3620,12 +3915,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3663,13 +3959,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3690,12 +3991,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3733,13 +4035,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3760,12 +4067,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3803,13 +4111,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const int64_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const int64_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3830,12 +4143,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3873,13 +4187,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const uint32_t& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3900,12 +4219,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -3943,13 +4263,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const float& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const float& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -3970,12 +4295,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4013,13 +4339,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const double& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const double& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     uniFFIArgs.value = value;
 
     return uniFFIArgs;
@@ -4040,12 +4371,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4087,13 +4419,18 @@ struct Result {
 //
 // For async calls this should be called in the main thread, since the GC can
 // move the ArrayBuffer pointers while the background task is waiting.
-Args PrepareArgs(const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+Args PrepareArgs(const UniFFIPointer& ptr, const ArrayBuffer& value,
     mozilla::ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
     Args uniFFIArgs;
-    // Extract the pointer from the JS::Value using `toPrivate`.
-    uniFFIArgs.ptr = ptr.toPrivate();
+    // We check if the pointer in the argument passed has the same type expected by this
+    // function
+    if (!ptr.isSamePtrType(&OptionneurPointerType::getInstance())) {
+        aUniFFIError.ThrowTypeError("pointer ptr is not of type Optionneur");
+        return uniFFIArgs;
+    }
+    uniFFIArgs.ptr = ptr.getPtr();
     // Convert the ArrayBuffer we get from JS to an OwnedRustBuffer
     value.ComputeState();
     uniFFIArgs.value = OwnedRustBuffer(value, aUniFFIError);
@@ -4121,12 +4458,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4198,12 +4536,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4275,12 +4614,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4352,12 +4692,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4429,12 +4770,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // RustBuffer return, convert it to an ArrayBuffer
             aReturnValue.mData.setObjectOrNull(OwnedRustBuffer(aCallResult.mReturnValue).intoArrayBuffer(aContext));
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4495,12 +4837,13 @@ Result Invoke(Args& aArgs) {
 // Return the result of the scaffolding call back to JS
 void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictionary<UniFFIRustCallResult>& aReturnValue) {
     switch (aCallResult.mCallStatus.code) {
-        case uniffi::CALL_SUCCESS:
+        case uniffi::CALL_SUCCESS: {
             // Successful call.  Populate data with the return value
             aReturnValue.mCode = uniffi::CALL_SUCCESS;
             // Numeric Return
             aReturnValue.mData.setNumber(aCallResult.mReturnValue);
             break;
+        }
 
         case uniffi::CALL_ERROR:
             // Rust Err() value.  Populate data with the `RustBuffer` containing the error
@@ -4520,7 +4863,7 @@ void ReturnResult(JSContext* aContext, const Result& aCallResult, RootedDictiona
 
 namespace mozilla::dom {
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336RetourneurObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336RetourneurObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4626,7 +4969,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurNew(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4679,7 +5022,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4732,7 +5075,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4785,7 +5128,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4838,7 +5181,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4891,7 +5234,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4944,7 +5287,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueI64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -4997,7 +5340,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueU64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5050,7 +5393,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueFloat(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueFloat(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5103,7 +5446,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueDouble(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueDouble(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5156,7 +5499,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5209,7 +5552,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5262,7 +5605,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueNombresSignes(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueNombresSignes(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5315,7 +5658,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueNombres(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueNombres(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5368,7 +5711,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5421,7 +5764,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336RetourneurIdentique
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336StringifierObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336StringifierObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5527,7 +5870,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierNew(cons
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierWellKnownString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierWellKnownString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5580,7 +5923,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierWellKnow
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5633,7 +5976,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU8(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU8(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5686,7 +6029,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5739,7 +6082,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU16(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU16(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5792,7 +6135,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5845,7 +6188,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5898,7 +6241,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringI64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -5951,7 +6294,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringU64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6004,7 +6347,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringFloat(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringFloat(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6057,7 +6400,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringDouble(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringDouble(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6110,7 +6453,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToStringBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6163,7 +6506,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336StringifierToString
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336OptionneurObjectFree(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr,
+already_AddRefed<Promise> RondpointScaffolding::FfiRondpoint9336OptionneurObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6269,7 +6612,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurNew(const
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonBoolean(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonBoolean(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6322,7 +6665,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonBool
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonString(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonString(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6375,7 +6718,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonStri
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonSequence(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonSequence(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6428,7 +6771,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonSequ
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonNull(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonNull(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6481,7 +6824,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonNull
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonZero(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonZero(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6534,7 +6877,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonZero
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6587,7 +6930,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8De
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6640,7 +6983,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8De
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6693,7 +7036,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6746,7 +7089,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6799,7 +7142,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6852,7 +7195,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6905,7 +7248,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64Dec(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64Dec(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -6958,7 +7301,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64D
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7011,7 +7354,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU8He
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int8_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int8_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7064,7 +7407,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI8He
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7117,7 +7460,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU16H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int16_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int16_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7170,7 +7513,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI16H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7223,7 +7566,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7276,7 +7619,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI32H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7329,7 +7672,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU64H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64Hex(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const int64_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64Hex(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const int64_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7382,7 +7725,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonI64H
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Oct(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const uint32_t& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32Oct(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const uint32_t& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7435,7 +7778,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonU32O
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF32(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const float& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF32(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const float& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7488,7 +7831,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF32(
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF64(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const double& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF64(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const double& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7541,7 +7884,7 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonF64(
     return uniFFIReturnPromise.forget();
 }
 using namespace uniffi::rondpoint;
-already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonEnum(const GlobalObject& aUniFFIGlobal,const JS::Handle<JS::Value>& ptr, const ArrayBuffer& value,
+already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336OptionneurSinonEnum(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& value,
  ErrorResult& aUniFFIError) {
     // Note: Prefix our params and local variables with "uniffi" to avoid name
     // conflicts with the scaffolding function args
@@ -7858,5 +8201,67 @@ already_AddRefed<Promise> RondpointScaffolding::Rondpoint9336Switcheroo(const Gl
     // Return the JS promise, using forget() to convert it to already_AddRefed
     return uniFFIReturnPromise.forget();
 }
+  already_AddRefed<UniFFIPointer> RondpointScaffolding::ReadPointerRetourneur(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
 
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &RetourneurPointerType::getInstance());
+  }
+  void RondpointScaffolding::WritePointerRetourneur(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+  }
+
+  
+  already_AddRefed<UniFFIPointer> RondpointScaffolding::ReadPointerStringifier(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &StringifierPointerType::getInstance());
+  }
+  void RondpointScaffolding::WritePointerStringifier(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+  }
+
+  
+  already_AddRefed<UniFFIPointer> RondpointScaffolding::ReadPointerOptionneur(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Reading Pointer from buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the write function, a pointer is converted to a void* then written as u64 BigEndian
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      void* ptr = (void*)mozilla::BigEndian::readUint64(data_ptr);
+      return UniFFIPointer::Create(ptr, &OptionneurPointerType::getInstance());
+  }
+  void RondpointScaffolding::WritePointerOptionneur(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition) {
+      MOZ_LOG(sUniFFIRondpointScaffoldingLogger, LogLevel::Info, ("[UniFFI] Writing Pointer to buffer"));
+      aArrayBuff.ComputeState();
+
+      // in Rust and in the read function, a u64 is read as BigEndian and then converted to a pointer
+      // we do the reverse here
+      uint8_t* data_ptr = aArrayBuff.Data() + aPosition; // Pointer arithmetic, move by position bytes
+      mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)aPtr.getPtr());
+  }
+
+  
 }  // namespace mozilla::dom
