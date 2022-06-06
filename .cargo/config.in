@@ -15,7 +15,7 @@ rev = "75ada456c92a429704691a85e1cb42fef8cafc0d"
 [source."https://github.com/mozilla/uniffi-rs.git"]
 git = "https://github.com/mozilla/uniffi-rs.git"
 replace-with = "vendored-sources"
-rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc"
+rev = "a8f49198773e61fb3f31dbd56473844968708714"
 
 [source."https://github.com/mozilla/neqo"]
 git = "https://github.com/mozilla/neqo"

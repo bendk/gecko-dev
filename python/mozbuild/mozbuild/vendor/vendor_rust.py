@@ -93,7 +93,6 @@ TOLERATED_DUPES = {
     "paste": 2,
     "pin-project-lite": 2,
     "semver": 2,
-    "semver-parser": 2,
     "target-lexicon": 2,
     "tokio": 3,
     "toml": 2,

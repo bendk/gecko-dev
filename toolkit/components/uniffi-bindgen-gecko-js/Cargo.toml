@@ -13,6 +13,7 @@ askama = { version = "0.11", default-features = false, features = ["config"] }
 clap = { version = "3.1", features = ["std", "derive"] }
 extend = "1.1"
 heck = "0.4"
-uniffi_bindgen = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc" }
+uniffi_bindgen = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714" }
 serde = "1"
 toml = "0.5"
+camino = "1.0.8"

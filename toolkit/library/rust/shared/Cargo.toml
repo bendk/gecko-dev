@@ -60,11 +60,11 @@ rust_minidump_writer_linux = { path = "../../../crashreporter/rust_minidump_writ
 gecko-profiler = { path = "../../../../tools/profiler/rust-api"}
 midir_impl = { path = "../../../../dom/midi/midir_impl", optional = true }
 origin-trials-ffi = { path = "../../../../dom/origin-trials/ffi" }
-uniffi-example-arithmetic = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc", optional = true }
-uniffi-example-geometry = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc", optional = true }
-uniffi-example-rondpoint = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc", optional = true }
-uniffi-example-sprites = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc", optional = true }
-uniffi-example-todolist = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "4487bbda8f75b712f2058eaebd592c65e8d5e9dc", optional = true }
+uniffi-example-arithmetic = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714", optional = true }
+uniffi-example-geometry = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714", optional = true }
+uniffi-example-rondpoint = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714", optional = true }
+uniffi-example-sprites = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714", optional = true }
+uniffi-example-todolist = { git = "https://github.com/mozilla/uniffi-rs.git", rev = "a8f49198773e61fb3f31dbd56473844968708714", optional = true }
 # Note: `modern_sqlite` means rusqlite's bindings file be for a sqlite with
 # version less than or equal to what we link to. This isn't a problem because we
 # tend to keep this up to date, but it needs to be taken into consideration when
