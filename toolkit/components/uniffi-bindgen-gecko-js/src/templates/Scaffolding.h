@@ -6,36 +6,41 @@
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/dom/RootedDictionary.h"
+#include "mozilla/dom/ScaffoldingConverter.h"
 #include "mozilla/dom/TypedArray.h"
-#include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
+
+
+namespace mozilla::dom {
 
 // Scaffolding functions from UniFFI
 extern "C" {
-{%- for func in ci.iter_user_ffi_function_definitions() %}
-{{ func.rust_return_type() }} {{ func.rust_name() }}({{ func.rust_arg_list() }});
-{% endfor %}
+  {%- for func in ci.iter_user_ffi_function_definitions() %}
+  {{ func.rust_return_type() }} {{ func.rust_name() }}({{ func.rust_arg_list() }});
+  {% endfor %}
 }
-
-namespace mozilla::dom {
 
 class GlobalObject;
 
 {%- for object in ci.object_definitions() %}
-class {{ object.nm() }}PointerType : public UniFFIPointerType {
+{%- let pointer_type = "{}PointerType"|format(object.nm()) %}
+// UniFFIPointerType subclass for this pointer type
+class {{ pointer_type }} : public UniFFIPointerType {
     public:
-        static {{ object.nm() }}PointerType& getInstance() {
-            static {{ object.nm() }}PointerType instance;
+        static {{ pointer_type }}& getInstance() {
+            static {{ pointer_type }} instance;
             return instance;
         }
     private:
-        {{ object.nm() }}PointerType() {
-            typeName = u"{{ ci.cpp_namespace() }}{{ object.nm() }}"_ns;
+    {{ pointer_type }}() {
+            typeName = "{{ ci.cpp_namespace() }}{{ object.nm() }}"_ns;
             destructor = {{ object.ffi_object_free().rust_name() }};
         }
 };
+
 {% endfor -%}
 
 class {{ ci.scaffolding_class() }} {
@@ -43,13 +48,16 @@ class {{ ci.scaffolding_class() }} {
   {%- for func in ci.iter_user_ffi_function_definitions() %}
 
   {%- if func.is_async() %}
-  static already_AddRefed<Promise> {{ func.nm() }}(const GlobalObject& aUniFFIGlobal,
-  {%- if func.has_args() %}{{ func.input_arg_list() }},{%- else %}{%- endif %}
-  ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> {{ func.nm() }}(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
   {%- else %}
-  static void {{ func.nm() }}(const GlobalObject& aUniFFIGlobal,
-   {%- if func.has_args() %}{{ func.input_arg_list() }},{%- else %}{%- endif %}
-  RootedDictionary<UniFFIRustCallResult>& aUniFFIReturnValue, ErrorResult& aUniFFIErrorResult);
+  static void {{ func.nm() }}(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          RootedDictionary<UniFFIScaffoldingCallResult>& aUniFFIReturnValue,
+          ErrorResult& aUniFFIErrorResult);
   {%- endif %}
   {%- endfor %}
 
@@ -57,7 +65,7 @@ class {{ ci.scaffolding_class() }} {
   {%- for object in ci.object_definitions() %}
 
   static already_AddRefed<UniFFIPointer> ReadPointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
-  static void WritePointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+  static void WritePointer{{ object.nm() }}(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position, ErrorResult& aError);
 
   {% endfor %}
 };

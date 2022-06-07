@@ -10,33 +10,30 @@
 #include "nsISupports.h"
 #include "nsWrapperCache.h"
 #include "nsString.h"
-#include "UniFFI.h"
-
-
+#include "UniFFIRust.h"
 
 namespace mozilla::dom {
-
 
 /**
  * UniFFIPointerType is the base class for the types of all
  * UniFFI allocated pointers.
  * Each UniFFIPointer will have a UniFFIPointerType, which will be a statically
  * allocated type per object exposed by the UniFFI interface
- **/ 
+ **/
 class UniFFIPointerType {
-  public:
-    void GetTypeName(nsString& retval);
+ public:
+  const nsCString& GetTypeName();
 
-    // Destroys the pointer by passing it to the Rust destructor
-    // the Rust destructor will give back ownership of the pointer to Rust which will deallocate it.
-    void DestroyPtr(void *ptr);
+  // Destroys the pointer by passing it to the Rust destructor
+  // the Rust destructor will give back ownership of the pointer to Rust which
+  // will deallocate it.
+  void DestroyPtr(void* ptr);
 
-  protected:
-    nsString typeName;
-    // The Rust destructor for the pointer, this gives back ownership to Rust
-    void (*destructor)(void *, RustCallStatus *);
+ protected:
+  nsCString typeName;
+  // The Rust destructor for the pointer, this gives back ownership to Rust
+  void (*destructor)(void*, RustCallStatus*);
 };
 }  // namespace mozilla::dom
 
 #endif /* mozilla_dom_UniFFIPointerType_h */
-

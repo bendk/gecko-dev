@@ -6,51 +6,54 @@
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/dom/RootedDictionary.h"
+#include "mozilla/dom/ScaffoldingConverter.h"
 #include "mozilla/dom/TypedArray.h"
-#include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
 
-// Scaffolding functions from UniFFI
-extern "C" {
-void ffi_todolist_126_TodoList_object_free(void *, RustCallStatus*);
-
-void * todolist_126_TodoList_new(RustCallStatus*);
-
-void todolist_126_TodoList_add_item(void *, RustBuffer, RustCallStatus*);
-
-void todolist_126_TodoList_add_entry(void *, RustBuffer, RustCallStatus*);
-
-RustBuffer todolist_126_TodoList_get_entries(void *, RustCallStatus*);
-
-RustBuffer todolist_126_TodoList_get_items(void *, RustCallStatus*);
-
-void todolist_126_TodoList_add_entries(void *, RustBuffer, RustCallStatus*);
-
-void todolist_126_TodoList_add_items(void *, RustBuffer, RustCallStatus*);
-
-RustBuffer todolist_126_TodoList_get_last_entry(void *, RustCallStatus*);
-
-RustBuffer todolist_126_TodoList_get_last(void *, RustCallStatus*);
-
-RustBuffer todolist_126_TodoList_get_first(void *, RustCallStatus*);
-
-void todolist_126_TodoList_clear_item(void *, RustBuffer, RustCallStatus*);
-
-void todolist_126_TodoList_make_default(void *, RustCallStatus*);
-
-RustBuffer todolist_126_get_default_list(RustCallStatus*);
-
-void todolist_126_set_default_list(void *, RustCallStatus*);
-
-RustBuffer todolist_126_create_entry_with(RustBuffer, RustCallStatus*);
-
-}
 
 namespace mozilla::dom {
 
+// Scaffolding functions from UniFFI
+extern "C" {
+  void ffi_todolist_126_TodoList_object_free(void *, RustCallStatus*);
+  
+  void * todolist_126_TodoList_new(RustCallStatus*);
+  
+  void todolist_126_TodoList_add_item(void *, RustBuffer, RustCallStatus*);
+  
+  void todolist_126_TodoList_add_entry(void *, RustBuffer, RustCallStatus*);
+  
+  RustBuffer todolist_126_TodoList_get_entries(void *, RustCallStatus*);
+  
+  RustBuffer todolist_126_TodoList_get_items(void *, RustCallStatus*);
+  
+  void todolist_126_TodoList_add_entries(void *, RustBuffer, RustCallStatus*);
+  
+  void todolist_126_TodoList_add_items(void *, RustBuffer, RustCallStatus*);
+  
+  RustBuffer todolist_126_TodoList_get_last_entry(void *, RustCallStatus*);
+  
+  RustBuffer todolist_126_TodoList_get_last(void *, RustCallStatus*);
+  
+  RustBuffer todolist_126_TodoList_get_first(void *, RustCallStatus*);
+  
+  void todolist_126_TodoList_clear_item(void *, RustBuffer, RustCallStatus*);
+  
+  void todolist_126_TodoList_make_default(void *, RustCallStatus*);
+  
+  RustBuffer todolist_126_get_default_list(RustCallStatus*);
+  
+  void todolist_126_set_default_list(void *, RustCallStatus*);
+  
+  RustBuffer todolist_126_create_entry_with(RustBuffer, RustCallStatus*);
+  
+}
+
 class GlobalObject;
+// UniFFIPointerType subclass for this pointer type
 class TodoListPointerType : public UniFFIPointerType {
     public:
         static TodoListPointerType& getInstance() {
@@ -58,48 +61,81 @@ class TodoListPointerType : public UniFFIPointerType {
             return instance;
         }
     private:
-        TodoListPointerType() {
-            typeName = u"uniffi::todolistTodoList"_ns;
+    TodoListPointerType() {
+            typeName = "uniffi::todolistTodoList"_ns;
             destructor = ffi_todolist_126_TodoList_object_free;
         }
 };
+
 class TodolistScaffolding {
   public:
-  static already_AddRefed<Promise> FfiTodolist126TodoListObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListNew(const GlobalObject& aUniFFIGlobal,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entry,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddEntries(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& entries,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListAddItems(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& items,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetLastEntry(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetLast(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListGetFirst(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListClearItem(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& todo,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126TodoListMakeDefault(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126GetDefaultList(const GlobalObject& aUniFFIGlobal,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126SetDefaultList(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& list,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Todolist126CreateEntryWith(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& todo,
-  ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> FfiTodolist126TodoListObjectFree(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListNew(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListAddItem(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListAddEntry(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListGetEntries(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListGetItems(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListAddEntries(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListAddItems(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListGetLastEntry(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListGetLast(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListGetFirst(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListClearItem(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126TodoListMakeDefault(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126GetDefaultList(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126SetDefaultList(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Todolist126CreateEntryWith(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
 
   static already_AddRefed<UniFFIPointer> ReadPointerTodoList(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
-  static void WritePointerTodoList(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+  static void WritePointerTodoList(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position, ErrorResult& aError);
 
   
 };

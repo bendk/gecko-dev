@@ -6,15 +6,14 @@
 
 FINAL_LIBRARY = "xul"
 
-UNIFIED_SOURCES += [
-    "OwnedRustBuffer.cpp",
-    "UniFFIPointer.cpp",
-    "UniFFIPointerType.cpp"
-]
+UNIFIED_SOURCES += ["OwnedRustBuffer.cpp", "UniFFIPointer.cpp", "UniFFIPointerType.cpp"]
 
 EXPORTS.mozilla.dom += [
     "OwnedRustBuffer.h",
+    "ScaffoldingCall.h",
+    "ScaffoldingConverter.h",
     "UniFFI.h",
     "UniFFIPointer.h",
-    "UniFFIPointerType.h"
+    "UniFFIPointerType.h",
+    "UniFFIRust.h",
 ]

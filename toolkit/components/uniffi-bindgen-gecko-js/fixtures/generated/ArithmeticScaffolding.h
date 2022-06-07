@@ -6,36 +6,46 @@
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/dom/RootedDictionary.h"
+#include "mozilla/dom/ScaffoldingConverter.h"
 #include "mozilla/dom/TypedArray.h"
-#include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
 
-// Scaffolding functions from UniFFI
-extern "C" {
-uint64_t arithmetic_8817_add(uint64_t, uint64_t, RustCallStatus*);
-
-uint64_t arithmetic_8817_sub(uint64_t, uint64_t, RustCallStatus*);
-
-uint64_t arithmetic_8817_div(uint64_t, uint64_t, RustCallStatus*);
-
-int8_t arithmetic_8817_equal(uint64_t, uint64_t, RustCallStatus*);
-
-}
 
 namespace mozilla::dom {
 
+// Scaffolding functions from UniFFI
+extern "C" {
+  uint64_t arithmetic_8817_add(uint64_t, uint64_t, RustCallStatus*);
+  
+  uint64_t arithmetic_8817_sub(uint64_t, uint64_t, RustCallStatus*);
+  
+  uint64_t arithmetic_8817_div(uint64_t, uint64_t, RustCallStatus*);
+  
+  int8_t arithmetic_8817_equal(uint64_t, uint64_t, RustCallStatus*);
+  
+}
+
 class GlobalObject;class ArithmeticScaffolding {
   public:
-  static already_AddRefed<Promise> Arithmetic8817Add(const GlobalObject& aUniFFIGlobal,const uint64_t& a, const uint64_t& b,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Arithmetic8817Sub(const GlobalObject& aUniFFIGlobal,const uint64_t& a, const uint64_t& b,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Arithmetic8817Div(const GlobalObject& aUniFFIGlobal,const uint64_t& dividend, const uint64_t& divisor,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> Arithmetic8817Equal(const GlobalObject& aUniFFIGlobal,const uint64_t& a, const uint64_t& b,
-  ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Arithmetic8817Add(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Arithmetic8817Sub(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Arithmetic8817Div(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> Arithmetic8817Equal(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
 };
 
 }  // namespace mozilla::dom

@@ -7,11 +7,6 @@
 
 var EXPORTED_SYMBOLS = [];
 
-// UniFFIRustCallResult.code values
-const CALL_SUCCESS = 0;
-const CALL_ERROR = 1;
-const CALL_INTERNAL_ERROR = 2;
-
 // Write/Read data to/from an ArrayBuffer
 class ArrayBufferDataStream {
     constructor(arrayBuffer) {
@@ -162,13 +157,13 @@ class ArrayBufferDataStream {
 
 function handleRustResult(result, liftCallback, liftErrCallback) {
     switch (result.code) {
-        case CALL_SUCCESS:
+        case "success":
             return liftCallback(result.data);
 
-        case CALL_ERROR:
+        case "error":
             throw liftErrCallback(result.data);
 
-        case CALL_INTERNAL_ERROR:
+        case "internal-error":
             let message = result.internalErrorMessage;
             if (message) {
                 throw new UniFFIInternalError(message);

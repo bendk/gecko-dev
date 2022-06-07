@@ -6,9 +6,8 @@ use super::shared::*;
 use askama::Template;
 use extend::ext;
 use heck::{ToLowerCamelCase, ToSnakeCase, ToUpperCamelCase};
-use uniffi_bindgen::interface::{
-    ComponentInterface, FFIArgument, FFIFunction, FFIType , Object,
-};
+use std::iter;
+use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType, Object};
 
 #[derive(Template)]
 #[template(path = "Scaffolding.cpp", escape = "none")]
@@ -47,6 +46,23 @@ pub impl ComponentInterface {
 pub impl FFIFunction {
     fn nm(&self) -> String {
         self.name().to_upper_camel_case()
+    }
+
+    // ScaffoldingCallHandler class
+    fn scaffolding_call_handler(&self) -> String {
+        let return_param = match self.return_type() {
+            Some(return_type) => return_type.scaffolding_converter(),
+            None => "ScaffoldingConverter<void>".to_string(),
+        };
+        let all_params = iter::once(return_param)
+            .chain(
+                self.arguments()
+                    .into_iter()
+                    .map(|a| a.scaffolding_converter()),
+            )
+            .collect::<Vec<_>>()
+            .join(", ");
+        return format!("ScaffoldingCallHandler<{}>", all_params);
     }
 
     // C++ namespace we create for the scaffolding code for this function (child of
@@ -93,6 +109,19 @@ pub impl FFIFunction {
 
 #[ext(name=FFITypeCppExt)]
 pub impl FFIType {
+    // ScaffoldingConverter class
+    //
+    // This is used to convert types between the JS code and Rust
+    fn scaffolding_converter(&self) -> String {
+        match self {
+            FFIType::RustArcPtr(name) => format!(
+                "ScaffoldingConverter<{}PointerType, ScaffoldingConverterTagObject>",
+                name.to_upper_camel_case()
+            ),
+            _ => format!("ScaffoldingConverter<{}>", self.rust_type()),
+        }
+    }
+
     // Type for the WebIDL implementation method
     //
     // This is what we get passed from the JS code via the WebIDL bindings helper code
@@ -160,6 +189,10 @@ pub impl FFIArgument {
 
     fn args_type(&self) -> String {
         self.type_().args_type()
+    }
+
+    fn scaffolding_converter(&self) -> String {
+        self.type_().scaffolding_converter()
     }
 
     fn rust_type(&self) -> String {

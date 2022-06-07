@@ -4,143 +4,146 @@
 [ChromeOnly, Exposed=Window]
 namespace RondpointScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> ffiRondpoint9336RetourneurObjectFree(UniFFIPointer ptr);
+  Promise<UniFFIScaffoldingCallResult> ffiRondpoint9336RetourneurObjectFree(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurNew();
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurNew(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueI8(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueI8(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueU8(UniFFIPointer ptr, octet value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueU8(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueI16(UniFFIPointer ptr, short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueI16(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueU16(UniFFIPointer ptr, unsigned short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueU16(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueI32(UniFFIPointer ptr, long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueI32(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueU32(UniFFIPointer ptr, unsigned long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueU32(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueI64(UniFFIPointer ptr, long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueI64(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueU64(UniFFIPointer ptr, unsigned long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueU64(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueFloat(UniFFIPointer ptr, float value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueFloat(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueDouble(UniFFIPointer ptr, double value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueDouble(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueBoolean(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueBoolean(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueString(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueString(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueNombresSignes(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueNombresSignes(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueNombres(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueNombres(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> ffiRondpoint9336StringifierObjectFree(UniFFIPointer ptr);
+  Promise<UniFFIScaffoldingCallResult> ffiRondpoint9336StringifierObjectFree(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierNew();
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierNew(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierWellKnownString(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierWellKnownString(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringI8(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringI8(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringU8(UniFFIPointer ptr, octet value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringU8(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringI16(UniFFIPointer ptr, short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringI16(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringU16(UniFFIPointer ptr, unsigned short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringU16(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringI32(UniFFIPointer ptr, long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringI32(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringU32(UniFFIPointer ptr, unsigned long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringU32(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringI64(UniFFIPointer ptr, long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringI64(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringU64(UniFFIPointer ptr, unsigned long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringU64(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringFloat(UniFFIPointer ptr, float value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringFloat(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringDouble(UniFFIPointer ptr, double value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringDouble(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336StringifierToStringBoolean(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336StringifierToStringBoolean(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> ffiRondpoint9336OptionneurObjectFree(UniFFIPointer ptr);
+  Promise<UniFFIScaffoldingCallResult> ffiRondpoint9336OptionneurObjectFree(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurNew();
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurNew(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonBoolean(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonBoolean(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonString(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonString(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonSequence(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonSequence(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonNull(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonNull(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonZero(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonZero(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU8Dec(UniFFIPointer ptr, octet value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU8Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI8Dec(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI8Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU16Dec(UniFFIPointer ptr, unsigned short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU16Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI16Dec(UniFFIPointer ptr, short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI16Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU32Dec(UniFFIPointer ptr, unsigned long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU32Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI32Dec(UniFFIPointer ptr, long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI32Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU64Dec(UniFFIPointer ptr, unsigned long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU64Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI64Dec(UniFFIPointer ptr, long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI64Dec(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU8Hex(UniFFIPointer ptr, octet value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU8Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI8Hex(UniFFIPointer ptr, byte value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI8Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU16Hex(UniFFIPointer ptr, unsigned short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU16Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI16Hex(UniFFIPointer ptr, short value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI16Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU32Hex(UniFFIPointer ptr, unsigned long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU32Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI32Hex(UniFFIPointer ptr, long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI32Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU64Hex(UniFFIPointer ptr, unsigned long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU64Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonI64Hex(UniFFIPointer ptr, long long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonI64Hex(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonU32Oct(UniFFIPointer ptr, unsigned long value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonU32Oct(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonF32(UniFFIPointer ptr, float value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonF32(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonF64(UniFFIPointer ptr, double value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonF64(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336OptionneurSinonEnum(UniFFIPointer ptr, ArrayBuffer value);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336OptionneurSinonEnum(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336CopieDictionnaire(ArrayBuffer d);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336CopieDictionnaire(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336CopieEnumeration(ArrayBuffer e);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336CopieEnumeration(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336CopieEnumerations(ArrayBuffer e);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336CopieEnumerations(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336CopieCarte(ArrayBuffer c);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336CopieCarte(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> rondpoint9336Switcheroo(byte b);
+  Promise<UniFFIScaffoldingCallResult> rondpoint9336Switcheroo(UniFFIScaffoldingType... args);
 
 UniFFIPointer readPointerRetourneur(ArrayBuffer buff, long position);
+[Throws]
 void writePointerRetourneur(UniFFIPointer ptr, ArrayBuffer buff, long position);
 
 
 
 UniFFIPointer readPointerStringifier(ArrayBuffer buff, long position);
+[Throws]
 void writePointerStringifier(UniFFIPointer ptr, ArrayBuffer buff, long position);
 
 
 
 UniFFIPointer readPointerOptionneur(ArrayBuffer buff, long position);
+[Throws]
 void writePointerOptionneur(UniFFIPointer ptr, ArrayBuffer buff, long position);
 
 

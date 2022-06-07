@@ -4,7 +4,7 @@
 [ChromeOnly, Exposed=Window]
 namespace GeometryScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> geometryC382Gradient(ArrayBuffer ln);
+  Promise<UniFFIScaffoldingCallResult> geometryC382Gradient(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> geometryC382Intersection(ArrayBuffer ln1, ArrayBuffer ln2);
+  Promise<UniFFIScaffoldingCallResult> geometryC382Intersection(UniFFIScaffoldingType... args);
 };

@@ -6,28 +6,34 @@
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/dom/RootedDictionary.h"
+#include "mozilla/dom/ScaffoldingConverter.h"
 #include "mozilla/dom/TypedArray.h"
-#include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
 
-// Scaffolding functions from UniFFI
-extern "C" {
-double geometry_c382_gradient(RustBuffer, RustCallStatus*);
-
-RustBuffer geometry_c382_intersection(RustBuffer, RustBuffer, RustCallStatus*);
-
-}
 
 namespace mozilla::dom {
 
+// Scaffolding functions from UniFFI
+extern "C" {
+  double geometry_c382_gradient(RustBuffer, RustCallStatus*);
+  
+  RustBuffer geometry_c382_intersection(RustBuffer, RustBuffer, RustCallStatus*);
+  
+}
+
 class GlobalObject;class GeometryScaffolding {
   public:
-  static already_AddRefed<Promise> GeometryC382Gradient(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& ln,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> GeometryC382Intersection(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& ln1, const ArrayBuffer& ln2,
-  ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryC382Gradient(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> GeometryC382Intersection(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
 };
 
 }  // namespace mozilla::dom
