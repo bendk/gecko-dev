@@ -11,7 +11,7 @@ const Geometry = ChromeUtils.import(
 const { TodoList } = ChromeUtils.import(
   "resource://gre/modules/components-utils/Todolist.jsm"
 );
-const { Stringifier }  = ChromeUtils.import(
+const { Stringifier } = ChromeUtils.import(
   "resource://gre/modules/components-utils/Rondpoint.jsm"
 );
 
@@ -35,7 +35,6 @@ add_task(async function() {
   const stringifier = await Stringifier.init();
   await todo.getEntries(); // OK
   todo.ptr = stringifier.ptr;
-
 
   try {
     await todo.getEntries(); // the pointer is incorrect, should throw

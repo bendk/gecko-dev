@@ -31,9 +31,9 @@ pub impl FFIFunction {
 
     fn return_type_name(&self) -> String {
         if self.is_async() {
-            "Promise<UniFFIRustCallResult>".to_string()
+            "Promise<UniFFIScaffoldingCallResult>".to_string()
         } else {
-            "UniFFIRustCallResult".to_string()
+            "UniFFIScaffoldingCallResult".to_string()
         }
     }
 }

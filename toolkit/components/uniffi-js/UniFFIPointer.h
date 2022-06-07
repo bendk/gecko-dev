@@ -12,54 +12,56 @@
 #include "nsString.h"
 #include "mozilla/dom/UniFFIPointerType.h"
 
-
-
 namespace mozilla::dom {
 
-class UniFFIPointer final: public nsISupports, public nsWrapperCache {
-  public:
-    NS_DECL_CYCLE_COLLECTING_ISUPPORTS
-    NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(UniFFIPointer)
+class UniFFIPointer final : public nsISupports, public nsWrapperCache {
+ public:
+  NS_DECL_CYCLE_COLLECTING_ISUPPORTS
+  NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(UniFFIPointer)
 
-    static already_AddRefed<UniFFIPointer> Create(void *ptr, UniFFIPointerType* type);
+  static already_AddRefed<UniFFIPointer> Create(void* ptr,
+                                                UniFFIPointerType* aType);
+  static already_AddRefed<UniFFIPointer> Read(const ArrayBuffer& aArrayBuff,
+                                              long aPosition,
+                                              UniFFIPointerType* aType);
+  void Write(const ArrayBuffer& aArrayBuff, long aPosition,
+             UniFFIPointerType* aType, ErrorResult& aError) const;
 
-    UniFFIPointer(void *ptr, UniFFIPointerType* type);
+  UniFFIPointer(void* ptr, UniFFIPointerType* type);
 
-    JSObject* WrapObject(JSContext* aCx,
-                        JS::Handle<JSObject*> aGivenProto) override;
-    nsISupports* GetParentObject() { return nullptr; }
+  JSObject* WrapObject(JSContext* aCx,
+                       JS::Handle<JSObject*> aGivenProto) override;
+  nsISupports* GetParentObject() { return nullptr; }
 
-    /**
-     * returns the raw pointer `UniFFIPointer` holds
-     * This is safe because:
-     * - The pointer was allocated in Rust as a reference counted `Arc<T>`
-     * - Rust cloned the pointer without destructing it when passed into C++
-     * - Eventually, when the destructor of `UniFFIPointer` runs, we return ownership
-     *    to Rust, which then decrements the count and deallocates the memory the pointer points to.
-     */
-    void *GetPtr() const;
+  /**
+   * returns the raw pointer `UniFFIPointer` holds
+   * This is safe because:
+   * - The pointer was allocated in Rust as a reference counted `Arc<T>`
+   * - Rust cloned the pointer without destructing it when passed into C++
+   * - Eventually, when the destructor of `UniFFIPointer` runs, we return
+   * ownership to Rust, which then decrements the count and deallocates the
+   * memory the pointer points to.
+   */
+  void* GetPtr() const;
 
-    /**
-     * Returns true if the pointer type `this` holds is the same as the argument
-     * it does so using pointer comparison, as there is **exactly** one static `UniFFIPointerType`
-     * per type exposed in the UniFFI interface
-     */
-    bool IsSamePtrType(const UniFFIPointerType* type) const;
+  /**
+   * Returns true if the pointer type `this` holds is the same as the argument
+   * it does so using pointer comparison, as there is **exactly** one static
+   * `UniFFIPointerType` per type exposed in the UniFFI interface
+   */
+  bool IsSamePtrType(const UniFFIPointerType* type) const;
 
+ private:
+  UniFFIPointerType* type;
+  void* ptr;
 
-  private:
-    UniFFIPointerType* type;  
-    void *ptr;
-
-  protected:
+ protected:
   /**
    * Destructs the `UniFFIPointer`, making sure to give back ownership of the
    * raw pointer back to Rust, which deallocates the pointer
    */
   ~UniFFIPointer();
-
 };
 }  // namespace mozilla::dom
 
 #endif /* mozilla_dom_UniFFIPointer_h */
-

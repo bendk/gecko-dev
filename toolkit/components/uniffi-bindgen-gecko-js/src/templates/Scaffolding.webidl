@@ -5,14 +5,17 @@
 namespace {{ ci.scaffolding_namespace() }} {
 {%- for func in ci.iter_user_ffi_function_definitions() %}
   [Throws]
-  {{ func.return_type_name() }} {{ func.nm() }}(
-      {%- for arg in func.arguments() %}{{ arg.type_name() }} {{ arg.nm() }}{% if !loop.last %}, {% endif %}{% endfor -%}
-    );
+  {%- if func.is_async() %}
+  Promise<UniFFIScaffoldingCallResult> {{ func.nm() }}(UniFFIScaffoldingType... args);
+  {%- else %}
+  UniFFIScaffoldingCallResult {{ func.nm() }}(UniFFIScaffoldingType... args);
+  {%- endif %}
 {%- endfor %}
 
 {%- for object in ci.object_definitions() %}
 
 UniFFIPointer readPointer{{ object.nm() }}(ArrayBuffer buff, long position);
+[Throws]
 void writePointer{{ object.nm() }}(UniFFIPointer ptr, ArrayBuffer buff, long position);
 
 {% endfor %}

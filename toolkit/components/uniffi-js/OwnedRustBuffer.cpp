@@ -4,21 +4,20 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+#include "nsString.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 
 namespace mozilla::dom {
 
 OwnedRustBuffer::OwnedRustBuffer(const RustBuffer& aBuf) {
   mBuf = aBuf;
-  MOZ_ASSERT(isValid());
+  MOZ_ASSERT(IsValid());
 }
 
-OwnedRustBuffer::OwnedRustBuffer(const ArrayBuffer& aArrayBuffer,
-                                 ErrorResult& aRv) {
+Result<OwnedRustBuffer, nsCString> OwnedRustBuffer::FromArrayBuffer(
+    const ArrayBuffer& aArrayBuffer) {
   if (aArrayBuffer.Length() > INT32_MAX) {
-    mBuf = {0};
-    aRv.ThrowRangeError("Input ArrayBuffer is too large");
-    return;
+    return Err("Input ArrayBuffer is too large"_ns);
   }
 
   RustCallStatus status{};
@@ -26,26 +25,24 @@ OwnedRustBuffer::OwnedRustBuffer(const ArrayBuffer& aArrayBuffer,
       static_cast<int32_t>(aArrayBuffer.Length()), &status);
   buf.len = aArrayBuffer.Length();
   if (status.code != 0) {
-    mBuf = {0};
     if (status.error_buf.data) {
-      auto cStr = nsDependentCSubstring(
-          reinterpret_cast<char*>(status.error_buf.data), status.error_buf.len);
+      auto message = nsCString("uniffi_rustbuffer_alloc: ");
+      message.Append(
+          nsDependentCSubstring(reinterpret_cast<char*>(status.error_buf.data),
+                                status.error_buf.len));
       RustCallStatus status2{};
       uniffi_rustbuffer_free(status.error_buf, &status2);
       // Don't check the status of free, it shouldn't fail and if it does
       // there's nothing we can do at this point.
-      aRv.ThrowUnknownError(cStr);
-      return;
+      return Err(message);
 
     } else {
-      aRv.ThrowUnknownError("Unknown error allocating rust buffer");
-      return;
+      return Err("Unknown error allocating rust buffer"_ns);
     }
   }
 
   memcpy(buf.data, aArrayBuffer.Data(), buf.len);
-  mBuf = buf;
-  MOZ_ASSERT(isValid());
+  return OwnedRustBuffer(buf);
 }
 
 OwnedRustBuffer::OwnedRustBuffer(OwnedRustBuffer&& aOther) : mBuf(aOther.mBuf) {
@@ -60,7 +57,7 @@ OwnedRustBuffer& OwnedRustBuffer::operator=(OwnedRustBuffer&& aOther) {
 }
 
 void OwnedRustBuffer::freeData() {
-  if (isValid()) {
+  if (IsValid()) {
     RustCallStatus status{};
     uniffi_rustbuffer_free(mBuf, &status);
     if (status.code != 0) {
@@ -72,13 +69,13 @@ void OwnedRustBuffer::freeData() {
 
 OwnedRustBuffer::~OwnedRustBuffer() { freeData(); }
 
-RustBuffer OwnedRustBuffer::intoRustBuffer() {
+RustBuffer OwnedRustBuffer::IntoRustBuffer() {
   RustBuffer rv = mBuf;
   mBuf = {};
   return rv;
 }
 
-JSObject* OwnedRustBuffer::intoArrayBuffer(JSContext* cx) {
+JSObject* OwnedRustBuffer::IntoArrayBuffer(JSContext* cx) {
   int32_t len = mBuf.len;
   void* data = mBuf.data;
   auto userData = MakeUnique<OwnedRustBuffer>(std::move(*this));

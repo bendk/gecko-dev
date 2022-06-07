@@ -10,15 +10,15 @@
 static mozilla::LazyLogModule sUniFFIPointerTypeLogger("uniffi_logger");
 namespace mozilla::dom {
 
-void UniFFIPointerType::GetTypeName(nsString& retval) {
-  retval = this->typeName;
-}
+const nsCString& UniFFIPointerType::GetTypeName() { return this->typeName; }
 
-void UniFFIPointerType::DestroyPtr(void *ptr) {
-  MOZ_LOG(sUniFFIPointerTypeLogger, LogLevel::Info, ("[UniFFI] Calling the object's Rust destructor"));
+void UniFFIPointerType::DestroyPtr(void* ptr) {
+  MOZ_LOG(sUniFFIPointerTypeLogger, LogLevel::Info,
+          ("[UniFFI] Calling the object's Rust destructor"));
   RustCallStatus status;
   this->destructor(ptr, &status);
-  NS_ASSERTION(status.code == CALL_SUCCESS, "UniFFI destructor call returned a non-success result");
+  NS_ASSERTION(status.code == RUST_CALL_SUCCESS,
+               "UniFFI destructor call returned a non-success result");
 }
 
-} // namespace mozilla::dom
+}  // namespace mozilla::dom

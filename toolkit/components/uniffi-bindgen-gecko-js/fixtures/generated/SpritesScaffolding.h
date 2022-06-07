@@ -6,33 +6,36 @@
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/dom/RootedDictionary.h"
+#include "mozilla/dom/ScaffoldingConverter.h"
 #include "mozilla/dom/TypedArray.h"
-#include "mozilla/dom/UniFFIRustCallResultBinding.h"
+#include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
 
-// Scaffolding functions from UniFFI
-extern "C" {
-void ffi_sprites_ff2d_Sprite_object_free(void *, RustCallStatus*);
-
-void * sprites_ff2d_Sprite_new(RustBuffer, RustCallStatus*);
-
-void * sprites_ff2d_Sprite_new_relative_to(RustBuffer, RustBuffer, RustCallStatus*);
-
-RustBuffer sprites_ff2d_Sprite_get_position(void *, RustCallStatus*);
-
-void sprites_ff2d_Sprite_move_to(void *, RustBuffer, RustCallStatus*);
-
-void sprites_ff2d_Sprite_move_by(void *, RustBuffer, RustCallStatus*);
-
-RustBuffer sprites_ff2d_translate(RustBuffer, RustBuffer, RustCallStatus*);
-
-}
 
 namespace mozilla::dom {
 
+// Scaffolding functions from UniFFI
+extern "C" {
+  void ffi_sprites_ff2d_Sprite_object_free(void *, RustCallStatus*);
+  
+  void * sprites_ff2d_Sprite_new(RustBuffer, RustCallStatus*);
+  
+  void * sprites_ff2d_Sprite_new_relative_to(RustBuffer, RustBuffer, RustCallStatus*);
+  
+  RustBuffer sprites_ff2d_Sprite_get_position(void *, RustCallStatus*);
+  
+  void sprites_ff2d_Sprite_move_to(void *, RustBuffer, RustCallStatus*);
+  
+  void sprites_ff2d_Sprite_move_by(void *, RustBuffer, RustCallStatus*);
+  
+  RustBuffer sprites_ff2d_translate(RustBuffer, RustBuffer, RustCallStatus*);
+  
+}
+
 class GlobalObject;
+// UniFFIPointerType subclass for this pointer type
 class SpritePointerType : public UniFFIPointerType {
     public:
         static SpritePointerType& getInstance() {
@@ -40,30 +43,45 @@ class SpritePointerType : public UniFFIPointerType {
             return instance;
         }
     private:
-        SpritePointerType() {
-            typeName = u"uniffi::spritesSprite"_ns;
+    SpritePointerType() {
+            typeName = "uniffi::spritesSprite"_ns;
             destructor = ffi_sprites_ff2d_Sprite_object_free;
         }
 };
+
 class SpritesScaffolding {
   public:
-  static already_AddRefed<Promise> FfiSpritesFf2dSpriteObjectFree(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteNew(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& initialPosition,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteNewRelativeTo(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& reference, const ArrayBuffer& direction,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteGetPosition(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteMoveTo(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& position,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dSpriteMoveBy(const GlobalObject& aUniFFIGlobal,const UniFFIPointer& ptr, const ArrayBuffer& direction,
-  ErrorResult& aUniFFIErrorResult);
-  static already_AddRefed<Promise> SpritesFf2dTranslate(const GlobalObject& aUniFFIGlobal,const ArrayBuffer& position, const ArrayBuffer& direction,
-  ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> FfiSpritesFf2dSpriteObjectFree(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dSpriteNew(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dSpriteNewRelativeTo(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dSpriteGetPosition(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dSpriteMoveTo(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dSpriteMoveBy(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
+  static already_AddRefed<Promise> SpritesFf2dTranslate(
+          const GlobalObject& aUniFFIGlobal,
+          const Sequence<ScaffoldingType>& aArgs,
+          ErrorResult& aUniFFIErrorResult);
 
   static already_AddRefed<UniFFIPointer> ReadPointerSprite(const GlobalObject& aUniFFIGlobal, const ArrayBuffer& aArrayBuff, long position);
-  static void WritePointerSprite(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position);
+  static void WritePointerSprite(const GlobalObject& aUniFFIGlobal, const UniFFIPointer& ptr, const ArrayBuffer& buff, long position, ErrorResult& aError);
 
   
 };

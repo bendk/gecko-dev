@@ -3,6 +3,10 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// Opaque type used to represent a pointer from Rust
+[ChromeOnly, Exposed=Window]
+interface UniFFIPointer {};
+
 // Types that can be passed or returned from scaffolding functions
 //
 // - double is used for all numeric types (including bool, which the JS code
@@ -11,13 +15,13 @@
 // - UniFFIPointer is used for Arc pointers
 typedef (double or ArrayBuffer or UniFFIPointer) UniFFIScaffoldingType;
 
+// The result of a call into UniFFI scaffolding call
 enum UniFFIScaffoldingCallCode {
    "success",         // Successful return
    "error",           // Rust Err return
    "internal-error",  // Internal/unexpected error
 };
 
-// Represents the result of a call into Rust via UniFFI
 dictionary UniFFIScaffoldingCallResult {
     required UniFFIScaffoldingCallCode code;
     // For success, this will be the return value for non-void returns

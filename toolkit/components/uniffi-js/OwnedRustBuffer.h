@@ -8,8 +8,9 @@
 #define mozilla_dom_OwnedRustBuffer_h
 
 #include "mozilla/ErrorResult.h"
+#include "mozilla/ResultVariant.h"
 #include "mozilla/dom/TypedArray.h"
-#include "UniFFI.h"
+#include "mozilla/dom/UniFFIRust.h"
 
 namespace mozilla::dom {
 
@@ -28,11 +29,6 @@ class OwnedRustBuffer final {
   // that was returned by Rust (therefore we now own the RustBuffer).
   explicit OwnedRustBuffer(const RustBuffer& aBuf);
 
-  // Constructor for creating an OwnedRustBuffer from an ArrayBuffer. Will set
-  // aRv to failed and construct an invalid OwnedRustBuffer if the conversion
-  // failed.
-  OwnedRustBuffer(const ArrayBuffer& aArrayBuffer, ErrorResult& aRv);
-
   // Manual implementation of move constructor and assignment operator.
   OwnedRustBuffer(OwnedRustBuffer&& aOther);
   OwnedRustBuffer& operator=(OwnedRustBuffer&& aOther);
@@ -44,18 +40,24 @@ class OwnedRustBuffer final {
   // Destructor that frees the RustBuffer if it is still valid
   ~OwnedRustBuffer();
 
+  // Constructor for creating an OwnedRustBuffer from an ArrayBuffer. Will set
+  // aError to failed and construct an invalid OwnedRustBuffer if the
+  // conversion failed.
+  static Result<OwnedRustBuffer, nsCString> FromArrayBuffer(
+      const mozilla::dom::ArrayBuffer& aArrayBuffer);
+
   // Moves the buffer out of this `OwnedArrayBuffer` into a raw `RustBuffer`
   // struct.  The raw struct must be passed into a Rust function, transfering
   // ownership to Rust.  After this call the buffer will no longer be valid.
-  RustBuffer intoRustBuffer();
+  RustBuffer IntoRustBuffer();
 
   // Moves the buffer out of this `OwnedArrayBuffer` into a JS ArrayBuffer.
   // This transfers ownership into the JS engine.  After this call the buffer
   // will no longer be valid.
-  JSObject* intoArrayBuffer(JSContext* cx);
+  JSObject* IntoArrayBuffer(JSContext* cx);
 
   // Is this RustBuffer pointing to valid data?
-  bool isValid() const { return mBuf.data != nullptr; }
+  bool IsValid() const { return mBuf.data != nullptr; }
 
  private:
   // Helper function used by IntoArrayBuffer.

@@ -4,11 +4,11 @@
 [ChromeOnly, Exposed=Window]
 namespace ArithmeticScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> arithmetic8817Add(unsigned long long a, unsigned long long b);
+  Promise<UniFFIScaffoldingCallResult> arithmetic8817Add(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> arithmetic8817Sub(unsigned long long a, unsigned long long b);
+  Promise<UniFFIScaffoldingCallResult> arithmetic8817Sub(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> arithmetic8817Div(unsigned long long dividend, unsigned long long divisor);
+  Promise<UniFFIScaffoldingCallResult> arithmetic8817Div(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> arithmetic8817Equal(unsigned long long a, unsigned long long b);
+  Promise<UniFFIScaffoldingCallResult> arithmetic8817Equal(UniFFIScaffoldingType... args);
 };

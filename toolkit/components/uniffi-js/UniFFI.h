@@ -7,30 +7,12 @@
 #ifndef mozilla_dom_UniFFI_h
 #define mozilla_dom_UniFFI_h
 
-#include <stdint.h>
+#include "mozilla/dom/UniFFIBinding.h"
 
-namespace uniffi {
-// Valid values for UniFFIRustCallResult.code and RustCallStatus.code
-const int8_t CALL_SUCCESS = 0;
-const int8_t CALL_ERROR = 1;
-const int8_t CALL_INTERNAL_ERROR = 2;
-}  // namespace uniffi
+namespace mozilla::dom {
 
-// structs/functions from UniFFI
-extern "C" {
-struct RustBuffer {
-  int32_t capacity;
-  int32_t len;
-  uint8_t* data;
-};
+using ScaffoldingType = OwningDoubleOrArrayBufferOrUniFFIPointer;
 
-struct RustCallStatus {
-  int8_t code;
-  RustBuffer error_buf;
-};
-
-RustBuffer uniffi_rustbuffer_alloc(int32_t size, RustCallStatus* call_status);
-void uniffi_rustbuffer_free(RustBuffer buf, RustCallStatus* call_status);
-}
+}  // namespace mozilla::dom
 
 #endif /* mozilla_dom_UniFFI_h */

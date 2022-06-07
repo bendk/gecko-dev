@@ -4,21 +4,22 @@
 [ChromeOnly, Exposed=Window]
 namespace SpritesScaffolding {
   [Throws]
-  Promise<UniFFIRustCallResult> ffiSpritesFf2dSpriteObjectFree(UniFFIPointer ptr);
+  Promise<UniFFIScaffoldingCallResult> ffiSpritesFf2dSpriteObjectFree(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dSpriteNew(ArrayBuffer initialPosition);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dSpriteNew(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dSpriteNewRelativeTo(ArrayBuffer reference, ArrayBuffer direction);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dSpriteNewRelativeTo(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dSpriteGetPosition(UniFFIPointer ptr);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dSpriteGetPosition(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dSpriteMoveTo(UniFFIPointer ptr, ArrayBuffer position);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dSpriteMoveTo(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dSpriteMoveBy(UniFFIPointer ptr, ArrayBuffer direction);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dSpriteMoveBy(UniFFIScaffoldingType... args);
   [Throws]
-  Promise<UniFFIRustCallResult> spritesFf2dTranslate(ArrayBuffer position, ArrayBuffer direction);
+  Promise<UniFFIScaffoldingCallResult> spritesFf2dTranslate(UniFFIScaffoldingType... args);
 
 UniFFIPointer readPointerSprite(ArrayBuffer buff, long position);
+[Throws]
 void writePointerSprite(UniFFIPointer ptr, ArrayBuffer buff, long position);
 
 
