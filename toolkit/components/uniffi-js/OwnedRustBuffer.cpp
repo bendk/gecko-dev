@@ -7,7 +7,9 @@
 #include "nsString.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 
-namespace mozilla::dom {
+namespace mozilla {
+
+using dom::ArrayBuffer;
 
 OwnedRustBuffer::OwnedRustBuffer(const RustBuffer& aBuf) {
   mBuf = aBuf;
@@ -86,4 +88,4 @@ JSObject* OwnedRustBuffer::IntoArrayBuffer(JSContext* cx) {
 void OwnedRustBuffer::ArrayBufferFreeFunc(void* contents, void* userData) {
   UniquePtr<OwnedRustBuffer> buf{reinterpret_cast<OwnedRustBuffer*>(userData)};
 }
-}  // namespace mozilla::dom
+}  // namespace mozilla

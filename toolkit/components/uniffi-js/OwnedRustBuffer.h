@@ -4,15 +4,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef mozilla_dom_OwnedRustBuffer_h
-#define mozilla_dom_OwnedRustBuffer_h
+#ifndef mozilla_OwnedRustBuffer_h
+#define mozilla_OwnedRustBuffer_h
 
 #include "mozilla/ErrorResult.h"
 #include "mozilla/ResultVariant.h"
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRust.h"
 
-namespace mozilla::dom {
+namespace mozilla {
 
 // RustBuffer that's owned by the JS code and handles the memory management
 class OwnedRustBuffer final {
@@ -64,6 +64,6 @@ class OwnedRustBuffer final {
   static void ArrayBufferFreeFunc(void* contents, void* userData);
 };
 
-}  // namespace mozilla::dom
+}  // namespace mozilla
 
-#endif  // mozilla_dom_OwnedRustBuffer_h
+#endif  // mozilla_OwnedRustBuffer_h

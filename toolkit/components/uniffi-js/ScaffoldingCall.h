@@ -4,8 +4,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef mozilla_dom_ScaffoldingCall_h
-#define mozilla_dom_ScaffoldingCall_h
+#ifndef mozilla_ScaffoldingCall_h
+#define mozilla_ScaffoldingCall_h
 
 #include <tuple>
 #include <type_traits>
@@ -19,7 +19,7 @@
 #include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIRust.h"
 
-namespace mozilla::dom {
+namespace mozilla {
 
 // Low-level result of calling a scaffolding function
 //
@@ -52,9 +52,9 @@ class ScaffoldingCallHandler {
   // Perform an async scaffolding call
   //
   // aFuncName should be a literal C string
-  static already_AddRefed<Promise> CallAsync(
-      ScaffoldingFunc aScaffoldingFunc, const GlobalObject& aGlobal,
-      const Sequence<ScaffoldingType>& aArgs, const char* aFuncName,
+  static already_AddRefed<dom::Promise> CallAsync(
+      ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& aGlobal,
+      const dom::Sequence<dom::ScaffoldingType>& aArgs, const char* aFuncName,
       ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
@@ -67,7 +67,8 @@ class ScaffoldingCallHandler {
     // Create the promise that we return to JS
     nsCOMPtr<nsIGlobalObject> xpcomGlobal =
         do_QueryInterface(aGlobal.GetAsSupports());
-    RefPtr<Promise> returnPromise = Promise::Create(xpcomGlobal, aError);
+    RefPtr<dom::Promise> returnPromise =
+        dom::Promise::Create(xpcomGlobal, aError);
     if (aError.Failed()) {
       return nullptr;
     }
@@ -100,8 +101,9 @@ class ScaffoldingCallHandler {
             return;
           }
 
-          AutoEntryScript aes(xpcomGlobal, aFuncName);
-          RootedDictionary<UniFFIScaffoldingCallResult> returnValue(aes.cx());
+          dom::AutoEntryScript aes(xpcomGlobal, aFuncName);
+          dom::RootedDictionary<dom::UniFFIScaffoldingCallResult> returnValue(
+              aes.cx());
 
           ReturnResult(aes.cx(), aResult.ResolveValue(), returnValue,
                        aFuncName);
@@ -116,13 +118,14 @@ class ScaffoldingCallHandler {
   //
   // aFuncName should be a literal C string
   static void CallSync(
-      ScaffoldingFunc aScaffoldingFunc, const GlobalObject& AGlobal,
-      const Sequence<ScaffoldingType>& aArgs,
-      RootedDictionary<UniFFIScaffoldingCallResult>& aReturnValue,
+      ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& AGlobal,
+      const dom::Sequence<dom::ScaffoldingType>& aArgs,
+      dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
       const char* aFuncName, ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
-      aError.ThrowUnknownError(aFuncName + convertResult.unwrapErr());
+      aError.ThrowUnknownError(nsDependentCString(aFuncName) +
+                               convertResult.unwrapErr());
       return;
     }
 
@@ -147,8 +150,11 @@ class ScaffoldingCallHandler {
   //
   // This should be called in the main thread
   static Result<IntermediateArgs, nsCString> ConvertJsArgs(
-      const Sequence<ScaffoldingType>& aArgs) {
+      const dom::Sequence<dom::ScaffoldingType>& aArgs) {
     IntermediateArgs convertedArgs;
+    if (aArgs.Length() != std::tuple_size_v<IntermediateArgs>) {
+      return mozilla::Err("Wrong argument count"_ns);
+    }
     auto result = PrepareArgsHelper<0>(aArgs, convertedArgs);
     return result.map([&](auto _) { return std::move(convertedArgs); });
   }
@@ -156,7 +162,7 @@ class ScaffoldingCallHandler {
   // Helper function for PrepareArgs that uses c++ magic to help with iteration
   template <size_t I = 0>
   static Result<mozilla::Ok, nsCString> PrepareArgsHelper(
-      const Sequence<ScaffoldingType>& aArgs,
+      const dom::Sequence<dom::ScaffoldingType>& aArgs,
       IntermediateArgs& aConvertedArgs) {
     if constexpr (I >= sizeof...(ArgConverters)) {
       // Iteration complete
@@ -211,11 +217,11 @@ class ScaffoldingCallHandler {
   // This should be called on the main thread
   static void ReturnResult(
       JSContext* aContext, RustCallResult& aCallResult,
-      RootedDictionary<UniFFIScaffoldingCallResult>& aReturnValue,
+      dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
       const char* aFuncName) {
     switch (aCallResult.mCallStatus.code) {
       case RUST_CALL_SUCCESS: {
-        aReturnValue.mCode = UniFFIScaffoldingCallCode::Success;
+        aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Success;
         if constexpr (!std::is_void_v<typename ReturnConverter::RustType>) {
           auto convertResult =
               ReturnConverter::FromRust(aCallResult.mReturnValue);
@@ -223,7 +229,7 @@ class ScaffoldingCallHandler {
             ReturnConverter::IntoJs(aContext, std::move(convertResult.unwrap()),
                                     aReturnValue.mData.Construct());
           } else {
-            aReturnValue.mCode = UniFFIScaffoldingCallCode::Internal_error;
+            aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Internal_error;
             aReturnValue.mInternalErrorMessage.Construct(
                 nsDependentCString(aFuncName) + " converting result: "_ns +
                 convertResult.unwrapErr());
@@ -235,7 +241,7 @@ class ScaffoldingCallHandler {
       case RUST_CALL_ERROR: {
         // Rust Err() value.  Populate data with the `RustBuffer` containing the
         // error
-        aReturnValue.mCode = UniFFIScaffoldingCallCode::Error;
+        aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Error;
         aReturnValue.mData.Construct().SetAsArrayBuffer().Init(
             OwnedRustBuffer(aCallResult.mCallStatus.error_buf)
                 .IntoArrayBuffer(aContext));
@@ -245,7 +251,7 @@ class ScaffoldingCallHandler {
       default: {
         // This indicates a RustError, which shouldn't happen in practice since
         // FF sets panic=abort
-        aReturnValue.mCode = UniFFIScaffoldingCallCode::Internal_error;
+        aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Internal_error;
         aReturnValue.mInternalErrorMessage.Construct(
             nsDependentCString(aFuncName) + "Unexpected Error"_ns);
         break;
@@ -254,6 +260,6 @@ class ScaffoldingCallHandler {
   }
 };
 
-}  // namespace mozilla::dom
+}  // namespace mozilla
 
-#endif  // mozilla_dom_ScaffoldingCall_h
+#endif  // mozilla_ScaffoldingCall_h

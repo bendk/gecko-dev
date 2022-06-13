@@ -4,15 +4,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef mozilla_dom_UniFFIPointerType_h
-#define mozilla_dom_UniFFIPointerType_h
+#ifndef mozilla_UniFFIPointerType_h
+#define mozilla_UniFFIPointerType_h
 
 #include "nsISupports.h"
 #include "nsWrapperCache.h"
 #include "nsString.h"
 #include "UniFFIRust.h"
 
-namespace mozilla::dom {
+namespace mozilla {
 
 /**
  * UniFFIPointerType is the base class for the types of all
@@ -34,6 +34,6 @@ class UniFFIPointerType {
   // The Rust destructor for the pointer, this gives back ownership to Rust
   void (*destructor)(void*, RustCallStatus*);
 };
-}  // namespace mozilla::dom
+}  // namespace mozilla
 
-#endif /* mozilla_dom_UniFFIPointerType_h */
+#endif /* mozilla_UniFFIPointerType_h */

@@ -382,14 +382,13 @@ EXPORTED_SYMBOLS.push("Point");class FfiConverterOptionalTypePoint extends FfiCo
 
 function gradient(ln) {
     
-
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeLine.checkType("ln", ln);
-
-        return GeometryScaffolding.geometryC382Gradient(FfiConverterTypeLine.lower(ln),
+        return UniFFI.callAsync(
+            0, // geometry:geometry_c382_gradient
+            FfiConverterTypeLine.lower(ln),
         )
     }
     try {
@@ -402,15 +401,15 @@ function gradient(ln) {
 EXPORTED_SYMBOLS.push("gradient");
 function intersection(ln1,ln2) {
     
-
     const liftResult = (result) => FfiConverterOptionalTypePoint.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeLine.checkType("ln1", ln1);
         FfiConverterTypeLine.checkType("ln2", ln2);
-
-        return GeometryScaffolding.geometryC382Intersection(FfiConverterTypeLine.lower(ln1),FfiConverterTypeLine.lower(ln2),
+        return UniFFI.callAsync(
+            1, // geometry:geometry_c382_intersection
+            FfiConverterTypeLine.lower(ln1),
+            FfiConverterTypeLine.lower(ln2),
         )
     }
     try {

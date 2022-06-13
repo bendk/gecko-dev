@@ -14,14 +14,6 @@ components = [
     "Todolist",
 ]
 
-UNIFIED_SOURCES += [
-    "generated/{}Scaffolding.cpp".format(component) for component in components
-]
-
-EXPORTS.mozilla.dom += [
-    "generated/{}Scaffolding.h".format(component) for component in components
-]
-
 EXTRA_JS_MODULES["components-utils"] = [
     "generated/{}.jsm".format(component) for component in components
 ]

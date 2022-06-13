@@ -3,118 +3,121 @@
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 use anyhow::{Context, Result};
-use camino::{Utf8Path, Utf8PathBuf};
-use clap::{ArgEnum, Parser};
-use heck::ToUpperCamelCase;
-use serde::Deserialize;
+use askama::Template;
+use camino::Utf8PathBuf;
+use clap::Parser;
+use heck::ToTitleCase;
 use std::fs::File;
 use std::io::Write;
-use uniffi_bindgen::{
-    generate_external_bindings, BindingGenerator, ComponentInterface, EmptyBindingGeneratorConfig,
-};
 
+mod ci_list;
 mod render;
 
-#[derive(ArgEnum, Copy, Clone, Debug, Deserialize, PartialEq, PartialOrd, Ord, Eq)]
-enum Mode {
-    Webidl,
-    CPPHeader,
-    CPP,
-    JS,
-}
+pub use ci_list::{ComponentInterfaceUniverse, FunctionIds, ObjectIds};
+pub use render::cpp::CPPScaffoldingTemplate;
+pub use render::js::JSBindingsTemplate;
+use uniffi_bindgen::ComponentInterface;
 
-#[derive(Clone, Parser)]
+#[derive(Debug, Parser)]
 #[clap(name = "uniffi-bindgen-gecko-js")]
 #[clap(version = clap::crate_version!())]
 #[clap(about = "JS bindings generator for Rust")]
 #[clap(propagate_version = true)]
 struct CliArgs {
-    /// Write output to STDOUT
-    #[clap(long)]
-    stdout: bool,
-
-    /// Write output to path
+    // This is a really convoluted set of arguments, but we're only expecting to be called by
+    // `mach_commands.py`
     #[clap(long, value_name = "FILE")]
-    out: Option<Utf8PathBuf>,
+    js_dir: Utf8PathBuf,
 
-    /// Directory in which to write generated files. Default is same folder as .udl file.
-    #[clap(long, value_name = "DIR")]
-    out_dir: Option<Utf8PathBuf>,
+    #[clap(long, value_name = "FILE")]
+    fixture_js_dir: Utf8PathBuf,
 
-    /// Path to the optional uniffi config file. If not provided, uniffi-bindgen will try to guess it from the UDL's file location.
-    #[clap(long, value_name = "DIR")]
-    config_path: Option<Utf8PathBuf>,
+    #[clap(long, value_name = "FILE")]
+    cpp_path: Utf8PathBuf,
 
-    /// Generation mode
-    #[clap(arg_enum)]
-    mode: Mode,
+    #[clap(long, value_name = "FILE")]
+    fixture_cpp_path: Utf8PathBuf,
 
-    /// Path to the UDL file
-    udl_file: Utf8PathBuf,
+    #[clap(long, multiple_values = true, value_name = "FILES")]
+    udl_files: Vec<Utf8PathBuf>,
+
+    #[clap(long, multiple_values = true, value_name = "FILES")]
+    fixture_udl_files: Vec<Utf8PathBuf>,
 }
 
-struct GeckoJsBindingGenerator {
-    args: CliArgs,
+fn render(out_path: Utf8PathBuf, template: impl Template) -> Result<()> {
+    println!("rendering {}", out_path);
+    let contents = template.render()?;
+    let mut f =
+        File::create(&out_path).context(format!("Failed to create {:?}", out_path.file_name()))?;
+    write!(f, "{}\n", contents).context(format!("Failed to write to {}", out_path))
 }
 
-// Use EmptyBindingGeneratorConfig for now
-type Config = EmptyBindingGeneratorConfig;
-
-impl GeckoJsBindingGenerator {
-    fn new(args: CliArgs) -> Self {
-        Self { args }
-    }
-
-    fn create_writer(
-        &self,
-        ci: &ComponentInterface,
-        out_dir: &Utf8Path,
-    ) -> anyhow::Result<Box<dyn Write>> {
-        if self.args.stdout {
-            return Ok(Box::new(std::io::stdout()));
-        }
-
-        let out_path = self.args.out.clone().unwrap_or_else(|| {
-            let filename = self.calc_filename(ci);
-            out_dir.join(&filename)
-        });
-        Ok(Box::new(File::create(&out_path).context(format!(
-            "Failed to create {:?}",
-            out_path.file_name()
-        ))?))
-    }
-
-    fn calc_filename(&self, ci: &ComponentInterface) -> String {
-        match self.args.mode {
-            Mode::Webidl => format!("{}Scaffolding.webidl", ci.namespace().to_upper_camel_case()),
-            Mode::CPP => format!("{}Scaffolding.cpp", ci.namespace().to_upper_camel_case()),
-            Mode::CPPHeader => format!("{}Scaffolding.h", ci.namespace().to_upper_camel_case()),
-            Mode::JS => format!("{}.jsm", ci.namespace().to_upper_camel_case()),
-        }
-    }
+fn render_cpp(
+    path: Utf8PathBuf,
+    prefix: &str,
+    ci_list: &Vec<ComponentInterface>,
+    function_ids: &FunctionIds,
+    object_ids: &ObjectIds,
+) -> Result<()> {
+    render(
+        path,
+        CPPScaffoldingTemplate {
+            prefix,
+            ci_list,
+            function_ids: &function_ids,
+            object_ids: &object_ids,
+        },
+    )
 }
 
-impl BindingGenerator for GeckoJsBindingGenerator {
-    type Config = Config;
-
-    fn write_bindings(
-        &self,
-        ci: ComponentInterface,
-        config: Self::Config,
-        out_dir: &camino::Utf8Path,
-    ) -> anyhow::Result<()> {
-        let writer = self.create_writer(&ci, out_dir)?;
-        render::render_file(self.args.mode, ci, config, writer)
+fn render_js(
+    out_dir: Utf8PathBuf,
+    ci_list: &Vec<ComponentInterface>,
+    function_ids: &FunctionIds,
+    object_ids: &ObjectIds,
+) -> Result<()> {
+    for ci in ci_list {
+        let path = out_dir.join(format!("{}.jsm", ci.namespace().to_title_case()));
+        render(
+            path,
+            JSBindingsTemplate {
+                ci,
+                function_ids: &function_ids,
+                object_ids: &object_ids,
+            },
+        )?;
     }
+    Ok(())
 }
 
 pub fn run_main() -> Result<()> {
     let args = CliArgs::parse();
-    let binding_generator = GeckoJsBindingGenerator::new(args.clone());
-    generate_external_bindings(
-        binding_generator,
-        &args.udl_file,
-        args.config_path,
-        args.out_dir,
-    )
+    let cis = ComponentInterfaceUniverse::new(args.udl_files, args.fixture_udl_files)?;
+    let function_ids = FunctionIds::new(&cis);
+    let object_ids = ObjectIds::new(&cis);
+
+    render_cpp(
+        args.cpp_path,
+        "UniFFI",
+        cis.ci_list(),
+        &function_ids,
+        &object_ids,
+    )?;
+    render_cpp(
+        args.fixture_cpp_path,
+        "UniFFIFixtures",
+        cis.fixture_ci_list(),
+        &function_ids,
+        &object_ids,
+    )?;
+    render_js(args.js_dir, cis.ci_list(), &function_ids, &object_ids)?;
+    render_js(
+        args.fixture_js_dir,
+        cis.fixture_ci_list(),
+        &function_ids,
+        &object_ids,
+    )?;
+
+    Ok(())
 }

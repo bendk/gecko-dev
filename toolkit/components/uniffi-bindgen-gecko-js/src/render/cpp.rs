@@ -2,43 +2,70 @@
 License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-use super::shared::*;
+use crate::{FunctionIds, ObjectIds};
 use askama::Template;
 use extend::ext;
-use heck::{ToLowerCamelCase, ToSnakeCase, ToUpperCamelCase};
+use heck::ToUpperCamelCase;
 use std::iter;
 use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType, Object};
 
 #[derive(Template)]
-#[template(path = "Scaffolding.cpp", escape = "none")]
-pub struct CPPScaffoldingTemplate {
-    pub ci: ComponentInterface,
-}
-
-#[derive(Template)]
-#[template(path = "Scaffolding.h", escape = "none")]
-pub struct CPPHeaderScaffoldingTemplate {
-    pub ci: ComponentInterface,
+#[template(path = "UniFFIScaffolding.cpp", escape = "none")]
+pub struct CPPScaffoldingTemplate<'a> {
+    // Prefix for each function name in.  This is related to how we handle the test fixtures.  For
+    // each function defined in the UniFFI namespace in UniFFI.webidl we:
+    //   - Generate a function in to handle it using the real UDL files
+    //   - Generate a different function in for handle it using the fixture UDL files
+    //   - Have a hand-written stub function that always calls the first function and only calls
+    //     the second function in if MOZ_UNIFFI_FIXTURES is defined.
+    pub prefix: &'a str,
+    pub ci_list: &'a Vec<ComponentInterface>,
+    pub function_ids: &'a FunctionIds<'a>,
+    pub object_ids: &'a ObjectIds<'a>,
 }
 
 // Define extension traits with methods used in our template code
 
 #[ext(name=ComponentInterfaceCppExt)]
 pub impl ComponentInterface {
-    // Scaffolding implementation class for our WebIDL code
-    fn scaffolding_class(&self) -> String {
-        format!("{}Scaffolding", self.namespace().to_upper_camel_case())
+    // C++ pointer type name.  This needs to be a valid C++ type name and unique across all UDL
+    // files.
+    fn pointer_type(&self, object: &Object) -> String {
+        self._pointer_type(object.name())
     }
 
-    // C++ namespace we create for this scaffolding code
-    fn cpp_namespace(&self) -> String {
-        format!("uniffi::{}", self.namespace().to_snake_case())
+    fn _pointer_type(&self, name: &str) -> String {
+        format!("{}_{}PointerType", self.namespace(), name)
     }
 
-    // Returns the name of the object in Upper camel case
-    // which is the name used in the CPP code
-    fn obj_name(&self, obj_name: &str) -> String {
-        obj_name.to_upper_camel_case()
+    // ScaffoldingConverter class
+    //
+    // This is used to convert types between the JS code and Rust
+    fn scaffolding_converter(&self, ffi_type: &FFIType) -> String {
+        match ffi_type {
+            FFIType::RustArcPtr(name) => format!(
+                "ScaffoldingConverter<{}, ScaffoldingConverterTagObject>",
+                self._pointer_type(name),
+            ),
+            _ => format!("ScaffoldingConverter<{}>", ffi_type.rust_type()),
+        }
+    }
+
+    // ScaffoldingCallHandler class
+    fn scaffolding_call_handler(&self, func: &FFIFunction) -> String {
+        let return_param = match func.return_type() {
+            Some(return_type) => self.scaffolding_converter(return_type),
+            None => "ScaffoldingConverter<void>".to_string(),
+        };
+        let all_params = iter::once(return_param)
+            .chain(
+                func.arguments()
+                    .into_iter()
+                    .map(|a| self.scaffolding_converter(&a.type_())),
+            )
+            .collect::<Vec<_>>()
+            .join(", ");
+        return format!("ScaffoldingCallHandler<{}>", all_params);
     }
 }
 
@@ -46,39 +73,6 @@ pub impl ComponentInterface {
 pub impl FFIFunction {
     fn nm(&self) -> String {
         self.name().to_upper_camel_case()
-    }
-
-    // ScaffoldingCallHandler class
-    fn scaffolding_call_handler(&self) -> String {
-        let return_param = match self.return_type() {
-            Some(return_type) => return_type.scaffolding_converter(),
-            None => "ScaffoldingConverter<void>".to_string(),
-        };
-        let all_params = iter::once(return_param)
-            .chain(
-                self.arguments()
-                    .into_iter()
-                    .map(|a| a.scaffolding_converter()),
-            )
-            .collect::<Vec<_>>()
-            .join(", ");
-        return format!("ScaffoldingCallHandler<{}>", all_params);
-    }
-
-    // C++ namespace we create for the scaffolding code for this function (child of
-    // ComponentInterface::namespace())
-    fn cpp_namespace(&self) -> String {
-        self.name().to_snake_case()
-    }
-
-    // Render our arguments as a comma-separated list, where each part is what gets passed to our
-    // scaffolding function by the WebIDL code generator.
-    fn input_arg_list(&self) -> String {
-        self.arguments()
-            .into_iter()
-            .map(|arg| format!("const {}& {}", arg.js_webidl_type(), arg.nm()))
-            .collect::<Vec<String>>()
-            .join(", ")
     }
 
     fn rust_name(&self) -> String {
@@ -97,35 +91,12 @@ pub impl FFIFunction {
         parts.push("RustCallStatus*".to_owned());
         parts.join(", ")
     }
-
-    fn has_args(&self) -> bool {
-        !self.arguments().is_empty()
-    }
-
-    fn has_return_type(&self) -> bool {
-        self.return_type().is_some()
-    }
 }
 
 #[ext(name=FFITypeCppExt)]
 pub impl FFIType {
-    // ScaffoldingConverter class
-    //
-    // This is used to convert types between the JS code and Rust
-    fn scaffolding_converter(&self) -> String {
-        match self {
-            FFIType::RustArcPtr(name) => format!(
-                "ScaffoldingConverter<{}PointerType, ScaffoldingConverterTagObject>",
-                name.to_upper_camel_case()
-            ),
-            _ => format!("ScaffoldingConverter<{}>", self.rust_type()),
-        }
-    }
-
-    // Type for the WebIDL implementation method
-    //
-    // This is what we get passed from the JS code via the WebIDL bindings helper code
-    fn js_webidl_type(&self) -> String {
+    // Type for the Rust scaffolding code
+    fn rust_type(&self) -> String {
         match self {
             FFIType::UInt8 => "uint8_t",
             FFIType::Int8 => "int8_t",
@@ -137,72 +108,18 @@ pub impl FFIType {
             FFIType::Int64 => "int64_t",
             FFIType::Float32 => "float",
             FFIType::Float64 => "double",
-            FFIType::RustArcPtr(_) => "UniFFIPointer",
-            // The JS wrapper code uses `ArrayBuffer` since it has a nice JS API.  We input
-            // `ArrayBuffer` in the C++ code, then convert it to `RustBuffer` before passing to
-            // Rust.
-            FFIType::RustBuffer => "ArrayBuffer",
+            FFIType::RustBuffer => "RustBuffer",
+            FFIType::RustArcPtr(_) => "void *",
             FFIType::ForeignBytes => unimplemented!("ForeignBytes not supported"),
             FFIType::ForeignCallback => unimplemented!("ForeignCallback not supported"),
         }
         .to_owned()
     }
-
-    // Type for the `Args` struct
-    //
-    // We convert js_webidl_type -> args_type in `PrepareArgs()` in `Scaffolding.cpp` in order to:
-    //
-    //   - Collect successfully converted arguments from JS.  For example, we store ArrayBuffer` args in an
-    //     `OwnedRustBuffer` which handles freeing them if other args fail to convert.
-    //   - Avoid dereferencing JS data inside async calls.  This is important because the GC might free up the data
-    //     before the worker thread processes it.  `PrepareArgs()` runs synchronously and extracts the data to pass to
-    //     the worker thread.
-    fn args_type(&self) -> String {
-        match self {
-            FFIType::RustBuffer => "OwnedRustBuffer".to_owned(),
-            FFIType::RustArcPtr(_) => "void *".to_owned(),
-            _ => self.js_webidl_type(),
-        }
-    }
-
-    // Type for the Rust scaffolding code
-    //
-    // We convert args_type -> rust_type in `Invoke()` in `Scaffolding.cpp`
-    fn rust_type(&self) -> String {
-        match self {
-            FFIType::RustBuffer => "RustBuffer".to_owned(),
-            FFIType::RustArcPtr(_) => "void *".to_owned(),
-            _ => self.js_webidl_type(),
-        }
-    }
 }
 
 #[ext(name=FFIArgumentCppExt)]
 pub impl FFIArgument {
-    fn nm(&self) -> String {
-        self.name().to_lower_camel_case()
-    }
-
-    fn js_webidl_type(&self) -> String {
-        self.type_().js_webidl_type()
-    }
-
-    fn args_type(&self) -> String {
-        self.type_().args_type()
-    }
-
-    fn scaffolding_converter(&self) -> String {
-        self.type_().scaffolding_converter()
-    }
-
     fn rust_type(&self) -> String {
         self.type_().rust_type()
-    }
-}
-
-#[ext(name=ObjectCppExt)]
-pub impl Object {
-    fn nm(&self) -> String {
-        self.name().to_upper_camel_case()
     }
 }

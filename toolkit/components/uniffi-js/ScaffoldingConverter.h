@@ -4,8 +4,8 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef mozilla_dom_ScaffoldingConverter_h
-#define mozilla_dom_ScaffoldingConverter_h
+#ifndef mozilla_ScaffoldingConverter_h
+#define mozilla_ScaffoldingConverter_h
 
 #include <limits>
 #include <type_traits>
@@ -19,7 +19,7 @@
 #include "mozilla/dom/UniFFIPointerType.h"
 #include "mozilla/dom/UniFFIRust.h"
 
-namespace mozilla::dom {
+namespace mozilla {
 
 class ScaffoldingConverterTagDefault {};
 class ScaffoldingConverterTagObject {};
@@ -50,7 +50,7 @@ class ScaffoldingConverter {
   //
   // If this succeeds then IntoRust is also guaranteed to succeed
   static mozilla::Result<IntermediateType, nsCString> FromJs(
-      const ScaffoldingType& aValue) {
+      const dom::ScaffoldingType& aValue) {
     if (!aValue.IsDouble()) {
       return Err("Bad argument type"_ns);
     }
@@ -60,8 +60,8 @@ class ScaffoldingConverter {
       // Use PrimitiveConversionTraits_Limits rather than std::numeric_limits,
       // since it handles JS-specific bounds like the 64-bit integer limits.
       // (see Number.MAX_SAFE_INTEGER and Number.MIN_SAFE_INTEGER)
-      if (value < PrimitiveConversionTraits_Limits<RustType>::min() ||
-          value > PrimitiveConversionTraits_Limits<RustType>::max()) {
+      if (value < dom::PrimitiveConversionTraits_Limits<RustType>::min() ||
+          value > dom::PrimitiveConversionTraits_Limits<RustType>::max()) {
         return Err("Out of bounds"_ns);
       }
     }
@@ -103,8 +103,8 @@ class ScaffoldingConverter {
     if constexpr (std::is_same<RustType, int64_t>::value ||
                   std::is_same<RustType, uint64_t>::value) {
       // Check that the value can fit in a double (only needed for 64 bit types)
-      if (aValue < PrimitiveConversionTraits_Limits<RustType>::min() ||
-          aValue > PrimitiveConversionTraits_Limits<RustType>::max()) {
+      if (aValue < dom::PrimitiveConversionTraits_Limits<RustType>::min() ||
+          aValue > dom::PrimitiveConversionTraits_Limits<RustType>::max()) {
         return Err("Out of bounds"_ns);
       }
     }
@@ -116,7 +116,7 @@ class ScaffoldingConverter {
   // This inputs an r-value reference since we may want to move data out of
   // this type.
   static void IntoJs(JSContext* aContext, IntermediateType&& aValue,
-                     ScaffoldingType& aDest) {
+                     dom::ScaffoldingType& aDest) {
     aDest.SetAsDouble() = aValue;
   }
 };
@@ -128,7 +128,7 @@ class ScaffoldingConverter<RustBuffer> {
   using IntermediateType = OwnedRustBuffer;
 
   static mozilla::Result<OwnedRustBuffer, nsCString> FromJs(
-      const ScaffoldingType& aValue) {
+      const dom::ScaffoldingType& aValue) {
     if (!aValue.IsArrayBuffer()) {
       return Err("Bad argument type"_ns);
     }
@@ -148,7 +148,7 @@ class ScaffoldingConverter<RustBuffer> {
   }
 
   static void IntoJs(JSContext* aContext, OwnedRustBuffer&& aValue,
-                     ScaffoldingType& aDest) {
+                     dom::ScaffoldingType& aDest) {
     aDest.SetAsArrayBuffer().Init(aValue.IntoArrayBuffer(aContext));
   }
 };
@@ -161,11 +161,11 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
   using IntermediateType = void*;
 
   static mozilla::Result<void*, nsCString> FromJs(
-      const ScaffoldingType& aValue) {
+      const dom::ScaffoldingType& aValue) {
     if (!aValue.IsUniFFIPointer()) {
       return Err("Bad argument type"_ns);
     }
-    UniFFIPointer& value = aValue.GetAsUniFFIPointer();
+    dom::UniFFIPointer& value = aValue.GetAsUniFFIPointer();
     if (!value.IsSamePtrType(&PointerType::getInstance())) {
       return Err("Bad pointer type"_ns);
     }
@@ -179,9 +179,9 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
   }
 
   static void IntoJs(JSContext* aContext, void*&& aValue,
-                     ScaffoldingType& aDest) {
+                     dom::ScaffoldingType& aDest) {
     aDest.SetAsUniFFIPointer() =
-        UniFFIPointer::Create(aValue, &PointerType::getInstance());
+        dom::UniFFIPointer::Create(aValue, &PointerType::getInstance());
   }
 };
 
@@ -195,6 +195,6 @@ class ScaffoldingConverter<void> {
   using RustType = void;
 };
 
-}  // namespace mozilla::dom
+}  // namespace mozilla
 
-#endif  // mozilla_dom_ScaffoldingConverter_h
+#endif  // mozilla_ScaffoldingConverter_h

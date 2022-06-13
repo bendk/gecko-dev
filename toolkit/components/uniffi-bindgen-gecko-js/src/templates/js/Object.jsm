@@ -27,13 +27,13 @@ class {{ object.nm() }} {
      */
     {%- endif %}
     static {{ cons.nm() }}({{cons.arg_names()}}) {
-        {% call js::call_constructor(cons, type_) %}
+        {%- call js::call_constructor(cons, type_) -%}
     }
     {%- endfor %}
 
     {%- for meth in object.methods() %}
     {{ meth.nm() }}({{ meth.arg_names() }}) {
-        {% call js::call_method(meth, type_, object) %}
+        {%- call js::call_method(meth, type_, object) -%}
     }
     {%- endfor %}
 

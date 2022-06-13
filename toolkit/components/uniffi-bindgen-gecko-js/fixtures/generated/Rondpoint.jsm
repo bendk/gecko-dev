@@ -155,37 +155,43 @@ class ArrayBufferDataStream {
     }
 
     readPointerRetourneur() {
-        const res = RondpointScaffolding.readPointerRetourneur(this.dataView.buffer, this.pos);
+        const pointerId = 0; // rondpoint:Retourneur
+        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointerRetourneur(value) {
-        RondpointScaffolding.writePointerRetourneur(value, this.dataView.buffer, this.pos);
+        const pointerId = 0; // rondpoint:Retourneur
+        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     
 
     readPointerStringifier() {
-        const res = RondpointScaffolding.readPointerStringifier(this.dataView.buffer, this.pos);
+        const pointerId = 1; // rondpoint:Stringifier
+        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointerStringifier(value) {
-        RondpointScaffolding.writePointerStringifier(value, this.dataView.buffer, this.pos);
+        const pointerId = 1; // rondpoint:Stringifier
+        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     
 
     readPointerOptionneur() {
-        const res = RondpointScaffolding.readPointerOptionneur(this.dataView.buffer, this.pos);
+        const pointerId = 2; // rondpoint:Optionneur
+        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointerOptionneur(value) {
-        RondpointScaffolding.writePointerOptionneur(value, this.dataView.buffer, this.pos);
+        const pointerId = 2; // rondpoint:Optionneur
+        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     
@@ -483,32 +489,26 @@ class Optionneur {
      *      to a newly constructed Optionneur
      */
     static init() {
-        
-
     const liftResult = (result) => FfiConverterTypeOptionneur.lift(result);
     const liftError = null;
-
     const functionCall = () => {
-
-        return RondpointScaffolding.rondpoint9336OptionneurNew(
+        return UniFFI.callAsync(
+            38, // rondpoint:rondpoint_9336_Optionneur_new
         )
     }
     try {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonBoolean(value = false) {
-        
-
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterBool.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonBoolean(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            39, // rondpoint:rondpoint_9336_Optionneur_sinon_boolean
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterBool.lower(value),
         )
     }
@@ -516,18 +516,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonString(value = "default") {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterString.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonString(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            40, // rondpoint:rondpoint_9336_Optionneur_sinon_string
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterString.lower(value),
         )
     }
@@ -535,18 +532,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonSequence(value = []) {
-        
-
     const liftResult = (result) => FfiConverterSequencestring.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterSequencestring.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonSequence(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            41, // rondpoint:rondpoint_9336_Optionneur_sinon_sequence
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterSequencestring.lower(value),
         )
     }
@@ -554,18 +548,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonNull(value = null) {
-        
-
     const liftResult = (result) => FfiConverterOptionalstring.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterOptionalstring.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonNull(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            42, // rondpoint:rondpoint_9336_Optionneur_sinon_null
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterOptionalstring.lower(value),
         )
     }
@@ -573,18 +564,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonZero(value = 0) {
-        
-
     const liftResult = (result) => FfiConverterOptionali32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterOptionali32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonZero(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            43, // rondpoint:rondpoint_9336_Optionneur_sinon_zero
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterOptionali32.lower(value),
         )
     }
@@ -592,18 +580,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU8Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU8Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            44, // rondpoint:rondpoint_9336_Optionneur_sinon_u8_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU8.lower(value),
         )
     }
@@ -611,18 +596,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI8Dec(value = -42) {
-        
-
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI8Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            45, // rondpoint:rondpoint_9336_Optionneur_sinon_i8_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI8.lower(value),
         )
     }
@@ -630,18 +612,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU16Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU16Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            46, // rondpoint:rondpoint_9336_Optionneur_sinon_u16_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU16.lower(value),
         )
     }
@@ -649,18 +628,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI16Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI16Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            47, // rondpoint:rondpoint_9336_Optionneur_sinon_i16_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI16.lower(value),
         )
     }
@@ -668,18 +644,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU32Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU32Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            48, // rondpoint:rondpoint_9336_Optionneur_sinon_u32_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU32.lower(value),
         )
     }
@@ -687,18 +660,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI32Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI32Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            49, // rondpoint:rondpoint_9336_Optionneur_sinon_i32_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI32.lower(value),
         )
     }
@@ -706,18 +676,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU64Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU64Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            50, // rondpoint:rondpoint_9336_Optionneur_sinon_u64_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU64.lower(value),
         )
     }
@@ -725,18 +692,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI64Dec(value = 42) {
-        
-
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI64Dec(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            51, // rondpoint:rondpoint_9336_Optionneur_sinon_i64_dec
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI64.lower(value),
         )
     }
@@ -744,18 +708,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU8Hex(value = 0xff) {
-        
-
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU8Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            52, // rondpoint:rondpoint_9336_Optionneur_sinon_u8_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU8.lower(value),
         )
     }
@@ -763,18 +724,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI8Hex(value = -127) {
-        
-
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI8Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            53, // rondpoint:rondpoint_9336_Optionneur_sinon_i8_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI8.lower(value),
         )
     }
@@ -782,18 +740,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU16Hex(value = 0xffff) {
-        
-
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU16Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            54, // rondpoint:rondpoint_9336_Optionneur_sinon_u16_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU16.lower(value),
         )
     }
@@ -801,18 +756,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI16Hex(value = 0x7f) {
-        
-
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI16Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            55, // rondpoint:rondpoint_9336_Optionneur_sinon_i16_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI16.lower(value),
         )
     }
@@ -820,18 +772,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU32Hex(value = 0xffffffff) {
-        
-
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU32Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            56, // rondpoint:rondpoint_9336_Optionneur_sinon_u32_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU32.lower(value),
         )
     }
@@ -839,18 +788,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI32Hex(value = 0x7fffffff) {
-        
-
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI32Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            57, // rondpoint:rondpoint_9336_Optionneur_sinon_i32_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI32.lower(value),
         )
     }
@@ -858,18 +804,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU64Hex(value = 0xffffffffffffffff) {
-        
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU64Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            58, // rondpoint:rondpoint_9336_Optionneur_sinon_u64_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU64.lower(value),
         )
     }
@@ -877,18 +820,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonI64Hex(value = 0x7fffffffffffffff) {
-        
-
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonI64Hex(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            59, // rondpoint:rondpoint_9336_Optionneur_sinon_i64_hex
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterI64.lower(value),
         )
     }
@@ -896,18 +836,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonU32Oct(value = 0o755) {
-        
-
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonU32Oct(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            60, // rondpoint:rondpoint_9336_Optionneur_sinon_u32_oct
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterU32.lower(value),
         )
     }
@@ -915,18 +852,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonF32(value = 42.0) {
-        
-
     const liftResult = (result) => FfiConverterF32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonF32(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            61, // rondpoint:rondpoint_9336_Optionneur_sinon_f32
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterF32.lower(value),
         )
     }
@@ -934,18 +868,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonF64(value = 42.1) {
-        
-
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonF64(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            62, // rondpoint:rondpoint_9336_Optionneur_sinon_f64
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterF64.lower(value),
         )
     }
@@ -953,18 +884,15 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     sinonEnum(value = Enumeration.TROIS) {
-        
-
     const liftResult = (result) => FfiConverterTypeEnumeration.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeEnumeration.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336OptionneurSinonEnum(FfiConverterTypeOptionneur.lower(this),
+        return UniFFI.callAsync(
+            63, // rondpoint:rondpoint_9336_Optionneur_sinon_enum
+            FfiConverterTypeOptionneur.lower(this),
             FfiConverterTypeEnumeration.lower(value),
         )
     }
@@ -972,8 +900,7 @@ class Optionneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
 
 }
 
@@ -1019,32 +946,26 @@ class Retourneur {
      *      to a newly constructed Retourneur
      */
     static init() {
-        
-
     const liftResult = (result) => FfiConverterTypeRetourneur.lift(result);
     const liftError = null;
-
     const functionCall = () => {
-
-        return RondpointScaffolding.rondpoint9336RetourneurNew(
+        return UniFFI.callAsync(
+            7, // rondpoint:rondpoint_9336_Retourneur_new
         )
     }
     try {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueI8(value) {
-        
-
     const liftResult = (result) => FfiConverterI8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueI8(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            8, // rondpoint:rondpoint_9336_Retourneur_identique_i8
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterI8.lower(value),
         )
     }
@@ -1052,18 +973,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueU8(value) {
-        
-
     const liftResult = (result) => FfiConverterU8.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueU8(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            9, // rondpoint:rondpoint_9336_Retourneur_identique_u8
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterU8.lower(value),
         )
     }
@@ -1071,18 +989,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueI16(value) {
-        
-
     const liftResult = (result) => FfiConverterI16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueI16(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            10, // rondpoint:rondpoint_9336_Retourneur_identique_i16
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterI16.lower(value),
         )
     }
@@ -1090,18 +1005,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueU16(value) {
-        
-
     const liftResult = (result) => FfiConverterU16.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueU16(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            11, // rondpoint:rondpoint_9336_Retourneur_identique_u16
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterU16.lower(value),
         )
     }
@@ -1109,18 +1021,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueI32(value) {
-        
-
     const liftResult = (result) => FfiConverterI32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueI32(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            12, // rondpoint:rondpoint_9336_Retourneur_identique_i32
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterI32.lower(value),
         )
     }
@@ -1128,18 +1037,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueU32(value) {
-        
-
     const liftResult = (result) => FfiConverterU32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueU32(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            13, // rondpoint:rondpoint_9336_Retourneur_identique_u32
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterU32.lower(value),
         )
     }
@@ -1147,18 +1053,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueI64(value) {
-        
-
     const liftResult = (result) => FfiConverterI64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueI64(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            14, // rondpoint:rondpoint_9336_Retourneur_identique_i64
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterI64.lower(value),
         )
     }
@@ -1166,18 +1069,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueU64(value) {
-        
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueU64(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            15, // rondpoint:rondpoint_9336_Retourneur_identique_u64
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterU64.lower(value),
         )
     }
@@ -1185,18 +1085,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueFloat(value) {
-        
-
     const liftResult = (result) => FfiConverterF32.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueFloat(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            16, // rondpoint:rondpoint_9336_Retourneur_identique_float
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterF32.lower(value),
         )
     }
@@ -1204,18 +1101,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueDouble(value) {
-        
-
     const liftResult = (result) => FfiConverterF64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueDouble(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            17, // rondpoint:rondpoint_9336_Retourneur_identique_double
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterF64.lower(value),
         )
     }
@@ -1223,18 +1117,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueBoolean(value) {
-        
-
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterBool.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueBoolean(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            18, // rondpoint:rondpoint_9336_Retourneur_identique_boolean
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterBool.lower(value),
         )
     }
@@ -1242,18 +1133,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueString(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterString.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueString(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            19, // rondpoint:rondpoint_9336_Retourneur_identique_string
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterString.lower(value),
         )
     }
@@ -1261,18 +1149,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueNombresSignes(value) {
-        
-
     const liftResult = (result) => FfiConverterTypeDictionnaireNombresSignes.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeDictionnaireNombresSignes.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueNombresSignes(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            20, // rondpoint:rondpoint_9336_Retourneur_identique_nombres_signes
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterTypeDictionnaireNombresSignes.lower(value),
         )
     }
@@ -1280,18 +1165,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueNombres(value) {
-        
-
     const liftResult = (result) => FfiConverterTypeDictionnaireNombres.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeDictionnaireNombres.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueNombres(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            21, // rondpoint:rondpoint_9336_Retourneur_identique_nombres
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterTypeDictionnaireNombres.lower(value),
         )
     }
@@ -1299,18 +1181,15 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     identiqueOptionneurDictionnaire(value) {
-        
-
     const liftResult = (result) => FfiConverterTypeOptionneurDictionnaire.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeOptionneurDictionnaire.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336RetourneurIdentiqueOptionneurDictionnaire(FfiConverterTypeRetourneur.lower(this),
+        return UniFFI.callAsync(
+            22, // rondpoint:rondpoint_9336_Retourneur_identique_optionneur_dictionnaire
+            FfiConverterTypeRetourneur.lower(this),
             FfiConverterTypeOptionneurDictionnaire.lower(value),
         )
     }
@@ -1318,8 +1197,7 @@ class Retourneur {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
 
 }
 
@@ -1365,32 +1243,26 @@ class Stringifier {
      *      to a newly constructed Stringifier
      */
     static init() {
-        
-
     const liftResult = (result) => FfiConverterTypeStringifier.lift(result);
     const liftError = null;
-
     const functionCall = () => {
-
-        return RondpointScaffolding.rondpoint9336StringifierNew(
+        return UniFFI.callAsync(
+            24, // rondpoint:rondpoint_9336_Stringifier_new
         )
     }
     try {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     wellKnownString(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterString.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierWellKnownString(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            25, // rondpoint:rondpoint_9336_Stringifier_well_known_string
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterString.lower(value),
         )
     }
@@ -1398,18 +1270,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringI8(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringI8(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            26, // rondpoint:rondpoint_9336_Stringifier_to_string_i8
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterI8.lower(value),
         )
     }
@@ -1417,18 +1286,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringU8(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU8.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringU8(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            27, // rondpoint:rondpoint_9336_Stringifier_to_string_u8
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterU8.lower(value),
         )
     }
@@ -1436,18 +1302,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringI16(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringI16(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            28, // rondpoint:rondpoint_9336_Stringifier_to_string_i16
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterI16.lower(value),
         )
     }
@@ -1455,18 +1318,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringU16(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU16.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringU16(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            29, // rondpoint:rondpoint_9336_Stringifier_to_string_u16
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterU16.lower(value),
         )
     }
@@ -1474,18 +1334,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringI32(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringI32(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            30, // rondpoint:rondpoint_9336_Stringifier_to_string_i32
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterI32.lower(value),
         )
     }
@@ -1493,18 +1350,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringU32(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringU32(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            31, // rondpoint:rondpoint_9336_Stringifier_to_string_u32
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterU32.lower(value),
         )
     }
@@ -1512,18 +1366,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringI64(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterI64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringI64(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            32, // rondpoint:rondpoint_9336_Stringifier_to_string_i64
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterI64.lower(value),
         )
     }
@@ -1531,18 +1382,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringU64(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringU64(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            33, // rondpoint:rondpoint_9336_Stringifier_to_string_u64
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterU64.lower(value),
         )
     }
@@ -1550,18 +1398,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringFloat(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF32.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringFloat(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            34, // rondpoint:rondpoint_9336_Stringifier_to_string_float
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterF32.lower(value),
         )
     }
@@ -1569,18 +1414,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringDouble(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterF64.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringDouble(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            35, // rondpoint:rondpoint_9336_Stringifier_to_string_double
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterF64.lower(value),
         )
     }
@@ -1588,18 +1430,15 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
     toStringBoolean(value) {
-        
-
     const liftResult = (result) => FfiConverterString.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterBool.checkType("value", value);
-
-        return RondpointScaffolding.rondpoint9336StringifierToStringBoolean(FfiConverterTypeStringifier.lower(this),
+        return UniFFI.callAsync(
+            36, // rondpoint:rondpoint_9336_Stringifier_to_string_boolean
+            FfiConverterTypeStringifier.lower(this),
             FfiConverterBool.lower(value),
         )
     }
@@ -1607,8 +1446,7 @@ class Stringifier {
         return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
-    }
-    }
+    }}
 
 }
 
@@ -2328,14 +2166,13 @@ class FfiConverterOptionali32 extends FfiConverterArrayBuffer {
 
 function copieDictionnaire(d) {
     
-
     const liftResult = (result) => FfiConverterTypeDictionnaire.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeDictionnaire.checkType("d", d);
-
-        return RondpointScaffolding.rondpoint9336CopieDictionnaire(FfiConverterTypeDictionnaire.lower(d),
+        return UniFFI.callAsync(
+            64, // rondpoint:rondpoint_9336_copie_dictionnaire
+            FfiConverterTypeDictionnaire.lower(d),
         )
     }
     try {
@@ -2348,14 +2185,13 @@ function copieDictionnaire(d) {
 EXPORTED_SYMBOLS.push("copieDictionnaire");
 function copieEnumeration(e) {
     
-
     const liftResult = (result) => FfiConverterTypeEnumeration.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterTypeEnumeration.checkType("e", e);
-
-        return RondpointScaffolding.rondpoint9336CopieEnumeration(FfiConverterTypeEnumeration.lower(e),
+        return UniFFI.callAsync(
+            65, // rondpoint:rondpoint_9336_copie_enumeration
+            FfiConverterTypeEnumeration.lower(e),
         )
     }
     try {
@@ -2368,14 +2204,13 @@ function copieEnumeration(e) {
 EXPORTED_SYMBOLS.push("copieEnumeration");
 function copieEnumerations(e) {
     
-
     const liftResult = (result) => FfiConverterSequenceTypeEnumeration.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterSequenceTypeEnumeration.checkType("e", e);
-
-        return RondpointScaffolding.rondpoint9336CopieEnumerations(FfiConverterSequenceTypeEnumeration.lower(e),
+        return UniFFI.callAsync(
+            66, // rondpoint:rondpoint_9336_copie_enumerations
+            FfiConverterSequenceTypeEnumeration.lower(e),
         )
     }
     try {
@@ -2388,14 +2223,13 @@ function copieEnumerations(e) {
 EXPORTED_SYMBOLS.push("copieEnumerations");
 function copieCarte(c) {
     
-
     const liftResult = (result) => FfiConverterMapStringTypeEnumerationAvecDonnees.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterMapStringTypeEnumerationAvecDonnees.checkType("c", c);
-
-        return RondpointScaffolding.rondpoint9336CopieCarte(FfiConverterMapStringTypeEnumerationAvecDonnees.lower(c),
+        return UniFFI.callAsync(
+            67, // rondpoint:rondpoint_9336_copie_carte
+            FfiConverterMapStringTypeEnumerationAvecDonnees.lower(c),
         )
     }
     try {
@@ -2408,14 +2242,13 @@ function copieCarte(c) {
 EXPORTED_SYMBOLS.push("copieCarte");
 function switcheroo(b) {
     
-
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterBool.checkType("b", b);
-
-        return RondpointScaffolding.rondpoint9336Switcheroo(FfiConverterBool.lower(b),
+        return UniFFI.callAsync(
+            68, // rondpoint:rondpoint_9336_switcheroo
+            FfiConverterBool.lower(b),
         )
     }
     try {
