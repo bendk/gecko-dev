@@ -309,15 +309,15 @@ class FfiConverterTypeArithmeticError extends FfiConverterArrayBuffer {
 
 function add(a,b) {
     
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = (data) => FfiConverterTypeArithmeticError.lift(data);
-
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-
-        return ArithmeticScaffolding.arithmetic8817Add(FfiConverterU64.lower(a),FfiConverterU64.lower(b),
+        return UniFFI.callAsync(
+            2, // arithmetic:arithmetic_8817_add
+            FfiConverterU64.lower(a),
+            FfiConverterU64.lower(b),
         )
     }
     try {
@@ -330,15 +330,15 @@ function add(a,b) {
 EXPORTED_SYMBOLS.push("add");
 function sub(a,b) {
     
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = (data) => FfiConverterTypeArithmeticError.lift(data);
-
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-
-        return ArithmeticScaffolding.arithmetic8817Sub(FfiConverterU64.lower(a),FfiConverterU64.lower(b),
+        return UniFFI.callAsync(
+            3, // arithmetic:arithmetic_8817_sub
+            FfiConverterU64.lower(a),
+            FfiConverterU64.lower(b),
         )
     }
     try {
@@ -351,15 +351,15 @@ function sub(a,b) {
 EXPORTED_SYMBOLS.push("sub");
 function div(dividend,divisor) {
     
-
     const liftResult = (result) => FfiConverterU64.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("dividend", dividend);
         FfiConverterU64.checkType("divisor", divisor);
-
-        return ArithmeticScaffolding.arithmetic8817Div(FfiConverterU64.lower(dividend),FfiConverterU64.lower(divisor),
+        return UniFFI.callAsync(
+            4, // arithmetic:arithmetic_8817_div
+            FfiConverterU64.lower(dividend),
+            FfiConverterU64.lower(divisor),
         )
     }
     try {
@@ -372,15 +372,15 @@ function div(dividend,divisor) {
 EXPORTED_SYMBOLS.push("div");
 function equal(a,b) {
     
-
     const liftResult = (result) => FfiConverterBool.lift(result);
     const liftError = null;
-
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-
-        return ArithmeticScaffolding.arithmetic8817Equal(FfiConverterU64.lower(a),FfiConverterU64.lower(b),
+        return UniFFI.callAsync(
+            5, // arithmetic:arithmetic_8817_equal
+            FfiConverterU64.lower(a),
+            FfiConverterU64.lower(b),
         )
     }
     try {

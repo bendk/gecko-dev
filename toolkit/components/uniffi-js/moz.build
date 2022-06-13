@@ -6,7 +6,18 @@
 
 FINAL_LIBRARY = "xul"
 
-UNIFIED_SOURCES += ["OwnedRustBuffer.cpp", "UniFFIPointer.cpp", "UniFFIPointerType.cpp"]
+UNIFIED_SOURCES += [
+    "OwnedRustBuffer.cpp",
+    "UniFFI.cpp",
+    "UniFFIPointer.cpp",
+    "UniFFIPointerType.cpp",
+    "UniFFIScaffolding.cpp",
+]
+
+if CONFIG["MOZ_UNIFFI_FIXTURES"]:
+    UNIFIED_SOURCES += [
+        "UniFFIFixtureScaffolding.cpp",
+    ]
 
 EXPORTS.mozilla.dom += [
     "OwnedRustBuffer.h",

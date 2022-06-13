@@ -4,12 +4,12 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this file,
  * You can obtain one at http://mozilla.org/MPL/2.0/. */
 
-#ifndef mozilla_dom_UniFFIRust_h
-#define mozilla_dom_UniFFIRust_h
+#ifndef mozilla_UniFFIRust_h
+#define mozilla_UniFFIRust_h
 
 #include <stdint.h>
 
-namespace mozilla::dom {
+namespace mozilla {
 
 // Low-level Rust structs for UniFFI
 
@@ -35,6 +35,6 @@ RustBuffer uniffi_rustbuffer_alloc(int32_t size, RustCallStatus* call_status);
 void uniffi_rustbuffer_free(RustBuffer buf, RustCallStatus* call_status);
 }
 
-}  // namespace mozilla::dom
+}  // namespace mozilla
 
-#endif /* mozilla_dom_UniFFIRust_h */
+#endif /* mozilla_UniFFIRust_h */

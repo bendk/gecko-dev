@@ -3,12 +3,13 @@ License, v. 2.0. If a copy of the MPL was not distributed with this
 * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
 use super::shared::*;
+use crate::{FunctionIds, ObjectIds};
 use askama::Template;
 use extend::ext;
 use heck::{ToLowerCamelCase, ToShoutySnakeCase, ToUpperCamelCase};
 use uniffi_bindgen::interface::{
-    Argument, ComponentInterface, Constructor, Enum, Error, FFIFunction, Field, Function, Literal,
-    Method, Object, Radix, Record, Type,
+    Argument, ComponentInterface, Constructor, Enum, Error, Field, Function, Literal, Method,
+    Object, Radix, Record, Type,
 };
 
 fn arg_names(args: &[&Argument]) -> String {
@@ -38,26 +39,13 @@ fn render_enum_literal(typ: &Type, variant_name: &str) -> String {
 }
 #[derive(Template)]
 #[template(path = "js/wrapper.jsm", escape = "none")]
-pub struct JSBindingsTemplate {
-    pub ci: ComponentInterface,
+pub struct JSBindingsTemplate<'a> {
+    pub ci: &'a ComponentInterface,
+    pub function_ids: &'a FunctionIds<'a>,
+    pub object_ids: &'a ObjectIds<'a>,
 }
 
 // Define extension traits with methods used in our template code
-
-#[ext(name=ComponentInterfaceJSExt)]
-pub impl ComponentInterface {
-    // Global Scaffolding object created by the WebIDL code generator
-    fn scaffolding_name(&self) -> String {
-        format!("{}Scaffolding", self.namespace().to_upper_camel_case())
-    }
-}
-
-#[ext(name=FFIFunctionJSExt)]
-pub impl FFIFunction {
-    fn nm(&self) -> String {
-        self.name().to_lower_camel_case()
-    }
-}
 
 #[ext(name=LiteralJSExt)]
 pub impl Literal {

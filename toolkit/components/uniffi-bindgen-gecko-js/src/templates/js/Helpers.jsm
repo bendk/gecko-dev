@@ -148,13 +148,15 @@ class ArrayBufferDataStream {
     {%- for object in ci.object_definitions() %}
 
     readPointer{{ object.nm() }}() {
-        const res = {{ci.scaffolding_name()}}.readPointer{{ object.nm() }}(this.dataView.buffer, this.pos);
+        const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
+        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointer{{ object.nm() }}(value) {
-        {{ci.scaffolding_name()}}.writePointer{{ object.nm() }}(value, this.dataView.buffer, this.pos);
+        const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
+        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     {% endfor %}

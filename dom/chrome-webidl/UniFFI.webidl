@@ -3,6 +3,15 @@
  * License, v. 2.0. If a copy of the MPL was not distributed with this
  * file, You can obtain one at http://mozilla.org/MPL/2.0/. */
 
+// Interface for making UniFFI scaffolding calls
+//
+// Gecko uses UniFFI to generate privileged JS bindings for Rust components.
+// UniFFI defines a C-ABI FFI layer for calling into Rust, called the
+// scaffolding. This interface is a bridge that allows the JS code to make
+// scaffolding calls
+//
+// See https://mozilla.github.io/uniffi-rs/ for details.
+
 // Opaque type used to represent a pointer from Rust
 [ChromeOnly, Exposed=Window]
 interface UniFFIPointer {};
@@ -27,6 +36,22 @@ dictionary UniFFIScaffoldingCallResult {
     // For success, this will be the return value for non-void returns
     // For error, this will be an ArrayBuffer storing the serialized error value
     UniFFIScaffoldingType data;
-    // For internal-error, this will be a string describing the error
+    // For internal-error, this will be a utf-8 string describing the error
     ByteString internalErrorMessage;
+};
+
+// Functions to make a UniFFI scaffolding call
+[ChromeOnly, Exposed=Window]
+namespace UniFFI {
+  [Throws]
+  Promise<UniFFIScaffoldingCallResult> callAsync(unsigned long long id, UniFFIScaffoldingType... args);
+
+  [Throws]
+  UniFFIScaffoldingCallResult callSync(unsigned long long id, UniFFIScaffoldingType... args);
+
+  [Throws]
+  UniFFIPointer readPointer(unsigned long long id, ArrayBuffer buff, long position);
+
+  [Throws]
+  void writePointer(unsigned long long id, UniFFIPointer ptr, ArrayBuffer buff, long position);
 };
