@@ -14,8 +14,8 @@ namespace mozilla::dom {
 
 using ScaffoldingType = OwningDoubleOrArrayBufferOrUniFFIPointer;
 
-// Handle functions defined in UniFFI.webidl
-class UniFFI {
+// Handle functions defined in UniFFIScaffolding.webidl
+class UniFFIScaffolding {
  public:
   static already_AddRefed<Promise> CallAsync(
       const GlobalObject& aUniFFIGlobal, uint64_t aId,

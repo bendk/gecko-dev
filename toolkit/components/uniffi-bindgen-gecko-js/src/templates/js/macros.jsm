@@ -29,9 +29,9 @@
         {%- endfor %}
 
         {%- if func.is_async() %}
-        return UniFFI.callAsync(
+        return UniFFIScaffolding.callAsync(
         {%- else %}
-        return UniFFI.callSync(
+        return UniFFIScaffolding.callSync(
         {%- endif %}
             {{ function_ids.get(ci, func.ffi_func()) }}, // {{ function_ids.name(ci, func.ffi_func()) }}
             {%- if receiver_ffi_converter != "" %}

@@ -149,14 +149,14 @@ class ArrayBufferDataStream {
 
     readPointer{{ object.nm() }}() {
         const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
-        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
+        const res = UniFFIScaffolding.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointer{{ object.nm() }}(value) {
         const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
-        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
+        UniFFIScaffolding.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     {% endfor %}

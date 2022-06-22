@@ -12,14 +12,14 @@
 #include "mozilla/dom/TypedArray.h"
 #include "mozilla/dom/UniFFIRust.h"
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 // RustBuffer that's owned by the JS code and handles the memory management
 class OwnedRustBuffer final {
  private:
   RustBuffer mBuf;
 
-  void freeData();
+  void FreeData();
 
  public:
   // The default constructor creates an invalid OwnedRustBuffer
@@ -64,6 +64,6 @@ class OwnedRustBuffer final {
   static void ArrayBufferFreeFunc(void* contents, void* userData);
 };
 
-}  // namespace mozilla
+}  // namespace mozilla::uniffi
 
 #endif  // mozilla_OwnedRustBuffer_h

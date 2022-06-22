@@ -8,7 +8,7 @@
 #include "mozilla/Logging.h"
 
 static mozilla::LazyLogModule sUniFFIPointerTypeLogger("uniffi_logger");
-namespace mozilla {
+namespace mozilla::uniffi {
 
 const nsCString& UniFFIPointerType::GetTypeName() { return this->typeName; }
 
@@ -21,4 +21,4 @@ void UniFFIPointerType::DestroyPtr(void* ptr) {
                "UniFFI destructor call returned a non-success result");
 }
 
-}  // namespace mozilla
+}  // namespace mozilla::uniffi

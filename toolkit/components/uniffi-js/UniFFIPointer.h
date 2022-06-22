@@ -19,15 +19,15 @@ class UniFFIPointer final : public nsISupports, public nsWrapperCache {
   NS_DECL_CYCLE_COLLECTING_ISUPPORTS
   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(UniFFIPointer)
 
-  static already_AddRefed<UniFFIPointer> Create(void* ptr,
-                                                UniFFIPointerType* aType);
+  static already_AddRefed<UniFFIPointer> Create(
+      void* ptr, uniffi::UniFFIPointerType* aType);
   static already_AddRefed<UniFFIPointer> Read(const ArrayBuffer& aArrayBuff,
                                               long aPosition,
-                                              UniFFIPointerType* aType);
+                                              uniffi::UniFFIPointerType* aType);
   void Write(const ArrayBuffer& aArrayBuff, long aPosition,
-             UniFFIPointerType* aType, ErrorResult& aError) const;
+             uniffi::UniFFIPointerType* aType, ErrorResult& aError) const;
 
-  UniFFIPointer(void* ptr, UniFFIPointerType* type);
+  UniFFIPointer(void* ptr, uniffi::UniFFIPointerType* type);
 
   JSObject* WrapObject(JSContext* aCx,
                        JS::Handle<JSObject*> aGivenProto) override;
@@ -49,10 +49,10 @@ class UniFFIPointer final : public nsISupports, public nsWrapperCache {
    * it does so using pointer comparison, as there is **exactly** one static
    * `UniFFIPointerType` per type exposed in the UniFFI interface
    */
-  bool IsSamePtrType(const UniFFIPointerType* type) const;
+  bool IsSamePtrType(const uniffi::UniFFIPointerType* type) const;
 
  private:
-  UniFFIPointerType* type;
+  uniffi::UniFFIPointerType* type;
   void* ptr;
 
  protected:

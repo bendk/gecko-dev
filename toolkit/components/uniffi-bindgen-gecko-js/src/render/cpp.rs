@@ -6,6 +6,7 @@ use crate::{FunctionIds, ObjectIds};
 use askama::Template;
 use extend::ext;
 use heck::ToUpperCamelCase;
+use std::collections::HashSet;
 use std::iter;
 use uniffi_bindgen::interface::{ComponentInterface, FFIArgument, FFIFunction, FFIType, Object};
 
@@ -36,6 +37,23 @@ pub impl ComponentInterface {
 
     fn _pointer_type(&self, name: &str) -> String {
         format!("{}_{}PointerType", self.namespace(), name)
+    }
+
+    // Iterate over all functions to expose via the UniFFIScaffolding class
+    //
+    // This is basically all the user functions, except we don't expose the free methods for
+    // objects.  Freeing is handled by the UniFFIPointer class.
+    //
+    // Note: this function should return `impl Iterator<&FFIFunction>`, but that's not currently
+    // allowed for traits.
+    fn exposed_functions(&self) -> Vec<&FFIFunction> {
+        let excluded: HashSet<_> = self.object_definitions()
+            .iter()
+            .map(|o| o.ffi_object_free().name())
+            .collect();
+        self.iter_user_ffi_function_definitions()
+            .filter(move |f| !excluded.contains(f.name()))
+            .collect()
     }
 
     // ScaffoldingConverter class

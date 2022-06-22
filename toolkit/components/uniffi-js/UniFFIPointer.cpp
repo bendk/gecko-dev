@@ -11,7 +11,9 @@
 #include "mozilla/Logging.h"
 
 static mozilla::LazyLogModule sUniFFIPointerLogger("uniffi_logger");
+
 namespace mozilla::dom {
+using uniffi::UniFFIPointerType;
 
 NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE_0(UniFFIPointer)
 

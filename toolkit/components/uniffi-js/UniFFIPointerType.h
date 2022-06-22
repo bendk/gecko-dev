@@ -12,7 +12,7 @@
 #include "nsString.h"
 #include "UniFFIRust.h"
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 /**
  * UniFFIPointerType is the base class for the types of all
@@ -34,6 +34,6 @@ class UniFFIPointerType {
   // The Rust destructor for the pointer, this gives back ownership to Rust
   void (*destructor)(void*, RustCallStatus*);
 };
-}  // namespace mozilla
+}  // namespace mozilla::uniffi
 
 #endif /* mozilla_UniFFIPointerType_h */
