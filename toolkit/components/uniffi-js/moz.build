@@ -10,7 +10,6 @@ UNIFIED_SOURCES += [
     "OwnedRustBuffer.cpp",
     "UniFFIGeneratedScaffolding.cpp",
     "UniFFIPointer.cpp",
-    "UniFFIPointerType.cpp",
     "UniFFIScaffolding.cpp",
 ]
 
