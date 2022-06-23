@@ -29,18 +29,16 @@ extern "C" {
 {%- for ci in ci_list %}
 {%- for object in ci.object_definitions() %}
 {%- let pointer_type = ci.pointer_type(object) %}
-class {{ pointer_type }} : public UniFFIPointerType {
-    public:
-        static {{ pointer_type }}& getInstance() {
-            static {{ pointer_type }} instance;
-            return instance;
-        }
-    private:
-    {{ pointer_type }}() {
-            typeName = "{{ "{}::{}"|format(ci.namespace(), object.name()) }}"_ns;
-            destructor = {{ object.ffi_object_free().rust_name() }};
-        }
+class {{ pointer_type }} {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
 };
+
+mozilla::uniffi::UniFFIPointerType {{pointer_type}}::instance{
+  "{{ "{}::{}"|format(ci.namespace(), object.name()) }}"_ns,
+  {{ object.ffi_object_free().rust_name() }}
+};
+
 {%- endfor %}
 {%- endfor %}
 
@@ -78,7 +76,7 @@ Maybe<already_AddRefed<UniFFIPointer>> {{ prefix }}ReadPointer(const GlobalObjec
     {%- for ci in ci_list %}
     {%- for object in ci.object_definitions() %}
     case {{ object_ids.get(ci, object) }}: { // {{ object_ids.name(ci, object) }}
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::instance));
     }
     {%- endfor %}
     {%- endfor %}
@@ -91,7 +89,7 @@ bool {{ prefix }}WritePointer(const GlobalObject& aGlobal, uint64_t aId, const U
     {%- for ci in ci_list %}
     {%- for object in ci.object_definitions() %}
     case {{ object_ids.get(ci, object) }}: { // {{ object_ids.name(ci, object) }}
-      aPtr.Write(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::instance, aError);
       return true;
     }
     {%- endfor %}

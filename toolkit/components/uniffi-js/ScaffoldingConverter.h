@@ -176,7 +176,7 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
       return Err("Bad argument type"_ns);
     }
     dom::UniFFIPointer& value = aValue.GetAsUniFFIPointer();
-    if (!value.IsSamePtrType(&PointerType::getInstance())) {
+    if (!value.IsSamePtrType(&PointerType::instance)) {
       return Err("Bad pointer type"_ns);
     }
     return value.GetPtr();
@@ -191,7 +191,7 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
   static void IntoJs(JSContext* aContext, void*&& aValue,
                      dom::ScaffoldingType& aDest) {
     aDest.SetAsUniFFIPointer() =
-        dom::UniFFIPointer::Create(aValue, &PointerType::getInstance());
+        dom::UniFFIPointer::Create(aValue, &PointerType::instance);
   }
 };
 

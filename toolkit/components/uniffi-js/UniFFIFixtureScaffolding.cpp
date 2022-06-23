@@ -113,65 +113,50 @@ extern "C" {
 }
 
 // Define pointer types
-class rondpoint_RetourneurPointerType : public UniFFIPointerType {
-    public:
-        static rondpoint_RetourneurPointerType& getInstance() {
-            static rondpoint_RetourneurPointerType instance;
-            return instance;
-        }
-    private:
-    rondpoint_RetourneurPointerType() {
-            typeName = "rondpoint::Retourneur"_ns;
-            destructor = ffi_rondpoint_9336_Retourneur_object_free;
-        }
+class rondpoint_RetourneurPointerType {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
 };
-class rondpoint_StringifierPointerType : public UniFFIPointerType {
-    public:
-        static rondpoint_StringifierPointerType& getInstance() {
-            static rondpoint_StringifierPointerType instance;
-            return instance;
-        }
-    private:
-    rondpoint_StringifierPointerType() {
-            typeName = "rondpoint::Stringifier"_ns;
-            destructor = ffi_rondpoint_9336_Stringifier_object_free;
-        }
+
+mozilla::uniffi::UniFFIPointerType rondpoint_RetourneurPointerType::instance{
+  "rondpoint::Retourneur"_ns,
+  ffi_rondpoint_9336_Retourneur_object_free
 };
-class rondpoint_OptionneurPointerType : public UniFFIPointerType {
-    public:
-        static rondpoint_OptionneurPointerType& getInstance() {
-            static rondpoint_OptionneurPointerType instance;
-            return instance;
-        }
-    private:
-    rondpoint_OptionneurPointerType() {
-            typeName = "rondpoint::Optionneur"_ns;
-            destructor = ffi_rondpoint_9336_Optionneur_object_free;
-        }
+class rondpoint_StringifierPointerType {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
 };
-class sprites_SpritePointerType : public UniFFIPointerType {
-    public:
-        static sprites_SpritePointerType& getInstance() {
-            static sprites_SpritePointerType instance;
-            return instance;
-        }
-    private:
-    sprites_SpritePointerType() {
-            typeName = "sprites::Sprite"_ns;
-            destructor = ffi_sprites_ff2d_Sprite_object_free;
-        }
+
+mozilla::uniffi::UniFFIPointerType rondpoint_StringifierPointerType::instance{
+  "rondpoint::Stringifier"_ns,
+  ffi_rondpoint_9336_Stringifier_object_free
 };
-class todolist_TodoListPointerType : public UniFFIPointerType {
-    public:
-        static todolist_TodoListPointerType& getInstance() {
-            static todolist_TodoListPointerType instance;
-            return instance;
-        }
-    private:
-    todolist_TodoListPointerType() {
-            typeName = "todolist::TodoList"_ns;
-            destructor = ffi_todolist_126_TodoList_object_free;
-        }
+class rondpoint_OptionneurPointerType {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
+};
+
+mozilla::uniffi::UniFFIPointerType rondpoint_OptionneurPointerType::instance{
+  "rondpoint::Optionneur"_ns,
+  ffi_rondpoint_9336_Optionneur_object_free
+};
+class sprites_SpritePointerType {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
+};
+
+mozilla::uniffi::UniFFIPointerType sprites_SpritePointerType::instance{
+  "sprites::Sprite"_ns,
+  ffi_sprites_ff2d_Sprite_object_free
+};
+class todolist_TodoListPointerType {
+  public:
+    static mozilla::uniffi::UniFFIPointerType instance;
+};
+
+mozilla::uniffi::UniFFIPointerType todolist_TodoListPointerType::instance{
+  "todolist::TodoList"_ns,
+  ffi_todolist_126_TodoList_object_free
 };
 
 Maybe<already_AddRefed<Promise>> UniFFIFixturesCallAsync(const GlobalObject& aGlobal, uint64_t aId, const Sequence<ScaffoldingType>& aArgs, ErrorResult& aError) {
@@ -972,19 +957,19 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
 Maybe<already_AddRefed<UniFFIPointer>> UniFFIFixturesReadPointer(const GlobalObject& aGlobal, uint64_t aId, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
   switch (aId) {
     case 0: { // rondpoint:Retourneur
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::instance));
     }
     case 1: { // rondpoint:Stringifier
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::instance));
     }
     case 2: { // rondpoint:Optionneur
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::instance));
     }
     case 3: { // sprites:Sprite
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &sprites_SpritePointerType::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &sprites_SpritePointerType::instance));
     }
     case 4: { // todolist:TodoList
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &todolist_TodoListPointerType::getInstance()));
+      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &todolist_TodoListPointerType::instance));
     }
   }
   return Nothing();
@@ -993,23 +978,23 @@ Maybe<already_AddRefed<UniFFIPointer>> UniFFIFixturesReadPointer(const GlobalObj
 bool UniFFIFixturesWritePointer(const GlobalObject& aGlobal, uint64_t aId, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
   switch (aId) {
     case 0: { // rondpoint:Retourneur
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::instance, aError);
       return true;
     }
     case 1: { // rondpoint:Stringifier
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::instance, aError);
       return true;
     }
     case 2: { // rondpoint:Optionneur
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::instance, aError);
       return true;
     }
     case 3: { // sprites:Sprite
-      aPtr.Write(aArrayBuff, aPosition, &sprites_SpritePointerType::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &sprites_SpritePointerType::instance, aError);
       return true;
     }
     case 4: { // todolist:TodoList
-      aPtr.Write(aArrayBuff, aPosition, &todolist_TodoListPointerType::getInstance(), aError);
+      aPtr.Write(aArrayBuff, aPosition, &todolist_TodoListPointerType::instance, aError);
       return true;
     }
   }
