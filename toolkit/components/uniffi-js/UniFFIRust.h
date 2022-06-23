@@ -9,7 +9,7 @@
 
 #include <stdint.h>
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 // Low-level Rust structs for UniFFI
 
@@ -35,6 +35,6 @@ RustBuffer uniffi_rustbuffer_alloc(int32_t size, RustCallStatus* call_status);
 void uniffi_rustbuffer_free(RustBuffer buf, RustCallStatus* call_status);
 }
 
-}  // namespace mozilla
+}  // namespace mozilla::uniffi
 
 #endif /* mozilla_UniFFIRust_h */

@@ -17,6 +17,7 @@ use anyhow::{bail, Context, Result};
 use camino::Utf8PathBuf;
 use std::collections::{BTreeSet, HashMap, HashSet};
 use uniffi_bindgen::interface::{ComponentInterface, FFIFunction, Object};
+use crate::render::cpp::ComponentInterfaceCppExt;
 
 pub struct ComponentInterfaceUniverse {
     ci_list: Vec<ComponentInterface>,
@@ -82,7 +83,8 @@ impl<'a> FunctionIds<'a> {
             map: cis
                 .iter_all()
                 .flat_map(|ci| {
-                    ci.iter_user_ffi_function_definitions()
+                    ci.exposed_functions()
+                        .into_iter()
                         .map(move |f| (ci.namespace(), f.name()))
                 })
                 .enumerate()

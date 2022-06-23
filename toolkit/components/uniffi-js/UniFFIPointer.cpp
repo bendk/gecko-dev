@@ -9,9 +9,15 @@
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/Logging.h"
+#include "UniFFIRust.h"
+
 
 static mozilla::LazyLogModule sUniFFIPointerLogger("uniffi_logger");
+
 namespace mozilla::dom {
+using uniffi::UniFFIPointerType;
+using uniffi::RustCallStatus;
+using uniffi::RUST_CALL_SUCCESS;
 
 NS_IMPL_CYCLE_COLLECTION_WRAPPERCACHE_0(UniFFIPointer)
 
@@ -47,7 +53,7 @@ void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
   if (!this->IsSamePtrType(aType)) {
     aError.ThrowUnknownError(nsPrintfCString(
         "Attempt to write pointer with wrong type: %s (expected: %s)",
-        aType->GetTypeName().get(), this->type->GetTypeName().get()));
+        aType->typeName.get(), this->type->typeName.get()));
     return;
   }
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
@@ -84,7 +90,10 @@ bool UniFFIPointer::IsSamePtrType(const UniFFIPointerType* type) const {
 UniFFIPointer::~UniFFIPointer() {
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
           ("[UniFFI] Destroying pointer"));
-  this->type->DestroyPtr(this->ptr);
+  RustCallStatus status{};
+  this->type->destructor(ptr, &status);
+  MOZ_DIAGNOSTIC_ASSERT(status.code == RUST_CALL_SUCCESS,
+               "UniFFI destructor call returned a non-success result");
 }
 
 }  // namespace mozilla::dom

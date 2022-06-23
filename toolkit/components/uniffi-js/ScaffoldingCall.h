@@ -19,7 +19,7 @@
 #include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIRust.h"
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 // Low-level result of calling a scaffolding function
 //
@@ -50,16 +50,13 @@ class ScaffoldingCallHandler {
       typename ArgConverters::RustType..., RustCallStatus*);
 
   // Perform an async scaffolding call
-  //
-  // aFuncName should be a literal C string
   static already_AddRefed<dom::Promise> CallAsync(
       ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& aGlobal,
-      const dom::Sequence<dom::ScaffoldingType>& aArgs, const char* aFuncName,
-      ErrorResult& aError) {
+      const dom::Sequence<dom::ScaffoldingType>& aArgs,
+      nsLiteralCString aFuncName, ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
-      aError.ThrowUnknownError(nsDependentCString(aFuncName) +
-                               convertResult.unwrapErr());
+      aError.ThrowUnknownError(aFuncName + convertResult.unwrapErr());
       return nullptr;
     }
     auto convertedArgs = convertResult.unwrap();
@@ -75,33 +72,32 @@ class ScaffoldingCallHandler {
 
     // Create a second promise that gets resolved by a background task that
     // calls the scaffolding function
-    RefPtr taskPromise = new typename TaskPromiseType::Private(aFuncName);
+    RefPtr taskPromise = new typename TaskPromiseType::Private(aFuncName.get());
     nsresult dispatchResult = NS_DispatchBackgroundTask(
-        NS_NewRunnableFunction(aFuncName,
+        NS_NewRunnableFunction(aFuncName.get(),
                                [args = std::move(convertedArgs), taskPromise,
                                 aScaffoldingFunc, aFuncName]() mutable {
                                  auto callResult = CallScaffoldingFunc(
                                      aScaffoldingFunc, std::move(args));
                                  taskPromise->Resolve(std::move(callResult),
-                                                      aFuncName);
+                                                      aFuncName.get());
                                }),
         NS_DISPATCH_EVENT_MAY_BLOCK);
     if (NS_FAILED(dispatchResult)) {
-      taskPromise->Reject(dispatchResult, aFuncName);
+      taskPromise->Reject(dispatchResult, aFuncName.get());
     }
 
     // When the background task promise completes, resolve the JS promise
     taskPromise->Then(
-        GetCurrentSerialEventTarget(), aFuncName,
+        GetCurrentSerialEventTarget(), aFuncName.get(),
         [xpcomGlobal, returnPromise,
          aFuncName](typename TaskPromiseType::ResolveOrRejectValue&& aResult) {
           if (!aResult.IsResolve()) {
-            returnPromise->MaybeRejectWithUnknownError(
-                nsDependentCString(aFuncName));
+            returnPromise->MaybeRejectWithUnknownError(aFuncName);
             return;
           }
 
-          dom::AutoEntryScript aes(xpcomGlobal, aFuncName);
+          dom::AutoEntryScript aes(xpcomGlobal, aFuncName.get());
           dom::RootedDictionary<dom::UniFFIScaffoldingCallResult> returnValue(
               aes.cx());
 
@@ -121,11 +117,10 @@ class ScaffoldingCallHandler {
       ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& AGlobal,
       const dom::Sequence<dom::ScaffoldingType>& aArgs,
       dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
-      const char* aFuncName, ErrorResult& aError) {
+      nsLiteralCString aFuncName, ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
-      aError.ThrowUnknownError(nsDependentCString(aFuncName) +
-                               convertResult.unwrapErr());
+      aError.ThrowUnknownError(aFuncName + convertResult.unwrapErr());
       return;
     }
 
@@ -218,7 +213,7 @@ class ScaffoldingCallHandler {
   static void ReturnResult(
       JSContext* aContext, RustCallResult& aCallResult,
       dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
-      const char* aFuncName) {
+      nsLiteralCString aFuncName) {
     switch (aCallResult.mCallStatus.code) {
       case RUST_CALL_SUCCESS: {
         aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Success;
@@ -231,7 +226,7 @@ class ScaffoldingCallHandler {
           } else {
             aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Internal_error;
             aReturnValue.mInternalErrorMessage.Construct(
-                nsDependentCString(aFuncName) + " converting result: "_ns +
+                aFuncName + " converting result: "_ns +
                 convertResult.unwrapErr());
           }
         }
@@ -252,14 +247,14 @@ class ScaffoldingCallHandler {
         // This indicates a RustError, which shouldn't happen in practice since
         // FF sets panic=abort
         aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Internal_error;
-        aReturnValue.mInternalErrorMessage.Construct(
-            nsDependentCString(aFuncName) + "Unexpected Error"_ns);
+        aReturnValue.mInternalErrorMessage.Construct(aFuncName +
+                                                     " Unexpected Error"_ns);
         break;
       }
     }
   }
 };
 
-}  // namespace mozilla
+}  // namespace mozilla::uniffi
 
 #endif  // mozilla_ScaffoldingCall_h

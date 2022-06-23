@@ -7,7 +7,7 @@
 #include "nsString.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 using dom::ArrayBuffer;
 
@@ -34,8 +34,8 @@ Result<OwnedRustBuffer, nsCString> OwnedRustBuffer::FromArrayBuffer(
                                 status.error_buf.len));
       RustCallStatus status2{};
       uniffi_rustbuffer_free(status.error_buf, &status2);
-      // Don't check the status of free, it shouldn't fail and if it does
-      // there's nothing we can do at this point.
+      MOZ_RELEASE_ASSERT(status2.code == 0,
+                         "Freeing a rustbuffer should never fail");
       return Err(message);
 
     } else {
@@ -52,24 +52,25 @@ OwnedRustBuffer::OwnedRustBuffer(OwnedRustBuffer&& aOther) : mBuf(aOther.mBuf) {
 }
 
 OwnedRustBuffer& OwnedRustBuffer::operator=(OwnedRustBuffer&& aOther) {
-  freeData();
+  if (&aOther != this) {
+    FreeData();
+  }
   mBuf = aOther.mBuf;
   aOther.mBuf = RustBuffer{0};
   return *this;
 }
 
-void OwnedRustBuffer::freeData() {
+void OwnedRustBuffer::FreeData() {
   if (IsValid()) {
     RustCallStatus status{};
     uniffi_rustbuffer_free(mBuf, &status);
-    if (status.code != 0) {
-      MOZ_CRASH("Freeing a RustBuffer should never fail");
-    }
+    MOZ_RELEASE_ASSERT(status.code == 0,
+                       "Freeing a rustbuffer should never fail");
     mBuf = {0};
   }
 }
 
-OwnedRustBuffer::~OwnedRustBuffer() { freeData(); }
+OwnedRustBuffer::~OwnedRustBuffer() { FreeData(); }
 
 RustBuffer OwnedRustBuffer::IntoRustBuffer() {
   RustBuffer rv = mBuf;
@@ -88,4 +89,4 @@ JSObject* OwnedRustBuffer::IntoArrayBuffer(JSContext* cx) {
 void OwnedRustBuffer::ArrayBufferFreeFunc(void* contents, void* userData) {
   UniquePtr<OwnedRustBuffer> buf{reinterpret_cast<OwnedRustBuffer*>(userData)};
 }
-}  // namespace mozilla
+}  // namespace mozilla::uniffi

@@ -19,7 +19,7 @@ FIXTURE_UDL_FILES = [
     "third_party/rust/uniffi-example-sprites/src/sprites.udl",
     "third_party/rust/uniffi-example-todolist/src/todolist.udl",
 ]
-CPP_PATH = "toolkit/components/uniffi-js/UniFFIScaffolding.cpp"
+CPP_PATH = "toolkit/components/uniffi-js/UniFFIGeneratedScaffolding.cpp"
 JS_DIR = "toolkit/components/uniffi-bindgen-gecko-js/components/generated"
 FIXTURE_CPP_PATH = "toolkit/components/uniffi-js/UniFFIFixtureScaffolding.cpp"
 FIXTURE_JS_DIR = "toolkit/components/uniffi-bindgen-gecko-js/fixtures/generated"

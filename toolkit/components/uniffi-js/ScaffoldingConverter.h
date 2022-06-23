@@ -13,13 +13,13 @@
 #include "mozilla/ResultVariant.h"
 #include "mozilla/dom/OwnedRustBuffer.h"
 #include "mozilla/dom/PrimitiveConversions.h"
-#include "mozilla/dom/UniFFI.h"
 #include "mozilla/dom/UniFFIBinding.h"
 #include "mozilla/dom/UniFFIPointer.h"
 #include "mozilla/dom/UniFFIPointerType.h"
 #include "mozilla/dom/UniFFIRust.h"
+#include "mozilla/dom/UniFFIScaffolding.h"
 
-namespace mozilla {
+namespace mozilla::uniffi {
 
 class ScaffoldingConverterTagDefault {};
 class ScaffoldingConverterTagObject {};
@@ -65,6 +65,11 @@ class ScaffoldingConverter {
         return Err("Out of bounds"_ns);
       }
     }
+    if constexpr (std::is_floating_point<RustType>::value) {
+      if (std::isnan(value)) {
+        return Err("NaN not allowed"_ns);
+      }
+    }
 
     // Don't check float bounds for a few reasons.
     //   - It's difficult because
@@ -106,6 +111,11 @@ class ScaffoldingConverter {
       if (aValue < dom::PrimitiveConversionTraits_Limits<RustType>::min() ||
           aValue > dom::PrimitiveConversionTraits_Limits<RustType>::max()) {
         return Err("Out of bounds"_ns);
+      }
+    }
+    if constexpr (std::is_floating_point<RustType>::value) {
+      if (std::isnan(aValue)) {
+        return Err("NaN not allowed"_ns);
       }
     }
     return aValue;
@@ -166,7 +176,7 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
       return Err("Bad argument type"_ns);
     }
     dom::UniFFIPointer& value = aValue.GetAsUniFFIPointer();
-    if (!value.IsSamePtrType(&PointerType::getInstance())) {
+    if (!value.IsSamePtrType(&PointerType::instance)) {
       return Err("Bad pointer type"_ns);
     }
     return value.GetPtr();
@@ -181,7 +191,7 @@ class ScaffoldingConverter<PointerType, ScaffoldingConverterTagObject> {
   static void IntoJs(JSContext* aContext, void*&& aValue,
                      dom::ScaffoldingType& aDest) {
     aDest.SetAsUniFFIPointer() =
-        dom::UniFFIPointer::Create(aValue, &PointerType::getInstance());
+        dom::UniFFIPointer::Create(aValue, &PointerType::instance);
   }
 };
 
@@ -195,6 +205,6 @@ class ScaffoldingConverter<void> {
   using RustType = void;
 };
 
-}  // namespace mozilla
+}  // namespace mozilla::uniffi
 
 #endif  // mozilla_ScaffoldingConverter_h

@@ -156,14 +156,14 @@ class ArrayBufferDataStream {
 
     readPointerSprite() {
         const pointerId = 3; // sprites:Sprite
-        const res = UniFFI.readPointer(pointerId, this.dataView.buffer, this.pos);
+        const res = UniFFIScaffolding.readPointer(pointerId, this.dataView.buffer, this.pos);
         this.pos += 8;
         return res;
     }
 
     writePointerSprite(value) {
         const pointerId = 3; // sprites:Sprite
-        UniFFI.writePointer(pointerId, value, this.dataView.buffer, this.pos);
+        UniFFIScaffolding.writePointer(pointerId, value, this.dataView.buffer, this.pos);
         this.pos += 8;
     }
     
@@ -289,8 +289,8 @@ class Sprite {
     const liftError = null;
     const functionCall = () => {
         FfiConverterOptionalTypePoint.checkType("initialPosition", initialPosition);
-        return UniFFI.callAsync(
-            70, // sprites:sprites_ff2d_Sprite_new
+        return UniFFIScaffolding.callAsync(
+            66, // sprites:sprites_ff2d_Sprite_new
             FfiConverterOptionalTypePoint.lower(initialPosition),
         )
     }
@@ -311,8 +311,8 @@ class Sprite {
     const functionCall = () => {
         FfiConverterTypePoint.checkType("reference", reference);
         FfiConverterTypeVector.checkType("direction", direction);
-        return UniFFI.callAsync(
-            71, // sprites:sprites_ff2d_Sprite_new_relative_to
+        return UniFFIScaffolding.callAsync(
+            67, // sprites:sprites_ff2d_Sprite_new_relative_to
             FfiConverterTypePoint.lower(reference),
             FfiConverterTypeVector.lower(direction),
         )
@@ -326,8 +326,8 @@ class Sprite {
     const liftResult = (result) => FfiConverterTypePoint.lift(result);
     const liftError = null;
     const functionCall = () => {
-        return UniFFI.callAsync(
-            72, // sprites:sprites_ff2d_Sprite_get_position
+        return UniFFIScaffolding.callAsync(
+            68, // sprites:sprites_ff2d_Sprite_get_position
             FfiConverterTypeSprite.lower(this),
         )
     }
@@ -341,8 +341,8 @@ class Sprite {
     const liftError = null;
     const functionCall = () => {
         FfiConverterTypePoint.checkType("position", position);
-        return UniFFI.callAsync(
-            73, // sprites:sprites_ff2d_Sprite_move_to
+        return UniFFIScaffolding.callAsync(
+            69, // sprites:sprites_ff2d_Sprite_move_to
             FfiConverterTypeSprite.lower(this),
             FfiConverterTypePoint.lower(position),
         )
@@ -357,8 +357,8 @@ class Sprite {
     const liftError = null;
     const functionCall = () => {
         FfiConverterTypeVector.checkType("direction", direction);
-        return UniFFI.callAsync(
-            74, // sprites:sprites_ff2d_Sprite_move_by
+        return UniFFIScaffolding.callAsync(
+            70, // sprites:sprites_ff2d_Sprite_move_by
             FfiConverterTypeSprite.lower(this),
             FfiConverterTypeVector.lower(direction),
         )
@@ -529,8 +529,8 @@ function translate(position,direction) {
     const functionCall = () => {
         FfiConverterTypePoint.checkType("position", position);
         FfiConverterTypeVector.checkType("direction", direction);
-        return UniFFI.callAsync(
-            75, // sprites:sprites_ff2d_translate
+        return UniFFIScaffolding.callAsync(
+            71, // sprites:sprites_ff2d_translate
             FfiConverterTypePoint.lower(position),
             FfiConverterTypeVector.lower(direction),
         )

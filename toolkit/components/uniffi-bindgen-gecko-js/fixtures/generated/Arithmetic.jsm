@@ -314,7 +314,7 @@ function add(a,b) {
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-        return UniFFI.callAsync(
+        return UniFFIScaffolding.callAsync(
             2, // arithmetic:arithmetic_8817_add
             FfiConverterU64.lower(a),
             FfiConverterU64.lower(b),
@@ -335,7 +335,7 @@ function sub(a,b) {
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-        return UniFFI.callAsync(
+        return UniFFIScaffolding.callAsync(
             3, // arithmetic:arithmetic_8817_sub
             FfiConverterU64.lower(a),
             FfiConverterU64.lower(b),
@@ -356,7 +356,7 @@ function div(dividend,divisor) {
     const functionCall = () => {
         FfiConverterU64.checkType("dividend", dividend);
         FfiConverterU64.checkType("divisor", divisor);
-        return UniFFI.callAsync(
+        return UniFFIScaffolding.callAsync(
             4, // arithmetic:arithmetic_8817_div
             FfiConverterU64.lower(dividend),
             FfiConverterU64.lower(divisor),
@@ -377,7 +377,7 @@ function equal(a,b) {
     const functionCall = () => {
         FfiConverterU64.checkType("a", a);
         FfiConverterU64.checkType("b", b);
-        return UniFFI.callAsync(
+        return UniFFIScaffolding.callAsync(
             5, // arithmetic:arithmetic_8817_equal
             FfiConverterU64.lower(a),
             FfiConverterU64.lower(b),

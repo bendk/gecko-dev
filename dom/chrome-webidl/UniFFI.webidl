@@ -40,9 +40,11 @@ dictionary UniFFIScaffoldingCallResult {
     ByteString internalErrorMessage;
 };
 
-// Functions to make a UniFFI scaffolding call
+// Functions to facilitate UniFFI scaffolding calls
+//
+// These should only be called by the generated code from UniFFI.
 [ChromeOnly, Exposed=Window]
-namespace UniFFI {
+namespace UniFFIScaffolding {
   [Throws]
   Promise<UniFFIScaffoldingCallResult> callAsync(unsigned long long id, UniFFIScaffoldingType... args);
 
