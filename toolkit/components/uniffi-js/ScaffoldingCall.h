@@ -53,7 +53,7 @@ class ScaffoldingCallHandler {
   static already_AddRefed<dom::Promise> CallAsync(
       ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& aGlobal,
       const dom::Sequence<dom::ScaffoldingType>& aArgs,
-      nsLiteralCString aFuncName, ErrorResult& aError) {
+      const nsLiteralCString& aFuncName, ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
       aError.ThrowUnknownError(aFuncName + convertResult.unwrapErr());
@@ -114,10 +114,10 @@ class ScaffoldingCallHandler {
   //
   // aFuncName should be a literal C string
   static void CallSync(
-      ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& AGlobal,
+      ScaffoldingFunc aScaffoldingFunc, const dom::GlobalObject& aGlobal,
       const dom::Sequence<dom::ScaffoldingType>& aArgs,
       dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
-      nsLiteralCString aFuncName, ErrorResult& aError) {
+      const nsLiteralCString& aFuncName, ErrorResult& aError) {
     auto convertResult = ConvertJsArgs(aArgs);
     if (convertResult.isErr()) {
       aError.ThrowUnknownError(aFuncName + convertResult.unwrapErr());
@@ -127,7 +127,7 @@ class ScaffoldingCallHandler {
     auto callResult = CallScaffoldingFunc(aScaffoldingFunc,
                                           std::move(convertResult.unwrap()));
 
-    ReturnResult(AGlobal.Context(), callResult, aReturnValue, aFuncName);
+    ReturnResult(aGlobal.Context(), callResult, aReturnValue, aFuncName);
   }
 
  private:
@@ -213,7 +213,7 @@ class ScaffoldingCallHandler {
   static void ReturnResult(
       JSContext* aContext, RustCallResult& aCallResult,
       dom::RootedDictionary<dom::UniFFIScaffoldingCallResult>& aReturnValue,
-      nsLiteralCString aFuncName) {
+      const nsLiteralCString& aFuncName) {
     switch (aCallResult.mCallStatus.code) {
       case RUST_CALL_SUCCESS: {
         aReturnValue.mCode = dom::UniFFIScaffoldingCallCode::Success;
