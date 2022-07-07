@@ -114,8 +114,8 @@ extern "C" {
 
 // Define pointer types
 // The class exists as a wrapper for a UniFFIPointerType instance for Retourneur
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class rondpoint_RetourneurPointerType {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;
@@ -126,8 +126,8 @@ mozilla::uniffi::UniFFIPointerType rondpoint_RetourneurPointerType::instance{
   ffi_rondpoint_9336_Retourneur_object_free
 };
 // The class exists as a wrapper for a UniFFIPointerType instance for Stringifier
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class rondpoint_StringifierPointerType {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;
@@ -138,8 +138,8 @@ mozilla::uniffi::UniFFIPointerType rondpoint_StringifierPointerType::instance{
   ffi_rondpoint_9336_Stringifier_object_free
 };
 // The class exists as a wrapper for a UniFFIPointerType instance for Optionneur
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class rondpoint_OptionneurPointerType {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;
@@ -150,8 +150,8 @@ mozilla::uniffi::UniFFIPointerType rondpoint_OptionneurPointerType::instance{
   ffi_rondpoint_9336_Optionneur_object_free
 };
 // The class exists as a wrapper for a UniFFIPointerType instance for Sprite
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class sprites_SpritePointerType {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;
@@ -162,8 +162,8 @@ mozilla::uniffi::UniFFIPointerType sprites_SpritePointerType::instance{
   ffi_sprites_ff2d_Sprite_object_free
 };
 // The class exists as a wrapper for a UniFFIPointerType instance for TodoList
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class todolist_TodoListPointerType {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;

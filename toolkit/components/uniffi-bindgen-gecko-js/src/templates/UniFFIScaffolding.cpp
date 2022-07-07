@@ -30,8 +30,8 @@ extern "C" {
 {%- for object in ci.object_definitions() %}
 {%- let pointer_type = ci.pointer_type(object) %}
 // The class exists as a wrapper for a UniFFIPointerType instance for {{ object.nm() }}
-// it's used by the templates in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type.
+// it's used as a template parameter in ScaffoldingConverter.h to reference
+// the correct concrete UniFFIPointerType instance based on the type parameter.
 class {{ pointer_type }} {
   public:
     static mozilla::uniffi::UniFFIPointerType instance;

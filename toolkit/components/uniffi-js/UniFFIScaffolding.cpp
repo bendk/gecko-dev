@@ -80,7 +80,7 @@ already_AddRefed<Promise> UniFFIScaffolding::CallAsync(
   }
 #endif
 
-  aError.ThrowUnknownError(nsPrintfCString("Unknown function id: %ld", aId));
+  aError.ThrowUnknownError(nsPrintfCString("Unknown function id: %llu", aId));
   return nullptr;
 }
 
@@ -99,7 +99,7 @@ void UniFFIScaffolding::CallSync(
   }
 #endif
 
-  aError.ThrowUnknownError(nsPrintfCString("Unknown function id: %ld", aId));
+  aError.ThrowUnknownError(nsPrintfCString("Unknown function id: %llu", aId));
 }
 
 already_AddRefed<UniFFIPointer> UniFFIScaffolding::ReadPointer(
@@ -119,7 +119,7 @@ already_AddRefed<UniFFIPointer> UniFFIScaffolding::ReadPointer(
   }
 #endif
 
-  aError.ThrowUnknownError(nsPrintfCString("Unknown object id: %ld", aId));
+  aError.ThrowUnknownError(nsPrintfCString("Unknown object id: %llu", aId));
   return nullptr;
 }
 
@@ -138,7 +138,7 @@ void UniFFIScaffolding::WritePointer(const GlobalObject& aGlobal, uint64_t aId,
   }
 #endif
 
-  aError.ThrowUnknownError(nsPrintfCString("Unknown object id: %ld", aId));
+  aError.ThrowUnknownError(nsPrintfCString("Unknown object id: %llu", aId));
 }
 
 }  // namespace mozilla::dom
