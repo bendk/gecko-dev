@@ -3,12 +3,12 @@
 class {{ object.nm() }} {
     // Use `init` to instantiate this class.
     // DO NOT USE THIS CONSTRUCTOR DIRECTLY
-    constructor(ptr) {
-        if (!ptr) {
+    constructor(opts) {
+        if (!Object.prototype.hasOwnProperty.call(opts, constructUniffiObject)) {
             throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
             "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
-        this.ptr = ptr;
+        this[uniffiObjectPtr] = opts[constructUniffiObject];
     }
 
     {%- for cons in object.constructors() %}
@@ -41,11 +41,13 @@ class {{ object.nm() }} {
 
 class {{ ffi_converter }} extends FfiConverter {
     static lift(value) {
-        return new {{ object.nm() }}(value);
+        const opts = {};
+        opts[constructUniffiObject] = value;
+        return new {{ object.nm() }}(opts);
     }
 
     static lower(value) {
-        return value.ptr;
+        return value[uniffiObjectPtr];
     }
 
     static read(dataStream) {
@@ -53,7 +55,7 @@ class {{ ffi_converter }} extends FfiConverter {
     }
 
     static write(dataStream, value) {
-        dataStream.writePointer{{ object.nm() }}(value.ptr);
+        dataStream.writePointer{{ object.nm() }}(value[uniffiObjectPtr]);
     }
 
     static computeSize(value) {

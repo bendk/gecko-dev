@@ -9,7 +9,7 @@
 
 #include "nsISupports.h"
 #include "nsWrapperCache.h"
-#include "nsString.h"
+#include "nsLiteralString.h"
 #include "UniFFIRust.h"
 
 namespace mozilla::uniffi {
@@ -20,7 +20,7 @@ namespace mozilla::uniffi {
  * allocated type per object exposed by the UniFFI interface
  **/
 struct UniFFIPointerType {
-  nsCString typeName;
+  nsLiteralCString typeName;
   // The Rust destructor for the pointer, this gives back ownership to Rust
   void (*destructor)(void*, RustCallStatus*);
 };

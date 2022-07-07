@@ -52,7 +52,7 @@ void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
   if (!this->IsSamePtrType(aType)) {
     aError.ThrowUnknownError(nsPrintfCString(
         "Attempt to write pointer with wrong type: %s (expected: %s)",
-        aType->typeName.get(), this->type->typeName.get()));
+        aType->typeName.get(), this->mType->typeName.get()));
     return;
   }
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
@@ -67,8 +67,8 @@ void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
 }
 
 UniFFIPointer::UniFFIPointer(void* aPtr, UniFFIPointerType* aType) {
-  ptr = aPtr;
-  type = aType;
+  mPtr = aPtr;
+  mType = aType;
 }
 
 JSObject* UniFFIPointer::WrapObject(JSContext* aCx,
@@ -79,18 +79,18 @@ JSObject* UniFFIPointer::WrapObject(JSContext* aCx,
 void* UniFFIPointer::GetPtr() const {
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
           ("[UniFFI] Getting raw pointer"));
-  return this->ptr;
+  return this->mPtr;
 }
 
-bool UniFFIPointer::IsSamePtrType(const UniFFIPointerType* type) const {
-  return this->type == type;
+bool UniFFIPointer::IsSamePtrType(const UniFFIPointerType* aType) const {
+  return this->mType == aType;
 }
 
 UniFFIPointer::~UniFFIPointer() {
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
           ("[UniFFI] Destroying pointer"));
   RustCallStatus status{};
-  this->type->destructor(ptr, &status);
+  this->mType->destructor(this->mPtr, &status);
   MOZ_DIAGNOSTIC_ASSERT(status.code == RUST_CALL_SUCCESS,
                         "UniFFI destructor call returned a non-success result");
 }
