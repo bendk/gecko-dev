@@ -20,14 +20,14 @@ class UniFFIPointer final : public nsISupports, public nsWrapperCache {
   NS_DECL_CYCLE_COLLECTION_SCRIPT_HOLDER_CLASS(UniFFIPointer)
 
   static already_AddRefed<UniFFIPointer> Create(
-      void* ptr, uniffi::UniFFIPointerType* aType);
+      void* aPtr, uniffi::UniFFIPointerType* aType);
   static already_AddRefed<UniFFIPointer> Read(const ArrayBuffer& aArrayBuff,
                                               long aPosition,
                                               uniffi::UniFFIPointerType* aType);
   void Write(const ArrayBuffer& aArrayBuff, long aPosition,
              uniffi::UniFFIPointerType* aType, ErrorResult& aError) const;
 
-  UniFFIPointer(void* ptr, uniffi::UniFFIPointerType* type);
+  UniFFIPointer(void* aPtr, uniffi::UniFFIPointerType* aType);
 
   JSObject* WrapObject(JSContext* aCx,
                        JS::Handle<JSObject*> aGivenProto) override;
@@ -52,8 +52,8 @@ class UniFFIPointer final : public nsISupports, public nsWrapperCache {
   bool IsSamePtrType(const uniffi::UniFFIPointerType* type) const;
 
  private:
-  uniffi::UniFFIPointerType* type;
-  void* ptr;
+  uniffi::UniFFIPointerType* mType;
+  void* mPtr;
 
  protected:
   /**

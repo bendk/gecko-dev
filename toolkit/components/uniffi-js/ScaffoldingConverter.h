@@ -56,6 +56,10 @@ class ScaffoldingConverter {
     }
     double value = aValue.GetAsDouble();
 
+    if (std::isnan(value)) {
+      return Err("NaN not allowed"_ns);
+    }
+
     if constexpr (std::is_integral<RustType>::value) {
       // Use PrimitiveConversionTraits_Limits rather than std::numeric_limits,
       // since it handles JS-specific bounds like the 64-bit integer limits.
@@ -63,11 +67,6 @@ class ScaffoldingConverter {
       if (value < dom::PrimitiveConversionTraits_Limits<RustType>::min() ||
           value > dom::PrimitiveConversionTraits_Limits<RustType>::max()) {
         return Err("Out of bounds"_ns);
-      }
-    }
-    if constexpr (std::is_floating_point<RustType>::value) {
-      if (std::isnan(value)) {
-        return Err("NaN not allowed"_ns);
       }
     }
 

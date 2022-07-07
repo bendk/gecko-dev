@@ -142,3 +142,10 @@ pub impl FFIArgument {
         self.type_().rust_type()
     }
 }
+
+#[ext(name=ObjectCppExt)]
+pub impl Object {
+    fn nm(&self) -> String {
+        self.name().to_upper_camel_case()
+    }
+}

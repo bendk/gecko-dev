@@ -147,6 +147,9 @@ class ArrayBufferDataStream {
 
     {%- for object in ci.object_definitions() %}
 
+    // Reads a {{ object.nm() }} pointer from the data stream
+    // UniFFI Pointers are **always** 8 bytes long. That is enforced
+    // by the C++ and Rust Scaffolding code.
     readPointer{{ object.nm() }}() {
         const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
         const res = UniFFIScaffolding.readPointer(pointerId, this.dataView.buffer, this.pos);
@@ -154,6 +157,9 @@ class ArrayBufferDataStream {
         return res;
     }
 
+    // Writes a {{ object.nm() }} pointer into the data stream
+    // UniFFI Pointers are **always** 8 bytes long. That is enforced
+    // by the C++ and Rust Scaffolding code.
     writePointer{{ object.nm() }}(value) {
         const pointerId = {{ object_ids.get(ci, object) }}; // {{ object_ids.name(ci, object) }}
         UniFFIScaffolding.writePointer(pointerId, value, this.dataView.buffer, this.pos);
@@ -216,3 +222,8 @@ class FfiConverterArrayBuffer extends FfiConverter {
         return buf;
     }
 }
+
+// Symbols that are used to ensure that Object constructors
+// can only be used with a proper UniFFI pointer
+const uniffiObjectPtr = Symbol("uniffiObjectPtr");
+const constructUniffiObject = Symbol("constructUniffiObject");

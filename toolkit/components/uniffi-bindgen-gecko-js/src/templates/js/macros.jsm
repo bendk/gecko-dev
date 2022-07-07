@@ -45,11 +45,11 @@
 
     {%- if func.is_async() %}
     try {
-        return functionCall().then((result) => handleRustResult(result,  liftResult, liftError));
+        return functionCall().then((result) => handleRustResult(result, liftResult, liftError));
     }  catch (error) {
         return Promise.reject(error)
     }
     {%- else %}
-    return handleRustResult(functionCall(),  liftResult, liftError);
+    return handleRustResult(functionCall(), liftResult, liftError);
     {%- endif %}
 {%- endmacro %}
