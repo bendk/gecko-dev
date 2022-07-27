@@ -30,15 +30,7 @@ extern "C" {
 {%- for ci in ci_list %}
 {%- for object in ci.object_definitions() %}
 {%- let pointer_type = ci.pointer_type(object) %}
-// The class exists as a wrapper for a UniFFIPointerType instance for {{ object.nm() }}
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class {{ pointer_type }} {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType {{pointer_type}}::instance{
+const static mozilla::uniffi::UniFFIPointerType {{ pointer_type }} {
   "{{ "{}::{}"|format(ci.namespace(), object.name()) }}"_ns,
   {{ object.ffi_object_free().rust_name() }}
 };
@@ -76,30 +68,38 @@ bool {{ prefix }}CallSync(const GlobalObject& aGlobal, uint64_t aId, const Seque
 }
 
 Maybe<already_AddRefed<UniFFIPointer>> {{ prefix }}ReadPointer(const GlobalObject& aGlobal, uint64_t aId, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
+  const UniFFIPointerType* type;
   switch (aId) {
     {%- for ci in ci_list %}
     {%- for object in ci.object_definitions() %}
     case {{ object_ids.get(ci, object) }}: { // {{ object_ids.name(ci, object) }}
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::instance));
+      type = &{{ ci.pointer_type(object) }};
+      break;
     }
     {%- endfor %}
     {%- endfor %}
+    default:
+      return Nothing();
   }
-  return Nothing();
+  return Some(UniFFIPointer::Read(aArrayBuff, aPosition, type, aError));
 }
 
 bool {{ prefix }}WritePointer(const GlobalObject& aGlobal, uint64_t aId, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
+  const UniFFIPointerType* type;
   switch (aId) {
     {%- for ci in ci_list %}
     {%- for object in ci.object_definitions() %}
     case {{ object_ids.get(ci, object) }}: { // {{ object_ids.name(ci, object) }}
-      aPtr.Write(aArrayBuff, aPosition, &{{ ci.pointer_type(object) }}::instance, aError);
-      return true;
+      type = &{{ ci.pointer_type(object) }};
+      break;
     }
     {%- endfor %}
     {%- endfor %}
+    default:
+      return false;
   }
-  return false;
+  aPtr.Write(aArrayBuff, aPosition, type, aError);
+  return true;
 }
 
 }  // namespace mozilla::uniffi

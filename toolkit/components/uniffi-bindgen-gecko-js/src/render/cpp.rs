@@ -36,7 +36,7 @@ pub impl ComponentInterface {
     }
 
     fn _pointer_type(&self, name: &str) -> String {
-        format!("{}_{}PointerType", self.namespace(), name)
+        format!("k{}{}PointerType", self.namespace().to_upper_camel_case(), name.to_upper_camel_case())
     }
 
     // Iterate over all functions to expose via the UniFFIScaffolding class
@@ -63,7 +63,7 @@ pub impl ComponentInterface {
     fn scaffolding_converter(&self, ffi_type: &FFIType) -> String {
         match ffi_type {
             FFIType::RustArcPtr(name) => format!(
-                "ScaffoldingConverter<{}, ScaffoldingConverterTagObject>",
+                "ScaffoldingObjectConverter<&{}>",
                 self._pointer_type(name),
             ),
             _ => format!("ScaffoldingConverter<{}>", ffi_type.rust_type()),

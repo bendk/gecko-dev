@@ -29,16 +29,23 @@ NS_INTERFACE_MAP_END
 
 // Static function
 already_AddRefed<UniFFIPointer> UniFFIPointer::Create(
-    void* aPtr, UniFFIPointerType* aType) {
+    void* aPtr, const UniFFIPointerType* aType) {
   RefPtr<UniFFIPointer> uniFFIPointer = new UniFFIPointer(aPtr, aType);
   return uniFFIPointer.forget();
 }
 
 already_AddRefed<UniFFIPointer> UniFFIPointer::Read(
-    const ArrayBuffer& aArrayBuff, long aPosition, UniFFIPointerType* aType) {
+    const ArrayBuffer& aArrayBuff, uint32_t aPosition, const UniFFIPointerType* aType, ErrorResult& aError) {
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
           ("[UniFFI] Reading Pointer from buffer"));
   aArrayBuff.ComputeState();
+
+  CheckedUint32 position = aPosition;
+  CheckedUint32 end = position + 8;
+  if (!end.isValid() || end.value() > aArrayBuff.Length()) {
+    aError.ThrowRangeError("position is out of range");
+    return nullptr;
+  }
   // in Rust and Write(), a pointer is converted to a void* then written as u64
   // BigEndian we do the reverse here
   uint8_t* data_ptr = aArrayBuff.Data() +
@@ -47,8 +54,8 @@ already_AddRefed<UniFFIPointer> UniFFIPointer::Read(
   return UniFFIPointer::Create(ptr, aType);
 }
 
-void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
-                          UniFFIPointerType* aType, ErrorResult& aError) const {
+void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, uint32_t aPosition,
+                          const UniFFIPointerType* aType, ErrorResult& aError) const {
   if (!this->IsSamePtrType(aType)) {
     aError.ThrowUnknownError(nsPrintfCString(
         "Attempt to write pointer with wrong type: %s (expected: %s)",
@@ -58,7 +65,12 @@ void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
   MOZ_LOG(sUniFFIPointerLogger, LogLevel::Info,
           ("[UniFFI] Writing Pointer to buffer"));
   aArrayBuff.ComputeState();
-
+  CheckedUint32 position = aPosition;
+  CheckedUint32 end = position + 8;
+  if (!end.isValid() || end.value() > aArrayBuff.Length()) {
+    aError.ThrowRangeError("position is out of range");
+    return;
+  }
   // in Rust and Read(), a u64 is read as BigEndian and then converted to a
   // pointer we do the reverse here
   uint8_t* data_ptr = aArrayBuff.Data() +
@@ -66,7 +78,7 @@ void UniFFIPointer::Write(const ArrayBuffer& aArrayBuff, long aPosition,
   mozilla::BigEndian::writeUint64(data_ptr, (uint64_t)GetPtr());
 }
 
-UniFFIPointer::UniFFIPointer(void* aPtr, UniFFIPointerType* aType) {
+UniFFIPointer::UniFFIPointer(void* aPtr, const UniFFIPointerType* aType) {
   mPtr = aPtr;
   mType = aType;
 }

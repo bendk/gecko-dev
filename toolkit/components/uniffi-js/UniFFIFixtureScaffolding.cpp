@@ -114,63 +114,23 @@ extern "C" {
 }
 
 // Define pointer types
-// The class exists as a wrapper for a UniFFIPointerType instance for Retourneur
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class rondpoint_RetourneurPointerType {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType rondpoint_RetourneurPointerType::instance{
+const static mozilla::uniffi::UniFFIPointerType kRondpointRetourneurPointerType {
   "rondpoint::Retourneur"_ns,
   ffi_rondpoint_84bf_Retourneur_object_free
 };
-// The class exists as a wrapper for a UniFFIPointerType instance for Stringifier
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class rondpoint_StringifierPointerType {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType rondpoint_StringifierPointerType::instance{
+const static mozilla::uniffi::UniFFIPointerType kRondpointStringifierPointerType {
   "rondpoint::Stringifier"_ns,
   ffi_rondpoint_84bf_Stringifier_object_free
 };
-// The class exists as a wrapper for a UniFFIPointerType instance for Optionneur
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class rondpoint_OptionneurPointerType {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType rondpoint_OptionneurPointerType::instance{
+const static mozilla::uniffi::UniFFIPointerType kRondpointOptionneurPointerType {
   "rondpoint::Optionneur"_ns,
   ffi_rondpoint_84bf_Optionneur_object_free
 };
-// The class exists as a wrapper for a UniFFIPointerType instance for Sprite
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class sprites_SpritePointerType {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType sprites_SpritePointerType::instance{
+const static mozilla::uniffi::UniFFIPointerType kSpritesSpritePointerType {
   "sprites::Sprite"_ns,
   ffi_sprites_f59e_Sprite_object_free
 };
-// The class exists as a wrapper for a UniFFIPointerType instance for TodoList
-// it's used as a template parameter in ScaffoldingConverter.h to reference
-// the correct concrete UniFFIPointerType instance based on the type parameter.
-class todolist_TodoListPointerType {
-  public:
-    static mozilla::uniffi::UniFFIPointerType instance;
-};
-
-mozilla::uniffi::UniFFIPointerType todolist_TodoListPointerType::instance{
+const static mozilla::uniffi::UniFFIPointerType kTodolistTodoListPointerType {
   "todolist::TodoList"_ns,
   ffi_todolist_9473_TodoList_object_free
 };
@@ -202,223 +162,223 @@ Maybe<already_AddRefed<Promise>> UniFFIFixturesCallAsync(const GlobalObject& aGl
       return Some(CallHandler::CallAsync(arithmetic_77d6_equal, aGlobal, aArgs, "arithmetic_77d6_equal: "_ns, aError));
     }
     case 6: { // rondpoint:rondpoint_84bf_Retourneur_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_new, aGlobal, aArgs, "rondpoint_84bf_Retourneur_new: "_ns, aError));
     }
     case 7: { // rondpoint:rondpoint_84bf_Retourneur_identique_i8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_i8, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_i8: "_ns, aError));
     }
     case 8: { // rondpoint:rondpoint_84bf_Retourneur_identique_u8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_u8, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_u8: "_ns, aError));
     }
     case 9: { // rondpoint:rondpoint_84bf_Retourneur_identique_i16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_i16, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_i16: "_ns, aError));
     }
     case 10: { // rondpoint:rondpoint_84bf_Retourneur_identique_u16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_u16, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_u16: "_ns, aError));
     }
     case 11: { // rondpoint:rondpoint_84bf_Retourneur_identique_i32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_i32, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_i32: "_ns, aError));
     }
     case 12: { // rondpoint:rondpoint_84bf_Retourneur_identique_u32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_u32, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_u32: "_ns, aError));
     }
     case 13: { // rondpoint:rondpoint_84bf_Retourneur_identique_i64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_i64, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_i64: "_ns, aError));
     }
     case 14: { // rondpoint:rondpoint_84bf_Retourneur_identique_u64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_u64, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_u64: "_ns, aError));
     }
     case 15: { // rondpoint:rondpoint_84bf_Retourneur_identique_float
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<float>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_float, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_float: "_ns, aError));
     }
     case 16: { // rondpoint:rondpoint_84bf_Retourneur_identique_double
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<double>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_double, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_double: "_ns, aError));
     }
     case 17: { // rondpoint:rondpoint_84bf_Retourneur_identique_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_boolean, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_boolean: "_ns, aError));
     }
     case 18: { // rondpoint:rondpoint_84bf_Retourneur_identique_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_string, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_string: "_ns, aError));
     }
     case 19: { // rondpoint:rondpoint_84bf_Retourneur_identique_nombres_signes
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_nombres_signes, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_nombres_signes: "_ns, aError));
     }
     case 20: { // rondpoint:rondpoint_84bf_Retourneur_identique_nombres
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_nombres, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_nombres: "_ns, aError));
     }
     case 21: { // rondpoint:rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire, aGlobal, aArgs, "rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire: "_ns, aError));
     }
     case 22: { // rondpoint:rondpoint_84bf_Stringifier_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointStringifierPointerType>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_new, aGlobal, aArgs, "rondpoint_84bf_Stringifier_new: "_ns, aError));
     }
     case 23: { // rondpoint:rondpoint_84bf_Stringifier_well_known_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_well_known_string, aGlobal, aArgs, "rondpoint_84bf_Stringifier_well_known_string: "_ns, aError));
     }
     case 24: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_i8, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_i8: "_ns, aError));
     }
     case 25: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_u8, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_u8: "_ns, aError));
     }
     case 26: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_i16, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_i16: "_ns, aError));
     }
     case 27: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_u16, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_u16: "_ns, aError));
     }
     case 28: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_i32, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_i32: "_ns, aError));
     }
     case 29: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_u32, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_u32: "_ns, aError));
     }
     case 30: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_i64, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_i64: "_ns, aError));
     }
     case 31: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_u64, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_u64: "_ns, aError));
     }
     case 32: { // rondpoint:rondpoint_84bf_Stringifier_to_string_float
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<float>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_float, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_float: "_ns, aError));
     }
     case 33: { // rondpoint:rondpoint_84bf_Stringifier_to_string_double
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<double>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_double, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_double: "_ns, aError));
     }
     case 34: { // rondpoint:rondpoint_84bf_Stringifier_to_string_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Stringifier_to_string_boolean, aGlobal, aArgs, "rondpoint_84bf_Stringifier_to_string_boolean: "_ns, aError));
     }
     case 35: { // rondpoint:rondpoint_84bf_Optionneur_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_new, aGlobal, aArgs, "rondpoint_84bf_Optionneur_new: "_ns, aError));
     }
     case 36: { // rondpoint:rondpoint_84bf_Optionneur_sinon_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_boolean, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_boolean: "_ns, aError));
     }
     case 37: { // rondpoint:rondpoint_84bf_Optionneur_sinon_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_string, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_string: "_ns, aError));
     }
     case 38: { // rondpoint:rondpoint_84bf_Optionneur_sinon_sequence
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_sequence, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_sequence: "_ns, aError));
     }
     case 39: { // rondpoint:rondpoint_84bf_Optionneur_sinon_null
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_null, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_null: "_ns, aError));
     }
     case 40: { // rondpoint:rondpoint_84bf_Optionneur_sinon_zero
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_zero, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_zero: "_ns, aError));
     }
     case 41: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u8_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u8_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u8_dec: "_ns, aError));
     }
     case 42: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i8_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i8_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i8_dec: "_ns, aError));
     }
     case 43: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u16_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u16_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u16_dec: "_ns, aError));
     }
     case 44: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i16_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i16_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i16_dec: "_ns, aError));
     }
     case 45: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u32_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u32_dec: "_ns, aError));
     }
     case 46: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i32_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i32_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i32_dec: "_ns, aError));
     }
     case 47: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u64_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u64_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u64_dec: "_ns, aError));
     }
     case 48: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i64_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i64_dec, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i64_dec: "_ns, aError));
     }
     case 49: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u8_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u8_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u8_hex: "_ns, aError));
     }
     case 50: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i8_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i8_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i8_hex: "_ns, aError));
     }
     case 51: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u16_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u16_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u16_hex: "_ns, aError));
     }
     case 52: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i16_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int16_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i16_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i16_hex: "_ns, aError));
     }
     case 53: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u32_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u32_hex: "_ns, aError));
     }
     case 54: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i32_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i32_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i32_hex: "_ns, aError));
     }
     case 55: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u64_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u64_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u64_hex: "_ns, aError));
     }
     case 56: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i64_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int64_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_i64_hex, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_i64_hex: "_ns, aError));
     }
     case 57: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_oct
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_u32_oct, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_u32_oct: "_ns, aError));
     }
     case 58: { // rondpoint:rondpoint_84bf_Optionneur_sinon_f32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<float>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_f32, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_f32: "_ns, aError));
     }
     case 59: { // rondpoint:rondpoint_84bf_Optionneur_sinon_f64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<double>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_f64, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_f64: "_ns, aError));
     }
     case 60: { // rondpoint:rondpoint_84bf_Optionneur_sinon_enum
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(rondpoint_84bf_Optionneur_sinon_enum, aGlobal, aArgs, "rondpoint_84bf_Optionneur_sinon_enum: "_ns, aError));
     }
     case 61: { // rondpoint:rondpoint_84bf_copie_dictionnaire
@@ -442,23 +402,23 @@ Maybe<already_AddRefed<Promise>> UniFFIFixturesCallAsync(const GlobalObject& aGl
       return Some(CallHandler::CallAsync(rondpoint_84bf_switcheroo, aGlobal, aArgs, "rondpoint_84bf_switcheroo: "_ns, aError));
     }
     case 66: { // sprites:sprites_f59e_Sprite_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(sprites_f59e_Sprite_new, aGlobal, aArgs, "sprites_f59e_Sprite_new: "_ns, aError));
     }
     case 67: { // sprites:sprites_f59e_Sprite_new_relative_to
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(sprites_f59e_Sprite_new_relative_to, aGlobal, aArgs, "sprites_f59e_Sprite_new_relative_to: "_ns, aError));
     }
     case 68: { // sprites:sprites_f59e_Sprite_get_position
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>>;
       return Some(CallHandler::CallAsync(sprites_f59e_Sprite_get_position, aGlobal, aArgs, "sprites_f59e_Sprite_get_position: "_ns, aError));
     }
     case 69: { // sprites:sprites_f59e_Sprite_move_to
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(sprites_f59e_Sprite_move_to, aGlobal, aArgs, "sprites_f59e_Sprite_move_to: "_ns, aError));
     }
     case 70: { // sprites:sprites_f59e_Sprite_move_by
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(sprites_f59e_Sprite_move_by, aGlobal, aArgs, "sprites_f59e_Sprite_move_by: "_ns, aError));
     }
     case 71: { // sprites:sprites_f59e_translate
@@ -466,51 +426,51 @@ Maybe<already_AddRefed<Promise>> UniFFIFixturesCallAsync(const GlobalObject& aGl
       return Some(CallHandler::CallAsync(sprites_f59e_translate, aGlobal, aArgs, "sprites_f59e_translate: "_ns, aError));
     }
     case 72: { // todolist:todolist_9473_TodoList_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_new, aGlobal, aArgs, "todolist_9473_TodoList_new: "_ns, aError));
     }
     case 73: { // todolist:todolist_9473_TodoList_add_item
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_add_item, aGlobal, aArgs, "todolist_9473_TodoList_add_item: "_ns, aError));
     }
     case 74: { // todolist:todolist_9473_TodoList_add_entry
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_add_entry, aGlobal, aArgs, "todolist_9473_TodoList_add_entry: "_ns, aError));
     }
     case 75: { // todolist:todolist_9473_TodoList_get_entries
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_get_entries, aGlobal, aArgs, "todolist_9473_TodoList_get_entries: "_ns, aError));
     }
     case 76: { // todolist:todolist_9473_TodoList_get_items
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_get_items, aGlobal, aArgs, "todolist_9473_TodoList_get_items: "_ns, aError));
     }
     case 77: { // todolist:todolist_9473_TodoList_add_entries
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_add_entries, aGlobal, aArgs, "todolist_9473_TodoList_add_entries: "_ns, aError));
     }
     case 78: { // todolist:todolist_9473_TodoList_add_items
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_add_items, aGlobal, aArgs, "todolist_9473_TodoList_add_items: "_ns, aError));
     }
     case 79: { // todolist:todolist_9473_TodoList_get_last_entry
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_get_last_entry, aGlobal, aArgs, "todolist_9473_TodoList_get_last_entry: "_ns, aError));
     }
     case 80: { // todolist:todolist_9473_TodoList_get_last
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_get_last, aGlobal, aArgs, "todolist_9473_TodoList_get_last: "_ns, aError));
     }
     case 81: { // todolist:todolist_9473_TodoList_get_first
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_get_first, aGlobal, aArgs, "todolist_9473_TodoList_get_first: "_ns, aError));
     }
     case 82: { // todolist:todolist_9473_TodoList_clear_item
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_clear_item, aGlobal, aArgs, "todolist_9473_TodoList_clear_item: "_ns, aError));
     }
     case 83: { // todolist:todolist_9473_TodoList_make_default
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_TodoList_make_default, aGlobal, aArgs, "todolist_9473_TodoList_make_default: "_ns, aError));
     }
     case 84: { // todolist:todolist_9473_get_default_list
@@ -518,7 +478,7 @@ Maybe<already_AddRefed<Promise>> UniFFIFixturesCallAsync(const GlobalObject& aGl
       return Some(CallHandler::CallAsync(todolist_9473_get_default_list, aGlobal, aArgs, "todolist_9473_get_default_list: "_ns, aError));
     }
     case 85: { // todolist:todolist_9473_set_default_list
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       return Some(CallHandler::CallAsync(todolist_9473_set_default_list, aGlobal, aArgs, "todolist_9473_set_default_list: "_ns, aError));
     }
     case 86: { // todolist:todolist_9473_create_entry_with
@@ -562,277 +522,277 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
       return true;
     }
     case 6: { // rondpoint:rondpoint_84bf_Retourneur_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_new, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_new: "_ns, aError);
       return true;
     }
     case 7: { // rondpoint:rondpoint_84bf_Retourneur_identique_i8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_i8, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_i8: "_ns, aError);
       return true;
     }
     case 8: { // rondpoint:rondpoint_84bf_Retourneur_identique_u8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_u8, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_u8: "_ns, aError);
       return true;
     }
     case 9: { // rondpoint:rondpoint_84bf_Retourneur_identique_i16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_i16, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_i16: "_ns, aError);
       return true;
     }
     case 10: { // rondpoint:rondpoint_84bf_Retourneur_identique_u16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_u16, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_u16: "_ns, aError);
       return true;
     }
     case 11: { // rondpoint:rondpoint_84bf_Retourneur_identique_i32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_i32, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_i32: "_ns, aError);
       return true;
     }
     case 12: { // rondpoint:rondpoint_84bf_Retourneur_identique_u32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_u32, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_u32: "_ns, aError);
       return true;
     }
     case 13: { // rondpoint:rondpoint_84bf_Retourneur_identique_i64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_i64, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_i64: "_ns, aError);
       return true;
     }
     case 14: { // rondpoint:rondpoint_84bf_Retourneur_identique_u64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<uint64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_u64, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_u64: "_ns, aError);
       return true;
     }
     case 15: { // rondpoint:rondpoint_84bf_Retourneur_identique_float
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<float>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_float, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_float: "_ns, aError);
       return true;
     }
     case 16: { // rondpoint:rondpoint_84bf_Retourneur_identique_double
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<double>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_double, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_double: "_ns, aError);
       return true;
     }
     case 17: { // rondpoint:rondpoint_84bf_Retourneur_identique_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_boolean, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_boolean: "_ns, aError);
       return true;
     }
     case 18: { // rondpoint:rondpoint_84bf_Retourneur_identique_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_string, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_string: "_ns, aError);
       return true;
     }
     case 19: { // rondpoint:rondpoint_84bf_Retourneur_identique_nombres_signes
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_nombres_signes, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_nombres_signes: "_ns, aError);
       return true;
     }
     case 20: { // rondpoint:rondpoint_84bf_Retourneur_identique_nombres
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_nombres, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_nombres: "_ns, aError);
       return true;
     }
     case 21: { // rondpoint:rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_RetourneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointRetourneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Retourneur_identique_optionneur_dictionnaire: "_ns, aError);
       return true;
     }
     case 22: { // rondpoint:rondpoint_84bf_Stringifier_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointStringifierPointerType>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_new, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_new: "_ns, aError);
       return true;
     }
     case 23: { // rondpoint:rondpoint_84bf_Stringifier_well_known_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_well_known_string, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_well_known_string: "_ns, aError);
       return true;
     }
     case 24: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_i8, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_i8: "_ns, aError);
       return true;
     }
     case 25: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u8
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_u8, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_u8: "_ns, aError);
       return true;
     }
     case 26: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_i16, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_i16: "_ns, aError);
       return true;
     }
     case 27: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u16
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_u16, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_u16: "_ns, aError);
       return true;
     }
     case 28: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_i32, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_i32: "_ns, aError);
       return true;
     }
     case 29: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_u32, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_u32: "_ns, aError);
       return true;
     }
     case 30: { // rondpoint:rondpoint_84bf_Stringifier_to_string_i64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_i64, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_i64: "_ns, aError);
       return true;
     }
     case 31: { // rondpoint:rondpoint_84bf_Stringifier_to_string_u64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<uint64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_u64, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_u64: "_ns, aError);
       return true;
     }
     case 32: { // rondpoint:rondpoint_84bf_Stringifier_to_string_float
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<float>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_float, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_float: "_ns, aError);
       return true;
     }
     case 33: { // rondpoint:rondpoint_84bf_Stringifier_to_string_double
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<double>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_double, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_double: "_ns, aError);
       return true;
     }
     case 34: { // rondpoint:rondpoint_84bf_Stringifier_to_string_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_StringifierPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointStringifierPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Stringifier_to_string_boolean, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Stringifier_to_string_boolean: "_ns, aError);
       return true;
     }
     case 35: { // rondpoint:rondpoint_84bf_Optionneur_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_new, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_new: "_ns, aError);
       return true;
     }
     case 36: { // rondpoint:rondpoint_84bf_Optionneur_sinon_boolean
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_boolean, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_boolean: "_ns, aError);
       return true;
     }
     case 37: { // rondpoint:rondpoint_84bf_Optionneur_sinon_string
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_string, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_string: "_ns, aError);
       return true;
     }
     case 38: { // rondpoint:rondpoint_84bf_Optionneur_sinon_sequence
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_sequence, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_sequence: "_ns, aError);
       return true;
     }
     case 39: { // rondpoint:rondpoint_84bf_Optionneur_sinon_null
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_null, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_null: "_ns, aError);
       return true;
     }
     case 40: { // rondpoint:rondpoint_84bf_Optionneur_sinon_zero
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_zero, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_zero: "_ns, aError);
       return true;
     }
     case 41: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u8_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u8_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u8_dec: "_ns, aError);
       return true;
     }
     case 42: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i8_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i8_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i8_dec: "_ns, aError);
       return true;
     }
     case 43: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u16_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u16_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u16_dec: "_ns, aError);
       return true;
     }
     case 44: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i16_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i16_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i16_dec: "_ns, aError);
       return true;
     }
     case 45: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u32_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u32_dec: "_ns, aError);
       return true;
     }
     case 46: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i32_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i32_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i32_dec: "_ns, aError);
       return true;
     }
     case 47: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u64_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u64_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u64_dec: "_ns, aError);
       return true;
     }
     case 48: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i64_dec
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i64_dec, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i64_dec: "_ns, aError);
       return true;
     }
     case 49: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u8_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u8_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u8_hex: "_ns, aError);
       return true;
     }
     case 50: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i8_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int8_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int8_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int8_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i8_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i8_hex: "_ns, aError);
       return true;
     }
     case 51: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u16_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u16_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u16_hex: "_ns, aError);
       return true;
     }
     case 52: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i16_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int16_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int16_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int16_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i16_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i16_hex: "_ns, aError);
       return true;
     }
     case 53: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u32_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u32_hex: "_ns, aError);
       return true;
     }
     case 54: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i32_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i32_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i32_hex: "_ns, aError);
       return true;
     }
     case 55: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u64_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u64_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u64_hex: "_ns, aError);
       return true;
     }
     case 56: { // rondpoint:rondpoint_84bf_Optionneur_sinon_i64_hex
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<int64_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<int64_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<int64_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_i64_hex, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_i64_hex: "_ns, aError);
       return true;
     }
     case 57: { // rondpoint:rondpoint_84bf_Optionneur_sinon_u32_oct
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<uint32_t>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<uint32_t>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<uint32_t>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_u32_oct, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_u32_oct: "_ns, aError);
       return true;
     }
     case 58: { // rondpoint:rondpoint_84bf_Optionneur_sinon_f32
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<float>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<float>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<float>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_f32, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_f32: "_ns, aError);
       return true;
     }
     case 59: { // rondpoint:rondpoint_84bf_Optionneur_sinon_f64
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<double>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<double>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<double>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_f64, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_f64: "_ns, aError);
       return true;
     }
     case 60: { // rondpoint:rondpoint_84bf_Optionneur_sinon_enum
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<rondpoint_OptionneurPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kRondpointOptionneurPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(rondpoint_84bf_Optionneur_sinon_enum, aGlobal, aArgs, aReturnValue, "rondpoint_84bf_Optionneur_sinon_enum: "_ns, aError);
       return true;
     }
@@ -862,27 +822,27 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
       return true;
     }
     case 66: { // sprites:sprites_f59e_Sprite_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(sprites_f59e_Sprite_new, aGlobal, aArgs, aReturnValue, "sprites_f59e_Sprite_new: "_ns, aError);
       return true;
     }
     case 67: { // sprites:sprites_f59e_Sprite_new_relative_to
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(sprites_f59e_Sprite_new_relative_to, aGlobal, aArgs, aReturnValue, "sprites_f59e_Sprite_new_relative_to: "_ns, aError);
       return true;
     }
     case 68: { // sprites:sprites_f59e_Sprite_get_position
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>>;
       CallHandler::CallSync(sprites_f59e_Sprite_get_position, aGlobal, aArgs, aReturnValue, "sprites_f59e_Sprite_get_position: "_ns, aError);
       return true;
     }
     case 69: { // sprites:sprites_f59e_Sprite_move_to
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(sprites_f59e_Sprite_move_to, aGlobal, aArgs, aReturnValue, "sprites_f59e_Sprite_move_to: "_ns, aError);
       return true;
     }
     case 70: { // sprites:sprites_f59e_Sprite_move_by
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<sprites_SpritePointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kSpritesSpritePointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(sprites_f59e_Sprite_move_by, aGlobal, aArgs, aReturnValue, "sprites_f59e_Sprite_move_by: "_ns, aError);
       return true;
     }
@@ -892,62 +852,62 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
       return true;
     }
     case 72: { // todolist:todolist_9473_TodoList_new
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_new, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_new: "_ns, aError);
       return true;
     }
     case 73: { // todolist:todolist_9473_TodoList_add_item
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(todolist_9473_TodoList_add_item, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_add_item: "_ns, aError);
       return true;
     }
     case 74: { // todolist:todolist_9473_TodoList_add_entry
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(todolist_9473_TodoList_add_entry, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_add_entry: "_ns, aError);
       return true;
     }
     case 75: { // todolist:todolist_9473_TodoList_get_entries
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_get_entries, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_get_entries: "_ns, aError);
       return true;
     }
     case 76: { // todolist:todolist_9473_TodoList_get_items
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_get_items, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_get_items: "_ns, aError);
       return true;
     }
     case 77: { // todolist:todolist_9473_TodoList_add_entries
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(todolist_9473_TodoList_add_entries, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_add_entries: "_ns, aError);
       return true;
     }
     case 78: { // todolist:todolist_9473_TodoList_add_items
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(todolist_9473_TodoList_add_items, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_add_items: "_ns, aError);
       return true;
     }
     case 79: { // todolist:todolist_9473_TodoList_get_last_entry
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_get_last_entry, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_get_last_entry: "_ns, aError);
       return true;
     }
     case 80: { // todolist:todolist_9473_TodoList_get_last
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_get_last, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_get_last: "_ns, aError);
       return true;
     }
     case 81: { // todolist:todolist_9473_TodoList_get_first
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<RustBuffer>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_get_first, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_get_first: "_ns, aError);
       return true;
     }
     case 82: { // todolist:todolist_9473_TodoList_clear_item
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>, ScaffoldingConverter<RustBuffer>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>, ScaffoldingConverter<RustBuffer>>;
       CallHandler::CallSync(todolist_9473_TodoList_clear_item, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_clear_item: "_ns, aError);
       return true;
     }
     case 83: { // todolist:todolist_9473_TodoList_make_default
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_TodoList_make_default, aGlobal, aArgs, aReturnValue, "todolist_9473_TodoList_make_default: "_ns, aError);
       return true;
     }
@@ -957,7 +917,7 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
       return true;
     }
     case 85: { // todolist:todolist_9473_set_default_list
-      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingConverter<todolist_TodoListPointerType, ScaffoldingConverterTagObject>>;
+      using CallHandler = ScaffoldingCallHandler<ScaffoldingConverter<void>, ScaffoldingObjectConverter<&kTodolistTodoListPointerType>>;
       CallHandler::CallSync(todolist_9473_set_default_list, aGlobal, aArgs, aReturnValue, "todolist_9473_set_default_list: "_ns, aError);
       return true;
     }
@@ -971,50 +931,62 @@ bool UniFFIFixturesCallSync(const GlobalObject& aGlobal, uint64_t aId, const Seq
 }
 
 Maybe<already_AddRefed<UniFFIPointer>> UniFFIFixturesReadPointer(const GlobalObject& aGlobal, uint64_t aId, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
+  const UniFFIPointerType* type;
   switch (aId) {
     case 0: { // rondpoint:Retourneur
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::instance));
+      type = &kRondpointRetourneurPointerType;
+      break;
     }
     case 1: { // rondpoint:Stringifier
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::instance));
+      type = &kRondpointStringifierPointerType;
+      break;
     }
     case 2: { // rondpoint:Optionneur
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::instance));
+      type = &kRondpointOptionneurPointerType;
+      break;
     }
     case 3: { // sprites:Sprite
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &sprites_SpritePointerType::instance));
+      type = &kSpritesSpritePointerType;
+      break;
     }
     case 4: { // todolist:TodoList
-      return Some(UniFFIPointer::Read(aArrayBuff, aPosition, &todolist_TodoListPointerType::instance));
+      type = &kTodolistTodoListPointerType;
+      break;
     }
+    default:
+      return Nothing();
   }
-  return Nothing();
+  return Some(UniFFIPointer::Read(aArrayBuff, aPosition, type, aError));
 }
 
 bool UniFFIFixturesWritePointer(const GlobalObject& aGlobal, uint64_t aId, const UniFFIPointer& aPtr, const ArrayBuffer& aArrayBuff, long aPosition, ErrorResult& aError) {
+  const UniFFIPointerType* type;
   switch (aId) {
     case 0: { // rondpoint:Retourneur
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_RetourneurPointerType::instance, aError);
-      return true;
+      type = &kRondpointRetourneurPointerType;
+      break;
     }
     case 1: { // rondpoint:Stringifier
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_StringifierPointerType::instance, aError);
-      return true;
+      type = &kRondpointStringifierPointerType;
+      break;
     }
     case 2: { // rondpoint:Optionneur
-      aPtr.Write(aArrayBuff, aPosition, &rondpoint_OptionneurPointerType::instance, aError);
-      return true;
+      type = &kRondpointOptionneurPointerType;
+      break;
     }
     case 3: { // sprites:Sprite
-      aPtr.Write(aArrayBuff, aPosition, &sprites_SpritePointerType::instance, aError);
-      return true;
+      type = &kSpritesSpritePointerType;
+      break;
     }
     case 4: { // todolist:TodoList
-      aPtr.Write(aArrayBuff, aPosition, &todolist_TodoListPointerType::instance, aError);
-      return true;
+      type = &kTodolistTodoListPointerType;
+      break;
     }
+    default:
+      return false;
   }
-  return false;
+  aPtr.Write(aArrayBuff, aPosition, type, aError);
+  return true;
 }
 
 }  // namespace mozilla::uniffi

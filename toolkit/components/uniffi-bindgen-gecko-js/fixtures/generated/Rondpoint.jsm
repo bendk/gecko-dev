@@ -431,6 +431,9 @@ class FfiConverterU8 extends FfiConverter {
         if (!Number.isSafeInteger(value)) {
             throw TypeError(`${name} exceeds the safe integer bounds (${value})`);
         }
+        if (value < 0) {
+            throw TypeError(`${name} exceeds the U64 bounds (${value})`);
+        }
     }
     static computeSize() {
         return 8;
@@ -556,6 +559,9 @@ class Optionneur {
         if (!Object.prototype.hasOwnProperty.call(opts, constructUniffiObject)) {
             throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
             "Please use a UDL defined constructor, or the init function for the primary constructor")
+        }
+        if (!opts[constructUniffiObject] instanceof UniFFIPointer) {
+            throw new UniFFIError("Attempting to create a UniFFI object with a pointer that is not an instance of UniFFIPointer")
         }
         this[uniffiObjectPtr] = opts[constructUniffiObject];
     }
@@ -1016,6 +1022,9 @@ class Retourneur {
             throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
             "Please use a UDL defined constructor, or the init function for the primary constructor")
         }
+        if (!opts[constructUniffiObject] instanceof UniFFIPointer) {
+            throw new UniFFIError("Attempting to create a UniFFI object with a pointer that is not an instance of UniFFIPointer")
+        }
         this[uniffiObjectPtr] = opts[constructUniffiObject];
     }
     /**
@@ -1314,6 +1323,9 @@ class Stringifier {
         if (!Object.prototype.hasOwnProperty.call(opts, constructUniffiObject)) {
             throw new UniFFIError("Attempting to construct an object using the JavaScript constructor directly" +
             "Please use a UDL defined constructor, or the init function for the primary constructor")
+        }
+        if (!opts[constructUniffiObject] instanceof UniFFIPointer) {
+            throw new UniFFIError("Attempting to create a UniFFI object with a pointer that is not an instance of UniFFIPointer")
         }
         this[uniffiObjectPtr] = opts[constructUniffiObject];
     }

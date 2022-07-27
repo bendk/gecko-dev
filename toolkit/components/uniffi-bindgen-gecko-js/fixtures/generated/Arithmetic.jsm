@@ -221,6 +221,9 @@ class FfiConverterU64 extends FfiConverter {
         if (!Number.isSafeInteger(value)) {
             throw TypeError(`${name} exceeds the safe integer bounds (${value})`);
         }
+        if (value < 0) {
+            throw TypeError(`${name} exceeds the U64 bounds (${value})`);
+        }
     }
     static computeSize() {
         return 8;

@@ -33,8 +33,8 @@ class {{ ffi_converter }} extends FfiConverter {
         return new {{record.nm()}}(
             {%- for field in record.fields() %}
             {{ field.read_datastream_fn() }}(dataStream)
-           {%- if !loop.last %}, {% endif %}
-           {%- endfor %}
+            {%- if !loop.last %}, {% endif %}
+            {%- endfor %}
         );
     }
     static write(dataStream, value) {

@@ -9,6 +9,9 @@ from mach.decorators import (
     SubCommand,
 )
 
+# IMPORTANT: Please Request review from a DOM peer before
+# committing to using UniFFI. There are other ways to consume Rust from
+# JavaScript that might fit your use case better.
 UDL_FILES = [
     # TODO: Use UniFFI
 ]
