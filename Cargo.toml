@@ -51,7 +51,7 @@ resolver = "2"
 
 [workspace.dependencies]
 # Shared across multiple UniFFI consumers.
-uniffi = "0.24.3"
+uniffi = "0.25.2"
 
 # Explicitly specify what our profiles use.  The opt-level setting here is
 # a total fiction; see the setup of MOZ_RUST_DEFAULT_FLAGS for what the
@@ -227,8 +227,8 @@ oneshot = { git = "https://github.com/bendk/oneshot", tag = "v0.1.5-mozilla" }
 path = "third_party/rust/mio-0.6.23"
 
 [patch."https://github.com/mozilla/uniffi-rs.git"]
-uniffi = "=0.24.3"
-uniffi_bindgen = "=0.24.3"
-uniffi_build = "=0.24.3"
-uniffi_macros = "=0.24.3"
+uniffi = "=0.25.2"
+uniffi_bindgen = "=0.25.2"
+uniffi_build = "=0.25.2"
+uniffi_macros = "=0.25.2"
 weedle2 = "=4.0.0"
