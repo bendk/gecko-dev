@@ -201,13 +201,13 @@ warp = { git = "https://github.com/glandium/warp", rev = "4af45fae95bc98b0eba1ef
 malloc_size_of_derive = { path = "xpcom/rust/malloc_size_of_derive" }
 
 # application-services overrides to make updating them all simpler.
-interrupt-support = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-sql-support = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-suggest = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-sync15 = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-tabs = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-viaduct = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
-webext-storage = { git = "https://github.com/mozilla/application-services", rev = "c82bccfa500813f273f4db0ead64fc73bfa2b34c" }
+interrupt-support = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+sql-support = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+suggest = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+sync15 = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+tabs = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+viaduct = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
+webext-storage = { git = "https://github.com/mozilla/application-services", rev = "acc6c3f44a3930403c38934e892b9baf3593c83d" }
 
 # ICU4X 1.2 with synstructure 0.13.x / syn 2.x. When updating to next version, this should be removed.
 diplomat = { git = "https://github.com/rust-diplomat/diplomat", rev = "8d125999893fedfdf30595e97334c21ec4b18da9" }
@@ -216,6 +216,10 @@ icu_provider_macros = { git = "https://github.com/unicode-org/icu4x", rev = "14e
 yoke-derive = { git = "https://github.com/unicode-org/icu4x", rev = "14e9a3a9857be74582abe2dfa7ab799c5eaac873" }
 zerofrom-derive = { git = "https://github.com/unicode-org/icu4x", rev = "14e9a3a9857be74582abe2dfa7ab799c5eaac873" }
 zerovec-derive = { git = "https://github.com/unicode-org/icu4x", rev = "14e9a3a9857be74582abe2dfa7ab799c5eaac873" }
+
+# Patch oneshot to disable the `loom` target, which we never use but causes many `loom` and many
+# other dependencies to be pulled in when running `mach vendor rust`
+oneshot = { git = "https://github.com/bendk/oneshot", tag = "v0.1.5-mozilla" }
 
 # Patch mio 0.6 to use winapi 0.3 and miow 0.3, getting rid of winapi 0.2.
 # There is not going to be new version of mio 0.6, mio now being >= 0.7.11.
