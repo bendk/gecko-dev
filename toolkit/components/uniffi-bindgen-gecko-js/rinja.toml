@@ -1,2 +1,4 @@
+[DEFAULT]
+
 [general]
 dirs = ["src/templates"]

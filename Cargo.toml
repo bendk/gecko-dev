@@ -62,8 +62,9 @@ rust-version = "1.82.0"
 
 [workspace.dependencies]
 # Shared across multiple UniFFI consumers.
-uniffi = "0.29.1"
-uniffi_bindgen = "0.29.1"
+uniffi = { git = "https://github.com/mozilla/uniffi-rs", rev = "e1c817fe4911f7eeb4f652d71a07b970392d375a" }
+uniffi_bindgen = { git = "https://github.com/mozilla/uniffi-rs", rev = "e1c817fe4911f7eeb4f652d71a07b970392d375a" }
+uniffi_pipeline = { git = "https://github.com/mozilla/uniffi-rs", rev = "e1c817fe4911f7eeb4f652d71a07b970392d375a" }
 # Shared across multiple application-services consumers.
 rusqlite = "0.31.0"
 # Shared across multiple glean consumers.

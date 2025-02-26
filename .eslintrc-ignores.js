@@ -297,6 +297,7 @@ module.exports = [
   // "scaffolding" used by uniffi which isn't valid JS in its original form.
   "toolkit/components/uniffi-bindgen-gecko-js/src/templates/js/",
   "toolkit/components/uniffi-bindgen-gecko-js/components/generated/*",
+  "toolkit/components/uniffi-bindgen-gecko-js/tests/generated/*",
 
   // Test files for circular import in modules.
   "dom/base/test/jsmodules/import_circular.mjs",

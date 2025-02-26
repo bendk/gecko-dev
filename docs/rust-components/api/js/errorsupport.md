@@ -4,3 +4,4 @@
 ```
 ```{js:autofunction} RustErrorsupport.sys.unsetApplicationErrorReporter
 ```
+
